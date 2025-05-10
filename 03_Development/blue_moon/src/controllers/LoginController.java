@@ -50,6 +50,9 @@ public class LoginController extends BaseController {
 		case ACCOUNTANT:
 			handler = new AccountantHomePageHandler(stage);
 			break;
+		case LEADER:
+			handler = new LeaderHomePageHandler(stage);
+			break;
 		default:
 			throw new UnsupportedOperationException("Vai trò chưa được hỗ trợ.");
 		}
