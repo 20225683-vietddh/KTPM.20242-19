@@ -7,14 +7,15 @@ public class ScreenNavigator {
 	
 	// Push new screen into stack
 	public static void push(BaseScreenHandler screen) {
-		System.out.println(screen + "\n");
 		screenStack.push(screen);
+		System.out.println(screenStack + "\n"); // This line aims to test the process of navigation. Comment it if necessary 
 	}
 	
 	// Back to previous screen
 	public static void goBack() {
 		if (screenStack.size() <= 1) return;
 		
+		System.out.println(screenStack + "\n"); // This line aims to test the process of navigation. Comment it if necessary
 		screenStack.pop();
 		
 		// Get the previous screen

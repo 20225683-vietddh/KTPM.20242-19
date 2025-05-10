@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import dto.LoginDTO;
 import controllers.LoginController;
 import exception.*;
-import views.homepage.*;
 import views.messages.ErrorDialog;
 
 public class LoginPageHandler extends BaseScreenHandler {
@@ -53,16 +52,16 @@ public class LoginPageHandler extends BaseScreenHandler {
 		try {
 			LoginDTO dto = new LoginDTO(loginName, password, selectedRole);
 			this.controller = new LoginController();
-			((LoginController) controller).handleLogin(dto);
-			HomePageHandler homepage = new AccountantHomePageHandler(this.stage);
-			homepage.show();
+		    BaseScreenHandler homepage = ((LoginController) controller).handleLogin(dto, this.stage);
+		    homepage.show();
 			
 		} catch (InvalidInputException e) {
-			ErrorDialog.showError(e.getMessage());
+			ErrorDialog.showError("Lỗi nhập liệu", e.getMessage());
 		} catch (AuthenticationException e) {
-			ErrorDialog.showError(e.getMessage());
+			ErrorDialog.showError("Lỗi xác thực", e.getMessage());
 		} catch (Exception e) {
-			ErrorDialog.showError("Không tải được trang chủ!");
+			ErrorDialog.showError("Lỗi hệ thống", "Không tải được trang chủ!");
+			e.printStackTrace();
 		}
 	}
 }

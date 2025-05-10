@@ -5,9 +5,9 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.ButtonType;
 
 public class ErrorDialog {
-	public static void showError(String message) {
+	public static void showError(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
-        alert.setTitle("Lỗi!");
+        alert.setTitle(title);
         alert.setHeaderText(null);
 
         DialogPane dialogPane = alert.getDialogPane();
@@ -29,8 +29,8 @@ public class ErrorDialog {
             "-fx-background-color: #ef4444; " +
             "-fx-text-fill: white; " +
             "-fx-font-weight: bold; " +
-            "-fx-background-radius: 6px" +
-            "-fx-padding: 20px" +
+            "-fx-background-radius: 6px;" +
+            "-fx-padding: 10px;" +
             "-fx-cursor: hand;"
         );
 
