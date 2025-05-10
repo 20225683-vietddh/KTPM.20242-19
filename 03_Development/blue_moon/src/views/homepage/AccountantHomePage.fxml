@@ -19,7 +19,7 @@
 
 <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1463.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1039.0" prefWidth="1446.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);">
+    <AnchorPane stylesheets="@../../assets/css/style.css" minHeight="0.0" minWidth="0.0" prefHeight="1039.0" prefWidth="1446.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);">
          <children>
             <VBox prefHeight="987.0" prefWidth="264.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="26.0">
                <children>
@@ -136,7 +136,7 @@
                               <Insets bottom="3.0" />
                            </padding>
                         </VBox>
-                        <Button fx:id="btnGoBack" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Quay lại">
+                        <Button fx:id="btnGoBack" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Quay lại">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -163,7 +163,7 @@
                               <Insets bottom="16.0" left="70.0" right="70.0" top="30.0" />
                            </VBox.margin>
                         </ImageView>
-                        <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Đăng xuất">
+                        <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Đăng xuất">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
