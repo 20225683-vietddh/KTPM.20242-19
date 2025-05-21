@@ -5,4 +5,7 @@ public class Configs {
 	public static final String LOGO_PATH = "/assets/images/logo-2.png";
 	public static final String ACCOUNTANT_HOME_PAGE_PATH = "/views/homepage/AccountantHomePage.fxml";
 	public static final String LEADER_HOME_PAGE_PATH = "/views/homepage/LeaderHomePage.fxml";
+	public static final String FEE_LIST_PAGE_PATH = "/views/fee/FeeListPage.fxml";
+	public static final String ADD_FEE_FORM_PATH = "/views/fee/AddFeeForm.fxml";
+	public static final String UPDATE_FEE_FORM_PATH = "/views/fee/UpdateFeeForm.fxml";
 }

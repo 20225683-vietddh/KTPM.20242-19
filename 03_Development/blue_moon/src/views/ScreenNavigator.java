@@ -17,10 +17,11 @@ public class ScreenNavigator {
 		
 		System.out.println(screenStack + "\n"); // This line aims to test the process of navigation. Comment it if necessary
 		screenStack.pop();
-		
+
 		// Get the previous screen
 		BaseScreenHandler prev = screenStack.peek();
-		prev.show();
+		prev.show();		
+		screenStack.pop();
 	}
 	
 	// Get the current screen (if necessary)

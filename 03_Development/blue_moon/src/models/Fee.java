@@ -1,22 +1,26 @@
 package models;
 
 import java.time.LocalDate;
+import utils.Status;
+import utils.Mandatory;
 
 public class Fee {
 	private String id;
 	private String name;
 	private LocalDate createdDate;
-	private int amount;
-	private boolean isMandatory;
+	private double amount;
+	private Mandatory isMandatory;
+	private Status status;
 	private String description;
 	
-	public Fee(String id, String name, LocalDate createdDate, int amount, boolean isMandatory, String description) {
+	public Fee(String id, String name, LocalDate createdDate, double amount, Mandatory isMandatory, Status status, String description) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.createdDate = createdDate;
 		this.amount = amount;
 		this.isMandatory = isMandatory;
+		this.status = status;
 		this.description = description;
 	}
 
@@ -44,20 +48,28 @@ public class Fee {
 		this.createdDate = createdDate;
 	}
 	
-	public int getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 	
-	public void setAmount(int amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 	
-	public boolean isMandatory() {
+	public Mandatory getIsMandatory() {
 		return isMandatory;
 	}
 	
-	public void setMandatory(boolean isMandatory) {
+	public void setIsMandatory(Mandatory isMandatory) {
 		this.isMandatory = isMandatory;
+	}
+	
+	public Status getStatus() {
+		return status;
+	}
+	
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 	
 	public String getDescription() {
