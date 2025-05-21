@@ -1,3 +1,5 @@
 .metadata/
 blue_moon/bin/
 .idea/
+blue_moon/.idea/
+lib/
