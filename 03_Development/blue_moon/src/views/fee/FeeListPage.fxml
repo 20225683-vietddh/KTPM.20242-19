@@ -278,16 +278,17 @@
                            <children>
                               <TableView fx:id="tblFees" prefHeight="438.0" prefWidth="1105.0">
                                  <columns>
-                                    <TableColumn fx:id="colId" prefWidth="84.0" text="Mã " />
-                                    <TableColumn fx:id="colName" prefWidth="178.0" text="Tên khoản thu" />
-                                    <TableColumn fx:id="colCreatedDate" prefWidth="119.0" text="Ngày tạo" />
-                                    <TableColumn fx:id="colAmount" prefWidth="128.0" text="Số tiền" />
-                                    <TableColumn fx:id="colMandatory" prefWidth="96.0" text="Bắt buộc" />
-                                    <TableColumn fx:id="colDescription" prefWidth="268.0" text="Mô tả" />
-                                    <TableColumn fx:id="colActions" maxWidth="161.0" prefWidth="161.0" text="Sửa/Xóa khoản thu" />
+                                    <TableColumn fx:id="colId" prefWidth="78.0" text="Mã " />
+                                    <TableColumn fx:id="colName" prefWidth="143.0" text="Tên khoản thu" />
+                                    <TableColumn fx:id="colCreatedDate" prefWidth="124.0" text="Ngày tạo" />
+                                    <TableColumn fx:id="colAmount" prefWidth="112.0" text="Số tiền" />
+                                    <TableColumn prefWidth="131.0" text="Trạng thái" />
+                                    <TableColumn fx:id="colMandatory" prefWidth="136.0" text="Loại khoản thu" />
+                                    <TableColumn fx:id="colDescription" prefWidth="231.0" text="Mô tả" />
+                                    <TableColumn fx:id="colActions" maxWidth="398.0" prefWidth="154.0" text="Thao tác" />
                                  </columns>
                                  <VBox.margin>
-                                    <Insets left="35.0" right="35.0" />
+                                    <Insets />
                                  </VBox.margin>
                               </TableView>
                            </children>

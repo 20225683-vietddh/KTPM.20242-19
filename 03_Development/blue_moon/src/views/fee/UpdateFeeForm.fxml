@@ -34,22 +34,32 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="15.0">
                <children>
-                  <Label prefWidth="120.0" text="Loại khoản thu:" textFill="white">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
-                  <ComboBox fx:id="cbMandatory" prefHeight="40.0" prefWidth="305.0" promptText="Chọn loại (Bắt buộc / Tự nguyện)" style="-fx-background-radius: 8; -fx-font-size: 13px; -fx-background-color: white;" HBox.hgrow="ALWAYS" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
-               <children>
                   <Label prefWidth="120.0" text="Số tiền:" textFill="white">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
                   <TextField fx:id="tfAmount" prefHeight="40.0" style="-fx-background-radius: 8; -fx-font-size: 13px; -fx-background-color: white;" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
+               <children>
+                  <Label prefWidth="120.0" text="Trạng thái:" textFill="white">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="cbMandatory" prefHeight="40.0" prefWidth="305.0" promptText="Tùy chọn" style="-fx-background-radius: 8; -fx-font-size: 13px; -fx-background-color: white;" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
+               <children>
+                  <Label prefWidth="120.0" text="Loại khoản thu:" textFill="white">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="cbMandatory1" prefHeight="40.0" prefWidth="305.0" promptText="Tùy chọn" style="-fx-background-radius: 8; -fx-font-size: 13px; -fx-background-color: white;" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="15.0">
