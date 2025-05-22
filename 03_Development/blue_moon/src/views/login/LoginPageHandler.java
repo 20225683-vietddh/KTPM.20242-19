@@ -1,17 +1,19 @@
 package views.login;
 
-import views.BaseScreenHandler;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
-import utils.Role;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
-import dto.LoginDTO;
+import views.BaseScreenHandler;
+import views.homepage.*;
 import controllers.LoginController;
+import dto.login.LoginRequestDTO;
+import dto.login.LoginResponseDTO;
 import exception.*;
 import views.messages.ErrorDialog;
+import utils.Role;
 
 public class LoginPageHandler extends BaseScreenHandler {
 	@FXML
@@ -35,26 +37,16 @@ public class LoginPageHandler extends BaseScreenHandler {
 	
 	@FXML
 	public void initialize() {
-		// Initialize combo box with a list of roles
 		cbRole.getItems().addAll(Role.values());
-		
-		// Attach an event handler for login button
 		btnLogin.setOnAction(e -> handleLogin());
 	}
 	
-	private void handleLogin() {
-		String loginName = tfLoginName.getText();
-		String password = pfPassword.getText();
-		Role selectedRole = cbRole.getValue();
-		
-		// System.out.println(loginName + " " + password + " " + selectedRole);
-				
+	private void handleLogin() {		
+		LoginRequestDTO requestDTO = getUserInput();	
 		try {
-			LoginDTO dto = new LoginDTO(loginName, password, selectedRole);
 			this.controller = new LoginController();
-		    BaseScreenHandler homepage = ((LoginController) controller).handleLogin(dto, this.stage);
-		    homepage.show();
-			
+		    LoginResponseDTO responseDTO = ((LoginController) controller).handleLogin(requestDTO);
+		    navigate(responseDTO);
 		} catch (InvalidInputException e) {
 			ErrorDialog.showError("Lỗi nhập liệu", e.getMessage());
 		} catch (AuthenticationException e) {
@@ -63,5 +55,28 @@ public class LoginPageHandler extends BaseScreenHandler {
 			ErrorDialog.showError("Lỗi hệ thống", "Không tải được trang chủ!");
 			e.printStackTrace();
 		}
+	}
+	
+	private LoginRequestDTO getUserInput() {
+		String loginName = tfLoginName.getText();
+		String password = pfPassword.getText();
+		Role selectedRole = cbRole.getValue();
+		return new LoginRequestDTO(loginName, password, selectedRole);
+	}
+	
+	private void navigate(LoginResponseDTO responseDTO) throws Exception {
+		BaseScreenHandler handler;
+		switch (responseDTO.getRole()) {
+		case ACCOUNTANT:
+			handler = new AccountantHomePageHandler(this.stage, responseDTO.getUserName());
+			handler.show();
+			break;
+		case LEADER:
+			handler = new LeaderHomePageHandler(this.stage, responseDTO.getUserName());
+			handler.show();
+			break;
+		default:
+			throw new Exception("Vai trò chưa được hỗ trợ");
+		}	
 	}
 }

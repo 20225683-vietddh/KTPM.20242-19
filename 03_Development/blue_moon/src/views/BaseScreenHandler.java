@@ -32,7 +32,9 @@ public abstract class BaseScreenHandler extends FXMLScreenHandler {
 	}
 	
 	public void show() {
-		ScreenNavigator.push(this);
+		if (!ScreenNavigator.isNavigatingBack()) {
+			ScreenNavigator.push(this);
+		}
 		stage.setScene(scene);
 		stage.setTitle(pageTitle);
 		stage.getIcons().add(new Image(getClass().getResource(iconPath).toString()));
