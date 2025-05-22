@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import models.CampaignFee;
+import views.messages.ErrorDialog;
 
 public class CampaignFeeCell extends HBox {
 	private final CampaignFee campaignFee;
@@ -55,6 +56,7 @@ public class CampaignFeeCell extends HBox {
 	    Button btnView = new Button("Xem");
 	    btnView.setStyle("-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;");
 	    btnView.setPrefWidth(80);
+	    btnView.setOnAction(e -> handleViewCampaignFee(campaignFee));
 	    
 	    Button btnUpdate = new Button("Sửa");
 	    btnUpdate.setStyle("-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;");
@@ -67,5 +69,14 @@ public class CampaignFeeCell extends HBox {
 	    hbButton.getChildren().addAll(btnView, btnUpdate, btnDelete);
 	    
 	    this.getChildren().addAll(name, campaignFeeName, startDate, campaignFeeStartDate, status, campaignFeeStatus, hbButton);
+	}
+	
+	private void handleViewCampaignFee(CampaignFee campaignFee) {
+		try {
+			(new CampaignFeeDetailedBox(campaignFee)).show();
+		} catch (Exception e) {
+			ErrorDialog.showError("Lỗi hệ thống", "Không thể hiển thị thông tin chi tiết của đợt thu " + campaignFee.getName());
+			e.printStackTrace();
+		}
 	}
 }
