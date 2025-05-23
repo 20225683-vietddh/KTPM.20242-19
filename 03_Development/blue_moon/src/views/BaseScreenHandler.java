@@ -3,6 +3,7 @@ package views;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import controllers.BaseController;
 
 public abstract class BaseScreenHandler extends FXMLScreenHandler {
@@ -40,5 +41,18 @@ public abstract class BaseScreenHandler extends FXMLScreenHandler {
 		stage.getIcons().add(new Image(getClass().getResource(iconPath).toString()));
 		stage.setResizable(true);
 		stage.show();
+	}
+	
+	/*
+	 * This method aims to show the pop up screen (e.g: show the form to enter new campaign fee's informations)
+	 */
+	public void showPopup(Stage ownerStage) {
+		stage.initOwner(ownerStage);
+	    stage.initModality(Modality.APPLICATION_MODAL);
+	    stage.setTitle(pageTitle);
+	    stage.setScene(scene);
+	    stage.setResizable(false);
+	    stage.getIcons().add(new Image(getClass().getResource(iconPath).toString()));
+	    stage.showAndWait();
 	}
 }

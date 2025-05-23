@@ -105,7 +105,7 @@
                                     <Insets left="10.0" />
                                  </HBox.margin>
                               </Label>
-                              <Button mnemonicParsing="false" style="-fx-background-radius: 5px; -fx-cursor: hand; -fx-border-color: pink; -fx-border-radius: 5px;" text="✚ Thêm đợt thu phí mới">
+                              <Button fx:id="btnAddCampaignFee" mnemonicParsing="false" style="-fx-background-radius: 5px; -fx-cursor: hand; -fx-border-color: pink; -fx-border-radius: 5px;" text="✚ Thêm đợt thu phí mới">
                                  <font>
                                     <Font size="18.0" />
                                  </font>

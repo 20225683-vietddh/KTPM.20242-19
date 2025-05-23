@@ -3,14 +3,17 @@ package dao.campaignfee;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.Connection;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.time.LocalDate;
 import dao.PostgreSQLConnection;
 import models.CampaignFee;
 import models.Fee;
+import dto.campaignfee.*;
 
 public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 	private final Connection conn;
@@ -64,4 +67,56 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 		return new ArrayList<>(campaignMap.values());
 	}
 	
+	@Override 
+	public void addNewCampaignFee(NewCampaignFeeDTO dto) throws SQLException {
+		String campaignFeeSQL = "INSERT INTO campaign_fees (name, created_date, start_date, due_date, status, description) VALUES (?, ?, ?, ?, ?, ?)";
+		LocalDate startDate = utils.Utils.parseDateSafely(dto.getStartDay(), dto.getStartMonth(), dto.getStartYear());
+		LocalDate dueDate = utils.Utils.parseDateSafely(dto.getDueDay(), dto.getDueMonth(), dto.getDueYear());
+        		
+		PreparedStatement stmt = conn.prepareStatement(campaignFeeSQL, Statement.RETURN_GENERATED_KEYS);
+		stmt.setString(1, dto.getName());
+		stmt.setObject(2, LocalDate.now());
+		stmt.setObject(3, startDate);
+		stmt.setObject(4, dueDate);
+		stmt.setString(5, "Mới tạo");
+		stmt.setString(6, dto.getDescription());
+		stmt.executeUpdate();
+		
+		ResultSet rs = stmt.getGeneratedKeys();
+        if (rs.next()) {
+            int campaignFeeId = rs.getInt(1); 
+
+            String itemSQL = "INSERT INTO campaign_fee_items (fee_id, campaign_fee_id) VALUES (?, ?)";
+            try (PreparedStatement itemStmt = conn.prepareStatement(itemSQL)) {
+                for (int feeId : dto.getFeeIds()) {
+                    itemStmt.setLong(1, feeId);          
+                    itemStmt.setLong(2, campaignFeeId); 
+                    itemStmt.addBatch();
+                }
+                itemStmt.executeBatch();
+            }
+        } else {
+            throw new SQLException("Không thể thêm được thông tin đợt thu phí mới vào CSDL.");
+        }
+	}
+	
+	@Override 
+	public void deleteCampaignFee(CampaignFee campaignFee) throws SQLException {
+		String deleteItemsSQL = "DELETE FROM campaign_fee_items WHERE campaign_fee_id = ?";
+	    String deleteFeeSQL = "DELETE FROM campaign_fees WHERE campaign_fee_id = ?";
+	    
+	    try (PreparedStatement deleteItemsStmt = conn.prepareStatement(deleteItemsSQL);
+	         PreparedStatement deleteFeeStmt = conn.prepareStatement(deleteFeeSQL)) {
+	    	
+			deleteItemsStmt.setInt(1, campaignFee.getId());
+			deleteItemsStmt.executeUpdate();
+
+			deleteFeeStmt.setLong(1, campaignFee.getId());
+			int rowsAffected = deleteFeeStmt.executeUpdate();
+
+			if (rowsAffected == 0) {
+				throw new SQLException("Không xóa được đợt thu phí " + campaignFee.getName());
+			}
+	    }
+	}
 }

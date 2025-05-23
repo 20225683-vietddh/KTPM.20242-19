@@ -4,10 +4,12 @@ import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
 import java.util.List;
 import views.BaseScreenWithLogoutAndGoBackHandler;
+import views.messages.ErrorDialog;
 import models.CampaignFee;
-import services.CampaignFeeListService;
+import services.CampaignFeeService;
 
 public class CampaignFeeListHandler extends BaseScreenWithLogoutAndGoBackHandler {
 	@FXML
@@ -16,7 +18,10 @@ public class CampaignFeeListHandler extends BaseScreenWithLogoutAndGoBackHandler
 	@FXML
 	private VBox vbCampaignFeeList;
 	
-	private final CampaignFeeListService service = new CampaignFeeListService();
+	@FXML 
+	private Button btnAddCampaignFee;
+	
+	private final CampaignFeeService service = new CampaignFeeService();
 	
 	public CampaignFeeListHandler(Stage stage, String userName) throws Exception {
 		super(stage, utils.Configs.CAMPAIGN_FEE_LIST_PATH, utils.Configs.LOGO_PATH, "Danh sách khoản thu");
@@ -30,6 +35,7 @@ public class CampaignFeeListHandler extends BaseScreenWithLogoutAndGoBackHandler
 	public void initialize() {
 		super.initialize();
 		loadCampaignFeeList();
+		btnAddCampaignFee.setOnAction(e -> handleAddCampaignFee());
 	}
 	
 	private void loadCampaignFeeList() {
@@ -38,10 +44,19 @@ public class CampaignFeeListHandler extends BaseScreenWithLogoutAndGoBackHandler
 		if (vbCampaignFeeList != null) {
 			vbCampaignFeeList.getChildren().clear();
 			for (CampaignFee campaignFee : campaignFees) {
-				CampaignFeeCell cell = new CampaignFeeCell(campaignFee);
+				CampaignFeeCell cell = new CampaignFeeCell(this.stage, campaignFee, service);
 				vbCampaignFeeList.getChildren().add(cell);
 				vbCampaignFeeList.setSpacing(20);
 			}
+		}
+	}
+	
+	private void handleAddCampaignFee() {
+		try {
+			new NewCampaignFeeHandler(this.stage);
+		} catch (Exception e) {
+			ErrorDialog.showError("Lỗi hệ thống", "Không thể hiển thị form điền thông tin đợt thu mới");
+			e.printStackTrace();
 		}
 	}
 }

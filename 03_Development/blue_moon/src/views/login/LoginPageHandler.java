@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import views.BaseScreenHandler;
 import views.homepage.*;
 import controllers.LoginController;
@@ -28,6 +29,9 @@ public class LoginPageHandler extends BaseScreenHandler {
 	@FXML
 	private Button btnLogin;
 	
+	@FXML 
+	private ImageView imgViewLogo;
+	
 	public LoginPageHandler(Stage stage) throws Exception {
 		super(stage, utils.Configs.LOGIN_PAGE_PATH, utils.Configs.LOGO_PATH, "Đăng nhập");
 		loader.setController(this);
@@ -39,6 +43,7 @@ public class LoginPageHandler extends BaseScreenHandler {
 	public void initialize() {
 		cbRole.getItems().addAll(Role.values());
 		btnLogin.setOnAction(e -> handleLogin());
+		utils.Utils.rotateLogo(imgViewLogo);
 	}
 	
 	private void handleLogin() {		

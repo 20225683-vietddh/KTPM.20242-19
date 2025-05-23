@@ -16,21 +16,21 @@
 
 <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1463.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <content>
-    <AnchorPane stylesheets="@../../assets/css/style.css" minHeight="0.0" minWidth="0.0" prefHeight="1039.0" prefWidth="1446.0" style="-fx-background-color: white;">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1039.0" prefWidth="1446.0" style="-fx-background-color: white;" stylesheets="@../../assets/css/style.css">
          <children>
             <HBox prefHeight="1039.0" prefWidth="1446.0">
                <children>
                   <VBox prefHeight="200.0" prefWidth="1000.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);">
                      <children>
-                        <ImageView fitHeight="300.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="imgViewLogo" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../assets/images/logo-2.png" />
+                              <Image url="@../../assets/images/logo.png" />
                            </image>
                            <VBox.margin>
-                              <Insets left="300.0" top="280.0" />
+                              <Insets left="350.0" top="280.0" />
                            </VBox.margin>
                         </ImageView>
-                        <Label alignment="CENTER" prefWidth="1000.0" text="Chất lượng trong từng căn hộ" textFill="#f4e7be">
+                        <Label alignment="CENTER" prefWidth="1000.0" text="BlueMoon - Chất lượng trong từng căn hộ" textFill="#f4e7be">
                            <VBox.margin>
                               <Insets top="15.0" />
                            </VBox.margin>
