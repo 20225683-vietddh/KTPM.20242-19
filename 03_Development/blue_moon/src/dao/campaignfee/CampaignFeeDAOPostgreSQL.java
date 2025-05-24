@@ -68,7 +68,7 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 	}
 	
 	@Override 
-	public void addNewCampaignFee(NewCampaignFeeDTO dto) throws SQLException {
+	public void addNewCampaignFee(CampaignFeeDTO dto) throws SQLException {
 		String campaignFeeSQL = "INSERT INTO campaign_fees (name, created_date, start_date, due_date, status, description) VALUES (?, ?, ?, ?, ?, ?)";
 		LocalDate startDate = utils.Utils.parseDateSafely(dto.getStartDay(), dto.getStartMonth(), dto.getStartYear());
 		LocalDate dueDate = utils.Utils.parseDateSafely(dto.getDueDay(), dto.getDueMonth(), dto.getDueYear());
@@ -100,23 +100,84 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
         }
 	}
 	
-	@Override 
+	@Override
 	public void deleteCampaignFee(CampaignFee campaignFee) throws SQLException {
-		String deleteItemsSQL = "DELETE FROM campaign_fee_items WHERE campaign_fee_id = ?";
-	    String deleteFeeSQL = "DELETE FROM campaign_fees WHERE campaign_fee_id = ?";
-	    
-	    try (PreparedStatement deleteItemsStmt = conn.prepareStatement(deleteItemsSQL);
-	         PreparedStatement deleteFeeStmt = conn.prepareStatement(deleteFeeSQL)) {
-	    	
-			deleteItemsStmt.setInt(1, campaignFee.getId());
-			deleteItemsStmt.executeUpdate();
+	    String deleteItemsSQL = "DELETE FROM campaign_fee_items WHERE campaign_fee_id = ?";
+	    String deleteFeeSQL = "DELETE FROM campaign_fees WHERE campaign_fee_id = ?"; 
 
-			deleteFeeStmt.setLong(1, campaignFee.getId());
-			int rowsAffected = deleteFeeStmt.executeUpdate();
+	    try {
+	        conn.setAutoCommit(false);
 
-			if (rowsAffected == 0) {
-				throw new SQLException("Không xóa được đợt thu phí " + campaignFee.getName());
-			}
+	        try (
+	            PreparedStatement deleteItemsStmt = conn.prepareStatement(deleteItemsSQL);
+	            PreparedStatement deleteFeeStmt = conn.prepareStatement(deleteFeeSQL)
+	        ) {
+	            deleteItemsStmt.setInt(1, campaignFee.getId());
+	            deleteItemsStmt.executeUpdate();
+
+	            deleteFeeStmt.setInt(1, campaignFee.getId());
+	            int rowsAffected = deleteFeeStmt.executeUpdate();
+
+	            if (rowsAffected == 0) {
+	                throw new SQLException("Không xóa được đợt thu phí " + campaignFee.getName());
+	            }
+
+	            conn.commit(); 
+
+	        } catch (Exception e) {
+	            conn.rollback(); 
+	            throw new SQLException("Lỗi khi xoá đợt thu phí", e);
+	        } finally {
+	            conn.setAutoCommit(true); 
+	        }
+
+	    } catch (SQLException e) {
+	        throw e;
 	    }
+	}
+	
+	@Override
+	public void updateCampaignFee(CampaignFeeDTO dto) throws SQLException {
+		String updateSQL = "UPDATE campaign_fees SET name = ?, start_date = ?, due_date = ?, status = ?, description = ? WHERE campaign_fee_id = ?";
+		String deleteItemsSql = "DELETE FROM campaign_fee_items WHERE campaign_fee_id = ?";
+	    String insertItemSql = "INSERT INTO campaign_fee_items (campaign_fee_id, fee_id) VALUES (?, ?)";
+	    
+		LocalDate startDate = utils.Utils.parseDateSafely(dto.getStartDay(), dto.getStartMonth(), dto.getStartYear());
+		LocalDate dueDate = utils.Utils.parseDateSafely(dto.getDueDay(), dto.getDueMonth(), dto.getDueYear());
+		
+		try {
+			conn.setAutoCommit(false);
+			
+			try (PreparedStatement updateStmt = conn.prepareStatement(updateSQL);
+		            PreparedStatement deleteStmt = conn.prepareStatement(deleteItemsSql);
+		            PreparedStatement insertStmt = conn.prepareStatement(insertItemSql)) {
+				updateStmt.setString(1, dto.getName());
+				updateStmt.setObject(2, startDate);
+				updateStmt.setObject(3, dueDate);
+				updateStmt.setString(4, dto.getStatus());
+				updateStmt.setString(5, dto.getDescription());
+				updateStmt.setInt(6, dto.getId());
+				updateStmt.executeUpdate();
+				
+				deleteStmt.setInt(1, dto.getId());
+	            deleteStmt.executeUpdate();
+
+	            for (Integer feeId : dto.getFeeIds()) {
+	                insertStmt.setInt(1, dto.getId());
+	                insertStmt.setInt(2, feeId);
+	                insertStmt.addBatch();
+	            }
+	            insertStmt.executeBatch();
+	            
+	            conn.commit();
+			} catch (Exception e) {
+				conn.rollback();
+				e.printStackTrace();
+			} finally {
+				conn.setAutoCommit(true);
+			}  
+		} catch (SQLException e) {
+			throw e;
+		}
 	}
 }

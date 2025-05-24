@@ -2,7 +2,8 @@ package dto.campaignfee;
 
 import java.util.List;
 
-public class NewCampaignFeeDTO {
+public class CampaignFeeDTO {
+	private int id;
 	private String name;
 	private String startDay;
 	private String startMonth;
@@ -11,9 +12,10 @@ public class NewCampaignFeeDTO {
 	private String dueMonth;
 	private String dueYear;
 	private String description;
+	private String status;
 	private List<Integer> feeIds;
 	
-	public NewCampaignFeeDTO(String name, String startDay, String startMonth, String startYear, String dueDay,
+	public CampaignFeeDTO(String name, String startDay, String startMonth, String startYear, String dueDay,
 			String dueMonth, String dueYear, String description, List<Integer> feeIds) {
 		this.name = name;
 		this.startDay = startDay;
@@ -96,5 +98,21 @@ public class NewCampaignFeeDTO {
 
 	public void setFeeIds(List<Integer> feeIds) {
 		this.feeIds = feeIds;
+	}
+	
+	public String getStatus() {
+		return this.status;
+	}
+	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 }
