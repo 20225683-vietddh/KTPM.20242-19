@@ -139,7 +139,6 @@ public class FeeListPageHandler extends BaseScreenWithLogoutAndGoBackHandler {
         try {
              BaseScreenHandler handler = new CampaignFeeListHandler(this.stage, lblUserName.getText());
              handler.show();
-            ErrorDialog.showError("Thông báo", "Chức năng đang được phát triển!");
         } catch (Exception e) {
             e.printStackTrace();
             ErrorDialog.showError("Lỗi hệ thống", "Không thể mở trang danh sách đợt thu!");

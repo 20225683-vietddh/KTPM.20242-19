@@ -53,7 +53,7 @@ public abstract class CampaignFeeFormHandler extends BaseScreenHandler {
 	protected VBox vbFeesList;
 	
 	private final FeeService service = new FeeService();
-	protected List<Fee> allFees = service.getAllFees();
+	protected List<Fee> allFees = service.getAllFeesAsModel();
 	protected List<FeeCell> feeCells = new ArrayList<>();
 	
 	public CampaignFeeFormHandler(Stage ownerStage, String path, String title) throws Exception {

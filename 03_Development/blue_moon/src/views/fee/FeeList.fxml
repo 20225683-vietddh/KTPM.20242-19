@@ -96,7 +96,7 @@
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button fx:id="btnHouseholds" layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Danh sách hộ dân">
+                              <Button fx:id="btnHouseholds" layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Thu phí">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
