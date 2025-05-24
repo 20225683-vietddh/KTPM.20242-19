@@ -66,6 +66,12 @@ public class NewCampaignFeeHandler extends BaseScreenHandler {
 	public NewCampaignFeeHandler(Stage ownerStage) throws Exception {
         super(new Stage(), utils.Configs.NEW_CAMPAIGN_FORM, utils.Configs.LOGO_PATH, "Thêm khoản thu mới");
         loader.setController(this);
+        try {
+            this.allFees = service.getAllFeesAsModel();
+        } catch (InvalidInputException e) {
+            ErrorDialog.showError("Lỗi", "Không thể tải danh sách khoản thu: " + e.getMessage());
+            this.allFees = new ArrayList<>();
+        }
         this.setContent();  
         this.setScene();    
 
@@ -78,12 +84,7 @@ public class NewCampaignFeeHandler extends BaseScreenHandler {
         this.stage.setOnHidden(e -> parentRoot.setEffect(null));
 
         // Load all fees
-        try {
-            this.allFees = service.getAllFeesAsModel();
-        } catch (InvalidInputException e) {
-            ErrorDialog.showError("Lỗi", "Không thể tải danh sách khoản thu: " + e.getMessage());
-            this.allFees = new ArrayList<>();
-        }
+      
 
         this.showPopup(ownerStage);
     }

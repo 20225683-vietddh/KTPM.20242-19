@@ -1,8 +1,9 @@
 package views.fee;
 
 import java.util.List;
-
+import views.campaignfee.*;
 import controllers.FeeListController;
+import views.BaseScreenHandler;
 import exception.InvalidInputException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -136,8 +137,8 @@ public class FeeListPageHandler extends BaseScreenWithLogoutAndGoBackHandler {
 
     private void handleCampaignFees() {
         try {
-            // BaseScreenHandler handler = new CampaignFeeListHandler(this.stage, lblUserName.getText());
-            // handler.show();
+             BaseScreenHandler handler = new CampaignFeeListHandler(this.stage, lblUserName.getText());
+             handler.show();
             ErrorDialog.showError("Thông báo", "Chức năng đang được phát triển!");
         } catch (Exception e) {
             e.printStackTrace();

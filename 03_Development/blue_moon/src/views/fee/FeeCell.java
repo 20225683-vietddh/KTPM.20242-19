@@ -38,31 +38,31 @@ public class FeeCell extends HBox {
         this.setStyle("-fx-border-color: black; -fx-border-radius: 8px; -fx-background-color: #F7F7F7; -fx-background-radius: 8px;");
     
         Label nameLabel = new Label("Tên: ");
-        nameLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: gray;");
+        nameLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: gray;");
         
         Label feeName = new Label(fee.getName());
-        feeName.setPrefWidth(150);
-        feeName.setMaxWidth(150);
-        feeName.setStyle("-fx-font-size: 12px; -fx-text-fill: black;");
+        feeName.setPrefWidth(200);
+        feeName.setMaxWidth(200);
+        feeName.setStyle("-fx-font-size: 14px; -fx-text-fill: black;");
         
         Label createdDateLabel = new Label("Ngày tạo: ");
-        createdDateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: gray;");
+        createdDateLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: gray;");
         
         Label feeCreatedDate = new Label(fee.getCreatedDate().toString());
-        feeCreatedDate.setPrefWidth(110);
-        feeCreatedDate.setMaxWidth(110);
-        feeCreatedDate.setStyle("-fx-font-size: 12px; -fx-text-fill: black;");
+        feeCreatedDate.setPrefWidth(120);
+        feeCreatedDate.setMaxWidth(120);
+        feeCreatedDate.setStyle("-fx-font-size: 14px; -fx-text-fill: black;");
         
         Label mandatoryLabel = new Label("Bắt buộc: ");
-        mandatoryLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: gray;");
+        mandatoryLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: gray;");
         
         Label feeMandatory = new Label(fee.getIsMandatory() ? "Có" : "Không");
-        feeMandatory.setPrefWidth(50);
-        feeMandatory.setMaxWidth(50);
-        feeMandatory.setStyle("-fx-font-size: 12px; -fx-text-fill: black;");
+        feeMandatory.setPrefWidth(80);
+        feeMandatory.setMaxWidth(80);
+        feeMandatory.setStyle("-fx-font-size: 14px; -fx-text-fill: black;");
         
         Label descriptionLabel = new Label("Mô tả: ");
-        descriptionLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: gray;");
+        descriptionLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: gray;");
         
         String descText = fee.getDescription();
         if (descText == null || descText.isEmpty()) {
@@ -72,9 +72,9 @@ public class FeeCell extends HBox {
         }
         
         Label feeDescription = new Label(descText);
-        feeDescription.setPrefWidth(280);
-        feeDescription.setMaxWidth(280);
-        feeDescription.setStyle("-fx-font-size: 12px; -fx-text-fill: black;");
+        feeDescription.setPrefWidth(230);
+        feeDescription.setMaxWidth(230);
+        feeDescription.setStyle("-fx-font-size: 14px; -fx-text-fill: black;");
         
         HBox hbButton = new HBox();
         hbButton.setPrefWidth(USE_COMPUTED_SIZE);
