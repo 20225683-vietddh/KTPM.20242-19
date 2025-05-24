@@ -1,34 +1,30 @@
 package models;
 
 import java.time.LocalDate;
-import utils.Status;
-import utils.Mandatory;
 
 public class Fee {
-	private String id;
+	private int id;
 	private String name;
 	private LocalDate createdDate;
-	private double amount;
-	private Mandatory isMandatory;
-	private Status status;
+	private boolean isMandatory;
 	private String description;
 	
-	public Fee(String id, String name, LocalDate createdDate, double amount, Mandatory isMandatory, Status status, String description) {
+	public Fee(int id, String name, LocalDate createdDate, boolean isMandatory, String description) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.createdDate = createdDate;
-		this.amount = amount;
 		this.isMandatory = isMandatory;
-		this.status = status;
 		this.description = description;
 	}
+	
+	public Fee() {}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 	
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	
@@ -48,28 +44,12 @@ public class Fee {
 		this.createdDate = createdDate;
 	}
 	
-	public double getAmount() {
-		return amount;
-	}
-	
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-	
-	public Mandatory getIsMandatory() {
+	public boolean getIsMandatory() {
 		return isMandatory;
 	}
 	
-	public void setIsMandatory(Mandatory isMandatory) {
+	public void setIsMandatory(boolean isMandatory) {
 		this.isMandatory = isMandatory;
-	}
-	
-	public Status getStatus() {
-		return status;
-	}
-	
-	public void setStatus(Status status) {
-		this.status = status;
 	}
 	
 	public String getDescription() {
@@ -78,5 +58,10 @@ public class Fee {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	@Override 
+	public String toString() {
+		return this.name;
 	}
 }

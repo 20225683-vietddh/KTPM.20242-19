@@ -1,6 +1,6 @@
 package controllers;
 
-import dto.AddFeeDTO;
+import dto.fee.AddFeeDTO;
 import services.FeeService;
 import exception.InvalidInputException;
 
@@ -8,7 +8,11 @@ public class AddFeeFormController extends FeeFormController {
     private FeeService feeService;
 
     public AddFeeFormController() {
-        this.feeService = new FeeService();
+        try {
+            this.feeService = new FeeService();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean saveAddFee(AddFeeDTO feeDTO) throws InvalidInputException {

@@ -1,16 +1,16 @@
 /**
  * This class aims to store the informations of unauthorized user
  */
-package dto;
+package dto.login;
 
 import utils.Role;
 
-public class LoginDTO {
+public class LoginRequestDTO {
 	private String loginName;
 	private String password;
 	private Role role;
 	
-	public LoginDTO(String loginName, String password, Role role) {
+	public LoginRequestDTO(String loginName, String password, Role role) {
 		this.loginName = loginName;
 		this.password = password;
 		this.role = role;

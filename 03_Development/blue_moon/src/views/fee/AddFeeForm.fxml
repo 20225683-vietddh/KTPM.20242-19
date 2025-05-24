@@ -2,7 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="430.0" prefWidth="500.0" style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #FF7BAC, #43A5DC);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="350.0" prefWidth="500.0" style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #FF7BAC, #43A5DC);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="TOP_CENTER" spacing="15.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="25.0">
          <children>
@@ -34,30 +34,21 @@
             
             <HBox alignment="CENTER_LEFT" spacing="15.0">
                <children>
-                  <Label prefWidth="120.0" text="Số tiền:" textFill="white">
+                  <Label prefWidth="120.0" text="Mô tả:" textFill="white">
                      <font><Font size="15.0" /></font>
                   </Label>
-                  <TextField fx:id="tfAmount" prefHeight="40.0" promptText="Ví dụ: 100000" style="-fx-background-radius: 8; -fx-font-size: 13px; -fx-background-color: white;" HBox.hgrow="ALWAYS" />
-               </children>
-            </HBox>
-            
-                        <HBox alignment="CENTER_LEFT" spacing="15.0">
-               <children>
-                  <Label prefWidth="120.0" text="Loại khoản thu:" textFill="white">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
-                  <ComboBox fx:id="cbMandatory" prefHeight="40.0" prefWidth="305.0" promptText="Tùy chọn" style="-fx-background-radius: 8; -fx-font-size: 13px; -fx-background-color: white;" HBox.hgrow="ALWAYS" />
+                  <TextField fx:id="tfDescription" prefHeight="40.0" promptText="Mô tả chi tiết (nếu có)" style="-fx-background-radius: 8; -fx-font-size: 13px; -fx-background-color: white;" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
             
             <HBox alignment="CENTER_LEFT" spacing="15.0">
                <children>
-                  <Label prefWidth="120.0" text="Mô tả:" textFill="white">
-                     <font><Font size="15.0" /></font>
+                  <Label prefWidth="120.0" text="Bắt buộc:" textFill="white">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
                   </Label>
-                  <TextField fx:id="tfDescription" prefHeight="40.0" promptText="Mô tả chi tiết (nếu có)" style="-fx-background-radius: 8; -fx-font-size: 13px; -fx-background-color: white;" HBox.hgrow="ALWAYS" />
+                  <CheckBox fx:id="chkMandatory" prefHeight="40.0" text="Đây là khoản thu bắt buộc" textFill="white" />
                </children>
             </HBox>
             

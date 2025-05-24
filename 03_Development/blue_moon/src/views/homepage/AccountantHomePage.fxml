@@ -19,7 +19,7 @@
 
 <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1463.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <content>
-    <AnchorPane stylesheets="@../../assets/css/style.css" minHeight="0.0" minWidth="0.0" prefHeight="1039.0" prefWidth="1446.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1039.0" prefWidth="1446.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);" stylesheets="@../../assets/css/style.css">
          <children>
             <VBox prefHeight="987.0" prefWidth="264.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="26.0">
                <children>
@@ -36,6 +36,14 @@
                               <Insets left="68.0" top="16.0" />
                            </VBox.margin>
                         </ImageView>
+                        <Label fx:id="lblUserName" alignment="CENTER" prefWidth="292.0">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Label>
                         <VBox prefWidth="100.0" style="-fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;">
                            <children>
                               <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-content-display: left;" text="Trang chủ" textFill="WHITE">
@@ -56,7 +64,7 @@
                                     <Insets right="98.0" />
                                  </padding>
                               </Button>
-                              <Button fx:id="btnViewCampaignFees" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Danh sách đợt thu">
+                              <Button styleClass="menu-button" fx:id="btnViewCampaignFees" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" text="Danh sách đợt thu">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -74,7 +82,7 @@
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button fx:id="btnViewFees" layoutX="11.0" layoutY="64.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Danh sách khoản thu">
+                              <Button styleClass="menu-button" fx:id="btnViewFees" layoutX="11.0" layoutY="64.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" text="Danh sách khoản thu">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -92,7 +100,7 @@
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button fx:id="btnViewHouseHolds" layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Danh sách hộ dân">
+                              <Button styleClass="menu-button" fx:id="btnViewHouseHolds" layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" text="Danh sách hộ dân">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -110,7 +118,7 @@
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button fx:id="btnTrackCampaignFee" layoutX="11.0" layoutY="165.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Thống kê đợt thu ">
+                              <Button styleClass="menu-button" fx:id="btnTrackCampaignFee" layoutX="11.0" layoutY="165.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" text="Thống kê đợt thu ">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -148,7 +156,7 @@
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets left="52.0" right="52.0" top="230.0" />
+                              <Insets left="52.0" right="52.0" top="205.0" />
                            </VBox.margin>
                         </Button>
                      </children>

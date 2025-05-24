@@ -1,13 +1,12 @@
 package views.fee;
 
 import controllers.AddFeeFormController;
-import dto.AddFeeDTO;
+import dto.fee.AddFeeDTO;
 import exception.InvalidInputException;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import models.Fee;
-import utils.Configs;
+import views.messages.ErrorDialog;
+import views.messages.InformationDialog;
 import javafx.stage.Stage;
 
 public class AddFeeFormHandler extends FeeFormHandler {
@@ -20,43 +19,31 @@ public class AddFeeFormHandler extends FeeFormHandler {
         this.setContent();
         this.setScene();
     }
-
-    public void handleSaveAddFee(ActionEvent event) {
+    
+    @Override
+    protected void handleSaveButtonAction(ActionEvent event) {
         try {
+            if (!validateInput()) {
+                return;
+            }
+            
             Fee fee = getFeeData();
             AddFeeDTO dto = new AddFeeDTO(
                 fee.getName(),
                 fee.getCreatedDate(),
-                fee.getAmount(),
                 fee.getIsMandatory(),
-                fee.getStatus(),
                 fee.getDescription()
             );
 
             boolean result = controller.saveAddFee(dto);
             if (result) {
-                showAlert(AlertType.INFORMATION, "Thành công", "Thêm khoản thu thành công!");
+                InformationDialog.showNotification("Thành công", "Thêm khoản thu thành công!");
                 this.stage.close();
             }
         } catch (InvalidInputException e) {
-            showAlert(AlertType.ERROR, "Lỗi dữ liệu", e.getMessage());
+            ErrorDialog.showError("Lỗi dữ liệu", e.getMessage());
         } catch (Exception e) {
-            showAlert(AlertType.ERROR, "Lỗi", "Có lỗi xảy ra: " + e.getMessage());
+            ErrorDialog.showError("Lỗi", "Có lỗi xảy ra: " + e.getMessage());
         }
-    }
-
-    private void showAlert(AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    public void clearForm() {
-        if (tfName != null) tfName.clear();
-        if (tfAmount != null) tfAmount.clear();
-        if (cbMandatory != null) cbMandatory.setValue(null);
-        if (tfDescription != null) tfDescription.clear();
     }
 } 

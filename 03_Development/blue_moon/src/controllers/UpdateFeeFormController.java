@@ -1,6 +1,6 @@
 package controllers;
 
-import dto.UpdateFeeDTO;
+import dto.fee.UpdateFeeDTO;
 import services.FeeService;
 import exception.InvalidInputException;
 
@@ -8,7 +8,11 @@ public class UpdateFeeFormController extends FeeFormController {
     private FeeService feeService;
 
     public UpdateFeeFormController() {
-        this.feeService = new FeeService();
+        try {
+            this.feeService = new FeeService();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean saveUpdateFee(UpdateFeeDTO feeDTO) throws InvalidInputException {
@@ -17,7 +21,6 @@ public class UpdateFeeFormController extends FeeFormController {
                 throw new InvalidInputException("Dữ liệu khoản thu không hợp lệ");
             }
             boolean result = feeService.updateFee(feeDTO);
-            showResult(result);
             return result;
         } catch (InvalidInputException e) {
             throw e;
@@ -26,7 +29,7 @@ public class UpdateFeeFormController extends FeeFormController {
         }
     }
 
-    public UpdateFeeDTO getFeeById(String feeId) throws InvalidInputException {
+    public UpdateFeeDTO getFeeById(int feeId) throws InvalidInputException {
         try {
             return feeService.getFeeById(feeId);
         } catch (InvalidInputException e) {
