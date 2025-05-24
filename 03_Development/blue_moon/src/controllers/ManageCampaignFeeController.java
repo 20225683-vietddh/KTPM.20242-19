@@ -8,20 +8,26 @@ import services.CampaignFeeService;
 import java.time.DateTimeException;
 import java.sql.SQLException;
 
-public class AddCampaignFeeController extends BaseController {
+public class ManageCampaignFeeController extends BaseController {
 	private final CampaignFeeService service ;
 	
-	public AddCampaignFeeController() throws SQLException {
+	public ManageCampaignFeeController() throws SQLException {
 		service = new CampaignFeeService();
 	}
 	
-	public void handleAddCampaignFee(NewCampaignFeeDTO requestDTO) throws InvalidInputException, DateTimeException, InvalidDateRangeException, SQLException {
+	public void handleAddCampaignFee(CampaignFeeDTO requestDTO) throws InvalidInputException, DateTimeException, InvalidDateRangeException, SQLException {
 		validateInputs(requestDTO);
 		validateStartAndDueDate(requestDTO);
 		addNewCampaignFee(requestDTO);
 	}
 	
-	private void validateInputs(NewCampaignFeeDTO dto) throws InvalidInputException {
+	public void handleUpdateCampaignFee(CampaignFeeDTO requestDTO) throws InvalidInputException, DateTimeException, InvalidDateRangeException, SQLException {
+		validateInputs(requestDTO);
+		validateStartAndDueDate(requestDTO);
+		updateCampaignFee(requestDTO);
+	}
+	
+	private void validateInputs(CampaignFeeDTO dto) throws InvalidInputException {
 		List<String> errorMessages = new ArrayList<>();
 
 		if (dto.getName() == null || dto.getName().isEmpty()) {
@@ -45,7 +51,7 @@ public class AddCampaignFeeController extends BaseController {
 		}
 	}
 	
-	private void validateStartAndDueDate(NewCampaignFeeDTO dto) throws DateTimeException, InvalidDateRangeException {
+	private void validateStartAndDueDate(CampaignFeeDTO dto) throws DateTimeException, InvalidDateRangeException {
 		String sDay = dto.getStartDay();
 		String sMonth = dto.getStartMonth();
 		String sYear = dto.getStartYear();
@@ -61,7 +67,11 @@ public class AddCampaignFeeController extends BaseController {
 		}
 	}
 	
-	private void addNewCampaignFee(NewCampaignFeeDTO dto) throws SQLException {
+	private void addNewCampaignFee(CampaignFeeDTO dto) throws SQLException {
 		service.addNewCampaignFee(dto);
+	}
+	
+	private void updateCampaignFee(CampaignFeeDTO dto) throws SQLException {
+		service.updateCampaignFee(dto);
 	}
 }

@@ -212,7 +212,7 @@
                               <Insets left="230.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="btnDelete" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="80.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-cursor: hand;" text="Xóa" textFill="WHITE">
+                        <Button fx:id="btnDelete" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="80.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-cursor: hand;" text="Hủy" textFill="WHITE">
                            <font>
                               <Font size="16.0" />
                            </font>

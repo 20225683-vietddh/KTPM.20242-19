@@ -24,7 +24,7 @@ public class CampaignFeeListHandler extends BaseScreenWithLogoutAndGoBackHandler
 	private final CampaignFeeService service = new CampaignFeeService();
 	
 	public CampaignFeeListHandler(Stage stage, String userName) throws Exception {
-		super(stage, utils.Configs.CAMPAIGN_FEE_LIST_PATH, utils.Configs.LOGO_PATH, "Danh sách khoản thu");
+		super(stage, utils.Configs.CAMPAIGN_FEE_LIST_PATH, utils.Configs.LOGO_PATH, "Danh sách đợt thu");
 		loader.setController(this);
 		this.setContent();
 		this.setScene();
