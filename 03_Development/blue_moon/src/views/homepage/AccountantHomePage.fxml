@@ -64,7 +64,7 @@
                                     <Insets right="98.0" />
                                  </padding>
                               </Button>
-                              <Button styleClass="menu-button" fx:id="btnViewCampaignFees" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" text="Danh sách đợt thu">
+                              <Button fx:id="btnViewCampaignFees" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" styleClass="menu-button" text="Danh sách đợt thu">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -82,7 +82,7 @@
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button styleClass="menu-button" fx:id="btnViewFees" layoutX="11.0" layoutY="64.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" text="Danh sách khoản thu">
+                              <Button fx:id="btnViewFees" layoutX="11.0" layoutY="64.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" styleClass="menu-button" text="Danh sách khoản thu">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -100,7 +100,7 @@
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button styleClass="menu-button" fx:id="btnViewHouseHolds" layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" text="Danh sách hộ dân">
+                              <Button fx:id="btnViewHouseHolds" layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" styleClass="menu-button" text="Thu phí">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -112,13 +112,13 @@
                                     </ImageView>
                                  </graphic>
                                  <padding>
-                                    <Insets right="35.0" />
+                                    <Insets right="118.0" />
                                  </padding>
                                  <VBox.margin>
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button styleClass="menu-button" fx:id="btnTrackCampaignFee" layoutX="11.0" layoutY="165.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" text="Thống kê đợt thu ">
+                              <Button fx:id="btnTrackCampaignFee" layoutX="11.0" layoutY="165.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" styleClass="menu-button" text="Thống kê đợt thu ">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
