@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="600.0" style="-fx-background-color: white;">
+         <children>
+            <VBox prefWidth="600.0" style="-fx-background-color: white;">
+               <children>
+                  <Label alignment="CENTER" prefWidth="600.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);" text="Thêm đợt thu phí mới" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="20.0" top="20.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <VBox prefWidth="100.0">
+                     <children>
+                        <HBox prefWidth="200.0">
+                           <children>
+                              <Label text="Tên đợt thu phí">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label text="*" textFill="RED">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <TextField fx:id="tfName" promptText="Đợt thu phí tháng 10 năm 2024" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: black; -fx-border-radius: 5;">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </TextField>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="20.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox layoutX="30.0" layoutY="87.0" prefWidth="100.0">
+                     <children>
+                        <HBox prefWidth="200.0">
+                           <children>
+                              <Label text="Ngày bắt đầu">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label text="*" textFill="RED">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefWidth="200.0">
+                           <children>
+                              <ComboBox fx:id="cbStartDay" prefWidth="175.0" promptText="Ngày" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-color: black; -fx-border-radius: 5px; -fx-font-size: 16px;">
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                              <ComboBox fx:id="cbStartMonth" layoutX="10.0" layoutY="15.0" prefWidth="175.0" promptText="Tháng" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-color: black; -fx-border-radius: 5px; -fx-font-size: 16px;">
+                                 <HBox.margin>
+                                    <Insets left="17.0" top="5.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                              <ComboBox fx:id="cbStartYear" layoutX="185.0" layoutY="10.0" prefWidth="175.0" promptText="Năm" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-color: black; -fx-border-radius: 5px; -fx-font-size: 16px;">
+                                 <HBox.margin>
+                                    <Insets left="17.0" top="5.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="15.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox layoutX="30.0" layoutY="171.0" prefWidth="100.0">
+                     <children>
+                        <HBox prefWidth="200.0">
+                           <children>
+                              <Label text="Ngày kết thúc">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label text="*" textFill="RED">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefWidth="200.0">
+                           <children>
+                              <ComboBox fx:id="cbDueDay" prefWidth="175.0" promptText="Ngày" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-color: black; -fx-border-radius: 5px; -fx-font-size: 16px;">
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                              <ComboBox fx:id="cbDueMonth" layoutX="10.0" layoutY="15.0" prefWidth="175.0" promptText="Tháng" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-color: black; -fx-border-radius: 5px; -fx-font-size: 16px;">
+                                 <HBox.margin>
+                                    <Insets left="17.0" top="5.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                              <ComboBox fx:id="cbDueYear" layoutX="185.0" layoutY="10.0" prefWidth="175.0" promptText="Năm" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-color: black; -fx-border-radius: 5px; -fx-font-size: 16px;">
+                                 <HBox.margin>
+                                    <Insets left="17.0" top="5.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="15.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox layoutX="30.0" layoutY="87.0" prefWidth="100.0">
+                     <children>
+                        <HBox prefWidth="200.0">
+                           <children>
+                              <Label text="Mô tả">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <TextArea fx:id="taDescription" prefHeight="75.0" prefWidth="200.0" promptText="Đợt thu phí hàng tháng toàn thể các hộ dân của chung cư Blue Moon " style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-color: black; -fx-border-radius: 5px;">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="2.0" />
+                           </padding>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </TextArea>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="15.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox prefWidth="100.0" spacing="5.0">
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="15.0" />
+                     </VBox.margin>
+                     <children>
+                        <HBox prefWidth="200.0">
+                           <children>
+                              <Label text="Các khoản thu">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label text="*" textFill="RED">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                        <VBox fx:id="vbFeesList" prefWidth="100.0" spacing="10.0" />
+                     </children>
+                  </VBox>
+                  <HBox prefWidth="200.0">
+                     <children>
+                        <Button fx:id="btnSave" mnemonicParsing="false" prefWidth="80.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-cursor: hand;" text="Lưu" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="230.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnDelete" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="80.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-cursor: hand;" text="Xóa" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+         </children></AnchorPane>
+  </content>
+</ScrollPane>
