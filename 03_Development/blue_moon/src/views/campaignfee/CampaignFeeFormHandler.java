@@ -123,4 +123,8 @@ public abstract class CampaignFeeFormHandler extends BaseScreenHandler {
 		        .collect(Collectors.toList());
 		return new CampaignFeeDTO(name, sDay, sMonth, sYear, dDay, dMonth, dYear, description, selectedFeeIds);
 	}
+
+	public Stage getStage() {
+		return this.stage;
+	}
 }

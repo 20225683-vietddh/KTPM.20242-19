@@ -16,11 +16,21 @@ public class CampaignFeeCell extends HBox {
 	private final Stage stage;
 	private final CampaignFee campaignFee;
 	private final CampaignFeeService service;
+	private final CampaignFeeListHandler campaignFeeListHandler;
 	
 	public CampaignFeeCell(Stage stage, CampaignFee cf, CampaignFeeService service) {
 		this.stage = stage;
 		campaignFee = cf;
 		this.service = service;
+		this.campaignFeeListHandler = null;
+		setupCampaignFeeCell();
+	}
+	
+	public CampaignFeeCell(Stage stage, CampaignFee cf, CampaignFeeService service, CampaignFeeListHandler handler) {
+		this.stage = stage;
+		campaignFee = cf;
+		this.service = service;
+		this.campaignFeeListHandler = handler;
 		setupCampaignFeeCell();
 	}
 	
@@ -92,7 +102,14 @@ public class CampaignFeeCell extends HBox {
 	
 	private void handleUpdate(CampaignFee campaignFee) {
 		try {
-			new UpdateCampaignFeeHandler(this.stage, campaignFee);
+			Stage popupStage = new Stage();
+			UpdateCampaignFeeHandler updateCampaignFeeHandler = new UpdateCampaignFeeHandler(this.stage, campaignFee);
+			
+			// Get reference to the popup stage that was created in the handler
+			popupStage = updateCampaignFeeHandler.getStage();
+			
+			// Add a listener to refresh the list when the update form is closed
+			popupStage.setOnHiding(e -> refreshCampaignFeeList());
 		} catch (Exception e) {
 			ErrorDialog.showError("Lỗi hệ thống", "Không thể mở form điền thông tin chỉnh sửa!");
 			e.printStackTrace();
@@ -106,10 +123,35 @@ public class CampaignFeeCell extends HBox {
 			try {
 				service.deleteCampaignFee(campaignFee);
 				InformationDialog.showNotification("Xóa thành công", "Đợt thu phí " + campaignFee.getName() + " đã được xóa thành công!");
-				ScreenNavigator.goBack();
+				refreshCampaignFeeList();
 			} catch (SQLException e) {
 				ErrorDialog.showError("Lỗi hệ thống", e.getMessage());
 			}
+		}
+	}
+	
+	private void refreshCampaignFeeList() {
+		try {
+			if (campaignFeeListHandler != null) {
+				campaignFeeListHandler.loadCampaignFeeList();
+			} else {
+				reloadCampaignFeeListPage();
+			}
+		} catch (Exception e) {
+			ErrorDialog.showError("Lỗi", "Không thể làm mới danh sách đợt thu: " + e.getMessage());
+			e.printStackTrace();
+			reloadCampaignFeeListPage();
+		}
+	}
+	
+	private void reloadCampaignFeeListPage() {
+		try {
+			// Reload the campaign fee list page
+			CampaignFeeListHandler handler = new CampaignFeeListHandler(stage, "");
+			handler.show();
+		} catch (Exception e) {
+			ErrorDialog.showError("Lỗi hệ thống", "Không thể tải lại trang danh sách đợt thu!");
+			e.printStackTrace();
 		}
 	}
 }

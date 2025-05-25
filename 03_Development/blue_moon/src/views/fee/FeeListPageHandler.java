@@ -18,12 +18,6 @@ import models.Fee;
 import services.FeeService;
 
 public class FeeListPageHandler extends BaseScreenWithLogoutAndGoBackHandler {
-    @FXML private Button btnHome;
-    @FXML private Button btnCampaignFees;
-    @FXML private Button btnFees;
-    @FXML private Button btnHouseholds;
-    @FXML private Button btnStatistics;
-
     @FXML private Button btnAddFee;
     @FXML private TextField tfSearch;
     @FXML private Label lblUserName;
@@ -61,17 +55,9 @@ public class FeeListPageHandler extends BaseScreenWithLogoutAndGoBackHandler {
         if (btnAddFee != null) {
             btnAddFee.setOnAction(e -> handleAddFee());
         }
-        
-        setupNavbarEvents();
+
     }
 
-    private void setupNavbarEvents() {
-        if (btnHome != null) btnHome.setOnAction(e -> handleHome());
-        if (btnCampaignFees != null) btnCampaignFees.setOnAction(e -> handleCampaignFees());
-        if (btnFees != null) btnFees.setOnAction(e -> {}); // Đang ở trang này
-        if (btnHouseholds != null) btnHouseholds.setOnAction(e -> handleHouseholds());
-        if (btnStatistics != null) btnStatistics.setOnAction(e -> handleStatistics());
-    }
 
     public void loadFeeList() {
         try {
@@ -122,48 +108,6 @@ public class FeeListPageHandler extends BaseScreenWithLogoutAndGoBackHandler {
             ErrorDialog.showError("Lỗi dữ liệu", e.getMessage());
         } catch (Exception e) {
             ErrorDialog.showError("Lỗi", "Có lỗi xảy ra: " + e.getMessage());
-        }
-    }
-    
-    private void handleHome() {
-        try {
-            AccountantHomePageHandler homePage = new AccountantHomePageHandler(this.stage);
-            homePage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            ErrorDialog.showError("Lỗi hệ thống", "Không thể quay về trang chủ!");
-        }
-    }
-
-    private void handleCampaignFees() {
-        try {
-             BaseScreenHandler handler = new CampaignFeeListHandler(this.stage, lblUserName.getText());
-             handler.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            ErrorDialog.showError("Lỗi hệ thống", "Không thể mở trang danh sách đợt thu!");
-        }
-    }
-
-    private void handleHouseholds() {
-        try {
-            // BaseScreenHandler handler = new HouseholdsPageHandler(this.stage, lblUserName.getText());
-            // handler.show();
-            ErrorDialog.showError("Thông báo", "Chức năng đang được phát triển!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            ErrorDialog.showError("Lỗi hệ thống", "Không thể mở trang danh sách hộ dân!");
-        }
-    }
-
-    private void handleStatistics() {
-        try {
-            // BaseScreenHandler handler = new StatisticsPageHandler(this.stage, utils.Configs.STATISTICS_PAGE_PATH);
-            // handler.show();
-            ErrorDialog.showError("Thông báo", "Chức năng đang được phát triển!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            ErrorDialog.showError("Lỗi hệ thống", "Không thể mở trang thống kê!");
         }
     }
 

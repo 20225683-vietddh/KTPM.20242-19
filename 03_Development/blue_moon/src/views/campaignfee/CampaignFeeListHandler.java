@@ -29,6 +29,11 @@ public class CampaignFeeListHandler extends BaseScreenWithLogoutAndGoBackHandler
 		this.setContent();
 		this.setScene();
 		this.lblUserName.setText(userName);
+		
+		// Store a reference to this handler in the scene userData
+        if (this.scene != null) {
+            this.scene.setUserData(this);
+        }
 	}
 	
 	@FXML
@@ -38,22 +43,36 @@ public class CampaignFeeListHandler extends BaseScreenWithLogoutAndGoBackHandler
 		btnAddCampaignFee.setOnAction(e -> handleAddCampaignFee());
 	}
 	
-	private void loadCampaignFeeList() {
+	public void loadCampaignFeeList() {
 		List<CampaignFee> campaignFees = service.getAllCampaignFees();
 		
 		if (vbCampaignFeeList != null) {
 			vbCampaignFeeList.getChildren().clear();
 			for (CampaignFee campaignFee : campaignFees) {
-				CampaignFeeCell cell = new CampaignFeeCell(this.stage, campaignFee, service);
+				CampaignFeeCell cell = new CampaignFeeCell(this.stage, campaignFee, service, this);
 				vbCampaignFeeList.getChildren().add(cell);
 				vbCampaignFeeList.setSpacing(20);
 			}
 		}
 	}
 	
+	public static CampaignFeeListHandler getHandlerFromStage(Stage stage) {
+		if (stage != null && stage.getScene() != null && stage.getScene().getUserData() instanceof CampaignFeeListHandler) {
+			return (CampaignFeeListHandler) stage.getScene().getUserData();
+		}
+		return null;
+	}
+	
 	private void handleAddCampaignFee() {
 		try {
-			new NewCampaignFeeHandler(this.stage);
+			Stage popupStage = new Stage();
+			NewCampaignFeeHandler newCampaignFeeHandler = new NewCampaignFeeHandler(this.stage);
+			
+			// Get reference to the popup stage that was created in the handler
+			popupStage = newCampaignFeeHandler.getStage();
+			
+			// Add a listener to refresh the list when the form is closed
+			popupStage.setOnHiding(e -> loadCampaignFeeList());
 		} catch (Exception e) {
 			ErrorDialog.showError("Lỗi hệ thống", "Không thể hiển thị form điền thông tin đợt thu mới");
 			e.printStackTrace();

@@ -40,106 +40,6 @@
                               <Insets top="5.0" />
                            </VBox.margin>
                         </Label>
-                        <VBox prefWidth="100.0" style="-fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;">
-                           <children>
-                              <Button fx:id="btnHome" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Trang chủ">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <graphic>
-                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../assets/images/home-page.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <VBox.margin>
-                                    <Insets left="3.0" right="3.0" top="3.0" />
-                                 </VBox.margin>
-                                 <padding>
-                                    <Insets right="98.0" />
-                                 </padding>
-                              </Button>
-                              <Button fx:id="btnCampaignFees" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Danh sách đợt thu">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <graphic>
-                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../assets/images/list-icon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <padding>
-                                    <Insets right="33.0" />
-                                 </padding>
-                                 <VBox.margin>
-                                    <Insets left="3.0" right="3.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button fx:id="btnFees" layoutX="11.0" layoutY="64.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-content-display: left;" text="Danh sách khoản thu">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <graphic>
-                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../assets/images/list-icon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <padding>
-                                    <Insets right="10.0" />
-                                 </padding>
-                                 <VBox.margin>
-                                    <Insets left="3.0" right="3.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button fx:id="btnHouseholds" layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Thu phí">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <graphic>
-                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../assets/images/list-icon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <padding>
-                                    <Insets right="35.0" />
-                                 </padding>
-                                 <VBox.margin>
-                                    <Insets left="3.0" right="3.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button fx:id="btnStatistics" layoutX="11.0" layoutY="165.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Thống kê đợt thu ">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <graphic>
-                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../assets/images/absence.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <padding>
-                                    <Insets right="35.0" />
-                                 </padding>
-                                 <VBox.margin>
-                                    <Insets left="3.0" right="3.0" />
-                                 </VBox.margin>
-                              </Button>
-                           </children>
-                           <VBox.margin>
-                              <Insets left="16.0" right="16.0" top="30.0" />
-                           </VBox.margin>
-                           <padding>
-                              <Insets bottom="3.0" />
-                           </padding>
-                        </VBox>
                         <Button fx:id="btnGoBack" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Quay lại">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
@@ -152,7 +52,7 @@
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets left="52.0" right="52.0" top="205.0" />
+                              <Insets left="52.0" right="52.0" top="490.0" />
                            </VBox.margin>
                         </Button>
                      </children>

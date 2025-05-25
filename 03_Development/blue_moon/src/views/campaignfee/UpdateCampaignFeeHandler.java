@@ -8,6 +8,7 @@ import exception.InvalidDateRangeException;
 import exception.InvalidInputException;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.effect.GaussianBlur;
 import javafx.stage.Stage;
 import javafx.scene.control.ComboBox;
@@ -22,12 +23,14 @@ public class UpdateCampaignFeeHandler extends CampaignFeeFormHandler {
     private ComboBox<String> cbStatus;
     
     private CampaignFee campaignFee;
+    private final Stage ownerStage;
     
 	public UpdateCampaignFeeHandler(Stage ownerStage, CampaignFee campaignFee) throws Exception {
         super(ownerStage, utils.Configs.UPDATE_CAMPAIGN_FORM, "Chỉnh sửa thông tin đợt thu");
         loader.setController(this);
         
         this.campaignFee = campaignFee;
+        this.ownerStage = ownerStage;
         this.setContent();  
         this.setupUI();
         this.setScene();    
@@ -67,7 +70,9 @@ public class UpdateCampaignFeeHandler extends CampaignFeeFormHandler {
 			stage.close();
 			InformationDialog.showNotification("Cập nhật thành công",
 					"Chúc mừng bạn! Đợt thu phí " + requestDTO.getName() + " đã được cập nhật thành công!");
-			ScreenNavigator.goBack();
+			
+			// Refresh the campaign fee list instead of navigating back
+			refreshCampaignFeeList();
 		} catch (InvalidInputException e) {
 			ErrorDialog.showError("Lỗi nhập liệu", e.getMessage());
 		} catch (DateTimeException e) {
@@ -76,6 +81,19 @@ public class UpdateCampaignFeeHandler extends CampaignFeeFormHandler {
 			ErrorDialog.showError("Lỗi ngày tháng", e.getMessage());
 		} catch (SQLException e) {
 			ErrorDialog.showError("Lỗi hệ thống", e.getMessage());
+		}
+	}
+	
+	private void refreshCampaignFeeList() {
+		try {
+			// Sử dụng phương thức tĩnh để lấy handler từ stage chủ
+			CampaignFeeListHandler listHandler = CampaignFeeListHandler.getHandlerFromStage(ownerStage);
+			if (listHandler != null) {
+				listHandler.loadCampaignFeeList();
+			}
+		} catch (Exception e) {
+			ErrorDialog.showError("Lỗi", "Không thể làm mới danh sách đợt thu: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	
