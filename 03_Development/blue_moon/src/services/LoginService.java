@@ -1,20 +1,24 @@
 package services;
 
-import dao.UserDAO;
-import dto.LoginDTO;
-import models.User;
+import dao.user.*;
+import dto.login.*;
 import exception.*;
+import java.sql.SQLException;
 
 public class LoginService {
-	private final UserDAO userDAO = new UserDAO();
+	private final UserDAO userDAO;
+	
+	public LoginService() throws SQLException {
+		this.userDAO = new UserDAOPostgreSQL();
+	}
+	
+    public LoginResponseDTO authenticate(LoginRequestDTO requestDTO) throws AuthenticationException {
+        LoginResponseDTO responseDTO = userDAO.findByCredentials(requestDTO);
 
-    public User authenticate(LoginDTO dto) throws AuthenticationException {
-        User user = userDAO.findByCredentials(dto);
-
-        if (user == null) {
-            throw new AuthenticationException("Sai tên đăng nhập hoặc mật khẩu. Hãy kiểm tra lại!");
+        if (responseDTO == null) {
+            throw new AuthenticationException("Sai tên đăng nhập, hoặc mật khẩu, hoặc vai trò. Hãy kiểm tra lại!");
         }
 
-        return user;
+        return responseDTO;
     }
 }

@@ -3,28 +3,28 @@ package models;
 import java.time.LocalDate;
 
 public class Fee {
-	private String id;
+	private int id;
 	private String name;
 	private LocalDate createdDate;
-	private int amount;
 	private boolean isMandatory;
 	private String description;
 	
-	public Fee(String id, String name, LocalDate createdDate, int amount, boolean isMandatory, String description) {
+	public Fee(int id, String name, LocalDate createdDate, boolean isMandatory, String description) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.createdDate = createdDate;
-		this.amount = amount;
 		this.isMandatory = isMandatory;
 		this.description = description;
 	}
+	
+	public Fee() {}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 	
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	
@@ -44,19 +44,11 @@ public class Fee {
 		this.createdDate = createdDate;
 	}
 	
-	public int getAmount() {
-		return amount;
-	}
-	
-	public void setAmount(int amount) {
-		this.amount = amount;
-	}
-	
-	public boolean isMandatory() {
+	public boolean getIsMandatory() {
 		return isMandatory;
 	}
 	
-	public void setMandatory(boolean isMandatory) {
+	public void setIsMandatory(boolean isMandatory) {
 		this.isMandatory = isMandatory;
 	}
 	
@@ -66,5 +58,10 @@ public class Fee {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	@Override 
+	public String toString() {
+		return this.name;
 	}
 }

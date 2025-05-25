@@ -13,20 +13,19 @@ public class ErrorDialog {
         DialogPane dialogPane = alert.getDialogPane();
 
         dialogPane.setStyle(
-            "-fx-background-color: #fef2f2; " +
-            "-fx-border-color: #f87171; " +
-            "-fx-border-width: 2px; " +
-            "-fx-padding: 20px; " +
-            "-fx-font-family: 'Segoe UI';"
+            "-fx-background-color: white; " +
+            "-fx-padding: 15px; " +
+            "-fx-font-family: 'System';"
         );
 
         dialogPane.lookup(".content.label").setStyle(
             "-fx-text-fill: #b91c1c; " +
-            "-fx-font-size: 16px;"
+            "-fx-font-size: 16px;" +
+            "-fx-padding: 12px;"
         );
 
         dialogPane.lookupButton(ButtonType.OK).setStyle(
-            "-fx-background-color: #ef4444; " +
+            "-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); " +
             "-fx-text-fill: white; " +
             "-fx-font-weight: bold; " +
             "-fx-background-radius: 6px;" +

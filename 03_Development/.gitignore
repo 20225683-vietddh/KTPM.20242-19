@@ -1,3 +1,6 @@
 .metadata/
 blue_moon/bin/
-
+.idea/
+blue_moon/.idea/
+lib/
+blue_moon/src/config.properties

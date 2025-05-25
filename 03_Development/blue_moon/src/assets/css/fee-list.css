@@ -1,0 +1,69 @@
+.root-bg {
+    -fx-background-color: linear-gradient(to bottom right, #43A5DC, #FF7BAC);
+}
+.sidebar {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 24 0 24 0;
+    -fx-effect: dropshadow(gaussian, #888, 8, 0.2, 0, 2);
+}
+.sidebar-btn {
+    -fx-background-radius: 10;
+    -fx-font-size: 16px;
+    -fx-pref-width: 220;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 0 16;
+}
+.sidebar-btn.selected {
+    -fx-background-color: #f4e7be;
+    -fx-border-color: #43A5DC;
+    -fx-border-width: 2;
+}
+.add-fee-btn {
+    -fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-background-radius: 16;
+    -fx-padding: 10 24;
+}
+.tab-btn {
+    -fx-background-radius: 16;
+    -fx-font-weight: bold;
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: #222;
+}
+.tab-btn:selected {
+    -fx-background-color: #43A5DC;
+    -fx-text-fill: white;
+}
+.table-section {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-padding: 24;
+    -fx-effect: dropshadow(gaussian, #888, 8, 0.2, 0, 2);
+}
+.search-box {
+    -fx-background-radius: 16;
+    -fx-padding: 8 16;
+    -fx-border-color: #888;
+    -fx-border-width: 1;
+}
+.unpaid-section {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-padding: 10 24;
+    -fx-effect: dropshadow(gaussian, #888, 8, 0.2, 0, 2);
+}
+.action-btn {
+    -fx-background-radius: 8;
+    -fx-font-weight: bold;
+    -fx-padding: 4 16;
+}
+.action-btn.update {
+    -fx-background-color: #43A5DC;
+    -fx-text-fill: white;
+}
+.action-btn.delete {
+    -fx-background-color: #FF7BAC;
+    -fx-text-fill: white;
+}
