@@ -83,6 +83,7 @@ CREATE TABLE fees (
     description TEXT
 );
 
+
 --- Bảng fee_payment_records ---
 CREATE TABLE fee_payment_records (
     payment_id SERIAL PRIMARY KEY,
@@ -91,8 +92,10 @@ CREATE TABLE fee_payment_records (
     paid_date DATE,
     is_fully_paid BOOLEAN,
     household_id INTEGER REFERENCES households(household_id),
-    fee_id INTEGER REFERENCES fees(fee_id)
+    fee_id INTEGER REFERENCES fees(fee_id),
+    campaign_fee_id INTEGER REFERENCES campaign_fees(campaign_fee_id)
 );
+
 
 --- Bảng campaign_fees ---
 CREATE TABLE campaign_fees (
@@ -182,15 +185,6 @@ VALUES
 (4, 2),
 (6, 2),
 (7, 3);
-
-
---- Chèn dữ liệu mẫu cho bảng fee_payment_records ---
-INSERT INTO fee_payment_records (expected_amount, paid_amount, paid_date, is_fully_paid, household_id, fee_id)
-VALUES 
-(50000, 50000, '2025-05-03', TRUE, 1, 1), -- Hộ 1 nộp đủ phí vệ sinh
-(120000, 100000, '2025-05-04', FALSE, 2, 2), -- Hộ 2 mới nộp 100k phí gửi xe
-(250000, 250000, '2025-05-10', TRUE, 2, 3); -- Hộ 2 nộp đủ tiền nước
-
 
 
 --- Chèn dữ liệu mẫu cho bảng users ---
