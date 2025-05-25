@@ -1,0 +1,172 @@
+package dao.chargefee;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
+import java.time.LocalDate;
+import dao.PostgreSQLConnection;
+import models.Household;
+import dto.campaignfee.FeeAmountRecordDTO;
+
+public class ChargeFeeDAOPostgreSQL implements ChargeFeeDAO {
+	private final Connection conn;
+
+	public ChargeFeeDAOPostgreSQL() throws SQLException {
+		this.conn = PostgreSQLConnection.getInstance().getConnection();
+	}
+	
+	@Override
+	public boolean existsRecord(int campaignFeeId, int householdId, int feeId) throws SQLException {
+        String sql = "SELECT 1 FROM fee_payment_records WHERE campaign_fee_id = ? AND household_id = ? AND fee_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, campaignFeeId);
+            stmt.setInt(2, householdId);
+            stmt.setInt(3, feeId);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        }
+    }
+	
+	@Override
+	public FeeAmountRecordDTO getPaymentRecord(int campaignFeeId, int householdId, int feeId) throws SQLException {
+		String sql = "SELECT expected_amount, paid_amount, paid_date FROM fee_payment_records "
+				+ "WHERE campaign_fee_id = ? AND household_id = ? AND fee_id = ?";
+		
+		FeeAmountRecordDTO dto = new FeeAmountRecordDTO();
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setInt(1, campaignFeeId);
+			stmt.setInt(2, householdId);
+			stmt.setInt(3, feeId);
+
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					dto.setCampaignFeeId(campaignFeeId);
+					dto.setHouseholdId(householdId);
+					dto.setFeeId(feeId);
+
+					int expected = rs.getInt("expected_amount");
+					dto.setExpectedAmount(rs.wasNull() ? 0 : expected);
+
+					int paid = rs.getInt("paid_amount");
+					dto.setPaidAmount(rs.wasNull() ? 0 : paid);
+
+					LocalDate paidDate = rs.getObject("paid_date", LocalDate.class);
+					dto.setPaidDate(paidDate != null ? paidDate : null);
+				}
+			}
+		}
+		
+		return dto;
+	}
+	
+	@Override
+	public void insertRecord(int campaignFeeId, int householdId, int feeId, int expectedAmount, int paidAmount, LocalDate paidDate) throws SQLException {
+		String sql = "INSERT INTO fee_payment_records "
+				+ "(campaign_fee_id, household_id, fee_id, expected_amount, paid_amount, paid_date) "
+				+ "VALUES (?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setInt(1, campaignFeeId);
+			stmt.setInt(2, householdId);
+			stmt.setInt(3, feeId);
+			stmt.setInt(4, expectedAmount);
+			stmt.setInt(5, paidAmount);
+			stmt.setObject(6, paidDate);
+			stmt.executeUpdate();
+		}
+	}
+
+	@Override
+	public void updateRecord(int campaignFeeId, int householdId, int feeId, int expectedAmount,int paidAmount, LocalDate paidDate) throws SQLException {
+		String sql = "UPDATE fee_payment_records SET expected_amount = ?, paid_amount = ?, paid_date = ? WHERE campaign_fee_id = ? AND household_id = ? AND fee_id = ?";
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setInt(1, expectedAmount);
+			stmt.setInt(2, paidAmount);
+			stmt.setObject(3, paidDate);
+			stmt.setInt(4, campaignFeeId);
+			stmt.setInt(5, householdId);
+			stmt.setInt(6, feeId);
+			stmt.executeUpdate();
+		}
+	}
+	
+	@Override
+	public List<Household> getHouseholds() {
+		String sql = "SELECT household_id, house_number FROM households";
+		List<Household> households = new ArrayList<Household>();
+		
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Household household = new Household();
+				household.setHouseholdId(rs.getInt("household_id"));
+				household.setHouseNumber(rs.getString("house_number"));
+				
+				households.add(household);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return households;
+	}
+	
+	@Override
+	public int countTotalExpectedAmount(int campaignFeeId, int householdId) {
+	    String sql = """
+	        SELECT SUM(fpr.expected_amount) AS total
+	        FROM fee_payment_records fpr
+	        JOIN fees f ON fpr.fee_id = f.fee_id
+	        WHERE fpr.campaign_fee_id = ?
+	          AND fpr.household_id = ?
+	          AND f.is_mandatory = TRUE
+	    """;
+
+	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, campaignFeeId);
+	        stmt.setInt(2, householdId);
+
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            return rs.getInt("total"); 
+	        }
+
+	    } catch (SQLException e) {
+	    	e.printStackTrace();
+	    }
+	    
+	    return 0;
+	}
+	
+	@Override
+	public int countTotalPaidAmount(int campaignFeeId, int householdId) {
+	    String sql = """
+	        SELECT SUM(fpr.paid_amount) AS total
+	        FROM fee_payment_records fpr
+	        JOIN fees f ON fpr.fee_id = f.fee_id
+	        WHERE fpr.campaign_fee_id = ?
+	          AND fpr.household_id = ?
+	    """;
+
+	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        
+	        stmt.setInt(1, campaignFeeId);
+	        stmt.setInt(2, householdId);
+
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            return rs.getInt("total"); 
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return 0;
+	}
+
+}

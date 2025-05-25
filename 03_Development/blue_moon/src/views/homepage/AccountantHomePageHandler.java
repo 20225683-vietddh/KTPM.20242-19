@@ -5,7 +5,9 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import views.BaseScreenHandler;
 import views.campaignfee.CampaignFeeListHandler;
-import views.messages.ErrorDialog;
+import views.messages.*;
+import views.chargefee.ChargeFeeHandler;
+import models.CampaignFee;
 
 public class AccountantHomePageHandler extends HomePageHandler {
 	@FXML
@@ -32,6 +34,7 @@ public class AccountantHomePageHandler extends HomePageHandler {
 	public void initialize() {
 		super.initialize();
 		btnViewCampaignFees.setOnAction(e -> handleViewCampaignFees());
+		btnViewHouseHolds.setOnAction(e -> handleChargeFee());
 	}
 	
 	private void handleViewCampaignFees() {
@@ -40,6 +43,26 @@ public class AccountantHomePageHandler extends HomePageHandler {
 			handler.show();
 		} catch (Exception e) {
 			ErrorDialog.showError("Lỗi hệ thống", "Không thể tải trang danh sách đợt thu phí!");
+			e.printStackTrace();
+		}
+	}
+	
+	private void handleChargeFee() {
+		try {
+			CampaignFeeChosenOption option = new CampaignFeeChosenOption();
+			option.show();
+			
+			CampaignFee selected = option.getSelectedOption();
+			
+			if (selected == null) {
+				ErrorDialog.showError("Lỗi", "Bạn chưa chọn đợt thu phí nào!");
+			} else {
+				BaseScreenHandler handler = new ChargeFeeHandler(this.stage, lblUserName.getText(), selected);
+				System.out.println(selected.getId() + selected.getName() + selected.getFees());
+				handler.show();
+			}
+		} catch (Exception e) {
+			ErrorDialog.showError("Lỗi hệ thống", "Không thể tải danh sách!");
 			e.printStackTrace();
 		}
 	}

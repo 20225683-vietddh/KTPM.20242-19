@@ -90,4 +90,9 @@ public class CampaignFee {
 	public void setFees(List<Fee> fees) {
 		this.fees = fees;
 	}
+	
+	@Override 
+	public String toString() {
+		return this.name;
+	}
 }

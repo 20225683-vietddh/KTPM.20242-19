@@ -9,6 +9,8 @@ public class Configs {
 	public static final String HOMEPAGE_LOGO_PATH = "/assets/images/logo.png";
 	public static final String NEW_CAMPAIGN_FORM = "/views/campaignfee/NewCampaignFeeForm.fxml";
 	public static final String UPDATE_CAMPAIGN_FORM = "/views/campaignfee/UpdateCampaignFeeForm.fxml";
+	public static final String CHARGE_FEE_SCREEN = "/views/chargefee/ChargeFeeScreen.fxml";
+	public static final String UPDATE_AMOUNT_BOX = "/views/chargefee/UpdateChargeFeeScreen.fxml";
 	public static final String[] DAY = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", 
 			                            "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", 
 			                            "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
