@@ -27,7 +27,7 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 		Map<Integer, CampaignFee> campaignMap = new LinkedHashMap<>();
 		
 		String sql = """ 
-				SELECT cf.campaign_fee_id, cf.name, cf.created_date, cf.start_date, cf.due_date, cf.status, cf.description, f.fee_id, f.name AS fee_name
+				SELECT cf.campaign_fee_id, cf.name, cf.created_date, cf.start_date, cf.due_date, cf.status, cf.description, f.fee_id, f.name AS fee_name, f.is_mandatory
                 FROM campaign_fees AS cf, campaign_fee_items AS cfi, fees AS f
                 WHERE cf.campaign_fee_id = cfi.campaign_fee_id
                 AND f.fee_id = cfi.fee_id;
@@ -56,10 +56,11 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 		        Fee fee = new Fee();
 		        fee.setId(rs.getInt("fee_id"));
 		        fee.setName(rs.getString("fee_name"));
+		        fee.setIsMandatory(rs.getBoolean("is_mandatory"));
+		        
 		        
 		        campaign.getFees().add(fee);
 		    }
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

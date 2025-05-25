@@ -62,4 +62,16 @@ public class Utils {
 		
 		LocalDate.of(y, m, d);
 	}
+	
+	public static String formatCurrency(int amount) {
+	    return String.format("%,d", amount).replace(',', '.');
+	}
+	
+	public static int parseCurrency(String input) throws NumberFormatException {
+		if (input == null || input.isEmpty()) return 0;
+
+		String plainNumber = input.replace(".", "").trim();
+		return Integer.parseInt(plainNumber);
+	   
+	}
 }
