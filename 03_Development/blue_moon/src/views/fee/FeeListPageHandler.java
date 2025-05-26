@@ -1,9 +1,6 @@
 package views.fee;
 
 import java.util.List;
-import views.campaignfee.*;
-import controllers.FeeListController;
-import views.BaseScreenHandler;
 import exception.InvalidInputException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -12,8 +9,6 @@ import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
 import views.BaseScreenWithLogoutAndGoBackHandler;
 import views.messages.ErrorDialog;
-import views.messages.InformationDialog;
-import views.homepage.AccountantHomePageHandler;
 import models.Fee;
 import services.FeeService;
 

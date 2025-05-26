@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import models.Fee;
 import views.BaseScreenHandler;
 import views.messages.ErrorDialog;
-import views.messages.InformationDialog;
 import javafx.stage.Stage;
 import java.time.LocalDate;
 import javafx.event.ActionEvent;

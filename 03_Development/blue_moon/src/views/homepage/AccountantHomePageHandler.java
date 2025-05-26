@@ -60,6 +60,7 @@ public class AccountantHomePageHandler extends HomePageHandler {
 
 	private void handleViewFees() {
 		try {
+			System.out.println("Gọi khoản thu");
 			FeeListPageHandler feeListHandler = new FeeListPageHandler(this.stage, lblUserName.getText());
 			feeListHandler.show();
 		} catch (Exception e) {
