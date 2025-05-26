@@ -8,6 +8,7 @@ import views.fee.FeeListPageHandler;
 import views.campaignfee.CampaignFeeListHandler;
 import views.messages.*;
 import views.chargefee.ChargeFeeHandler;
+import views.trackcampaignfee.TrackCampaignFeeHandler;
 import models.CampaignFee;
 
 public class AccountantHomePageHandler extends HomePageHandler {
@@ -72,7 +73,17 @@ public class AccountantHomePageHandler extends HomePageHandler {
 
 	private void handleTrackCampaignFee() {
 		try {
-
+			CampaignFeeChosenOption option = new CampaignFeeChosenOption();
+			option.show();
+			
+			CampaignFee selected = option.getSelectedOption();
+			
+			if (selected == null) {
+				ErrorDialog.showError("Lỗi", "Bạn chưa chọn đợt thu phí nào!");
+			} else {
+				BaseScreenHandler handler = new TrackCampaignFeeHandler(this.stage, lblUserName.getText(), selected);
+				handler.show();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorDialog.showError("Lỗi hệ thống", "Không thể mở trang thống kê!");
@@ -90,7 +101,6 @@ public class AccountantHomePageHandler extends HomePageHandler {
 				ErrorDialog.showError("Lỗi", "Bạn chưa chọn đợt thu phí nào!");
 			} else {
 				BaseScreenHandler handler = new ChargeFeeHandler(this.stage, lblUserName.getText(), selected);
-				System.out.println(selected.getId() + selected.getName() + selected.getFees());
 				handler.show();
 			}
 		} catch (Exception e) {

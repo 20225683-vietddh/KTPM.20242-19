@@ -76,22 +76,22 @@ public class UpdateChargeFeeHandler extends BaseScreenHandler {
 
 		    for (Fee fee : fees) {
 		        Label lblFeeName = new Label(fee.getName());
-		        lblFeeName.setPrefWidth(200);
-		        lblFeeName.setMaxWidth(200);
+		        lblFeeName.setPrefWidth(180);
+		        lblFeeName.setMaxWidth(180);
 		        lblFeeName.setPadding(new Insets(0, 0, 0, 10));
 		        if (!fee.getIsMandatory()) {
 		        	lblFeeName.setStyle("-fx-font-size: 18px; -fx-font-style: italic;");
 		        	System.out.println(fee.getIsMandatory());
 		        } else {
-		        	lblFeeName.setStyle("-fx-font-size: 18px; -fx-font-style: regular;");
+		        	lblFeeName.setStyle("-fx-font-size: 18px;");
 		        }
 		        
 		        TextField tfExpectedAmount = new TextField();
-		        tfExpectedAmount.setPrefWidth(140);
+		        tfExpectedAmount.setPrefWidth(160);
 		        tfExpectedAmount.setStyle("-fx-font-size: 18px; -fx-alignment: center;");
 		        
 		        Label lblPaidAmount = new Label();
-		        lblPaidAmount.setPrefWidth(140);
+		        lblPaidAmount.setPrefWidth(160);
 		        lblPaidAmount.setStyle("-fx-font-size: 18px; -fx-alignment: center;");
 		        
 		        Label lblPaidDate = new Label();

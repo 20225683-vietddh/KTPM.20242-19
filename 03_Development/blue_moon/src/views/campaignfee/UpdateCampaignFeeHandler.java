@@ -8,13 +8,11 @@ import exception.InvalidDateRangeException;
 import exception.InvalidInputException;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.effect.GaussianBlur;
 import javafx.stage.Stage;
 import javafx.scene.control.ComboBox;
 import models.CampaignFee;
 import models.Fee;
-import views.ScreenNavigator;
 import views.messages.ErrorDialog;
 import views.messages.InformationDialog;
 
@@ -86,7 +84,6 @@ public class UpdateCampaignFeeHandler extends CampaignFeeFormHandler {
 	
 	private void refreshCampaignFeeList() {
 		try {
-			// Sử dụng phương thức tĩnh để lấy handler từ stage chủ
 			CampaignFeeListHandler listHandler = CampaignFeeListHandler.getHandlerFromStage(ownerStage);
 			if (listHandler != null) {
 				listHandler.loadCampaignFeeList();

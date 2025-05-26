@@ -8,7 +8,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import models.CampaignFee;
 import views.messages.*;
-import views.ScreenNavigator;
 import services.CampaignFeeService;
 import java.sql.SQLException;
 
