@@ -1,0 +1,13 @@
+/LoginService.class
+/HouseholdService.class
+/TemporaryResidenceAbsenceService.class
+/memberDAO.class
+/MemberService.class
+/ServiceException.class
+/ServiceFactory.class
+/HouseholdServiceImpl.class
+/MemberServiceImpl.class
+/CampaignFeeService.class
+/ChargeFeeService.class
+/FeeService.class
+/TrackCampaignFeeService.class

@@ -7,7 +7,7 @@ import views.BaseScreenWithLogoutAndGoBackHandler;
 
 public abstract class HomePageHandler extends BaseScreenWithLogoutAndGoBackHandler {
 	@FXML
-	protected Label lblUserName;
+	protected Label lblUserName ;
 	
 	public HomePageHandler(Stage stage, String screenPath) throws Exception {
 		super(stage, screenPath, utils.Configs.LOGO_PATH, "Trang chủ");

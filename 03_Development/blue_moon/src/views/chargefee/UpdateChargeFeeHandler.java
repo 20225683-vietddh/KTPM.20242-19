@@ -48,7 +48,7 @@ public class UpdateChargeFeeHandler extends BaseScreenHandler {
     private ChargeFeeService service;
     
 	public UpdateChargeFeeHandler(Stage ownerStage, CampaignFee campaignFee, Household household, ChargeFeeService service) throws Exception {
-        super(new Stage(), utils.Configs.UPDATE_AMOUNT_BOX, utils.Configs.LOGO_PATH, "Cập nhật tình hình thu phí");
+        super(new Stage(), utils.Configs.UPDATE_AMOUNT_BOX, utils.Configs.LOGO_PATH, "Cáº­p nháº­t tÃ¬nh hÃ¬nh thu phÃ­");
         loader.setController(this);
         this.campaignFee = campaignFee;
         this.household = household;
@@ -70,7 +70,7 @@ public class UpdateChargeFeeHandler extends BaseScreenHandler {
 	
 	@FXML
 	public void initialize() {
-		this.lblHouseNumber.setText("Hộ " + household.getHouseNumber());
+		this.lblHouseNumber.setText("Há»™ " + household.getHouseholdNumber());
 		try {
 			List<Fee> fees = campaignFee.getFees();
 
@@ -102,21 +102,21 @@ public class UpdateChargeFeeHandler extends BaseScreenHandler {
 		        tfNewPaidAmount.setPrefWidth(135);
 		        tfNewPaidAmount.setStyle("-fx-font-size: 18px; -fx-alignment: center;");
 		        
-		        boolean existed = service.isRecordExisted(campaignFee.getId(), household.getHouseholdId(), fee.getId());
+		        boolean existed = service.isRecordExisted(campaignFee.getId(), household.getId(), fee.getId());
 
 		        if (!existed) {
 		            tfExpectedAmount.setText("0");
 		            lblPaidAmount.setText("0");
-		            lblPaidDate.setText("Chưa có");
+		            lblPaidDate.setText("ChÆ°a cÃ³");
 		            tfNewPaidAmount.setDisable(true);
 		        } else {
-		        	FeeAmountRecordDTO dto = service.getPaymentRecord(campaignFee.getId(), household.getHouseholdId(), fee.getId());
+		        	FeeAmountRecordDTO dto = service.getPaymentRecord(campaignFee.getId(), household.getId(), fee.getId());
 		        	tfExpectedAmount.setText(utils.Utils.formatCurrency(dto.getExpectedAmount()));
 		        	lblPaidAmount.setText(utils.Utils.formatCurrency(dto.getPaidAmount()));
-		        	lblPaidDate.setText(dto.getPaidDate() == null ? "Chưa có" : dto.getPaidDate().toString());
+		        	lblPaidDate.setText(dto.getPaidDate() == null ? "ChÆ°a cÃ³" : dto.getPaidDate().toString());
 		            if (dto.isFullyPaid()) {
 		            	tfNewPaidAmount.setDisable(true);
-		            	tfNewPaidAmount.setPromptText("Đã nộp đủ");
+		            	tfNewPaidAmount.setPromptText("Ä�Ã£ ná»™p Ä‘á»§");
 		            } else {
 		            	tfNewPaidAmount.setDisable(false);
 		            }
@@ -127,12 +127,12 @@ public class UpdateChargeFeeHandler extends BaseScreenHandler {
 		        vbFeeAmounts.getChildren().add(row);
 		    }
 		} catch (SQLException e) {
-			ErrorDialog.showError("Lỗi hệ thống", "Không thể truy cập vào CSDL!");
+			ErrorDialog.showError("Lá»—i há»‡ thá»‘ng", "KhÃ´ng thá»ƒ truy cáº­p vÃ o CSDL!");
 			e.printStackTrace();
 		}
 		
-		lblTotalExpectedAmount.setText(utils.Utils.formatCurrency(service.countTotalExpectedAmount(campaignFee.getId(), household.getHouseholdId())) + " đồng.");
-		lblTotalPaidAmount.setText(utils.Utils.formatCurrency(service.countTotalPaidAmount(campaignFee.getId(), household.getHouseholdId())) + " đồng.");
+		lblTotalExpectedAmount.setText(utils.Utils.formatCurrency(service.countTotalExpectedAmount(campaignFee.getId(), household.getId())) + " Ä‘á»“ng.");
+		lblTotalPaidAmount.setText(utils.Utils.formatCurrency(service.countTotalPaidAmount(campaignFee.getId(), household.getId())) + " Ä‘á»“ng.");
 		btnSave.setOnAction(e -> handleSave());
 		btnDelete.setOnAction(e -> handleDelete());
 	}
@@ -155,17 +155,17 @@ public class UpdateChargeFeeHandler extends BaseScreenHandler {
 
 		            int feeId = fee.getId();
 		            int campaignFeeId = campaignFee.getId();
-		            int householdId = household.getHouseholdId();
+		            int householdId = household.getId();
 
 		            Integer expectedAmount = null;
 		            try {
 		                expectedAmount = utils.Utils.parseCurrency(expectedAmountField.getText().trim());
 		                if (expectedAmount <= 0) {
-		                    ErrorDialog.showError("Lỗi", "Vui lòng nhập số tiền cần thu là một số nguyên dương cho khoản thu " + fee.getName());
+		                    ErrorDialog.showError("Lá»—i", "Vui lÃ²ng nháº­p sá»‘ tiá»�n cáº§n thu lÃ  má»™t sá»‘ nguyÃªn dÆ°Æ¡ng cho khoáº£n thu " + fee.getName());
 		                    return;
 		                }
 		            } catch (NumberFormatException e) {
-		                ErrorDialog.showError("Lỗi", "Vui lòng nhập số tiền cần thu hợp lệ cho khoản thu " + fee.getName());
+		                ErrorDialog.showError("Lá»—i", "Vui lÃ²ng nháº­p sá»‘ tiá»�n cáº§n thu há»£p lá»‡ cho khoáº£n thu " + fee.getName());
 		                return;
 		            }
 
@@ -175,12 +175,12 @@ public class UpdateChargeFeeHandler extends BaseScreenHandler {
 		                if (!input.isEmpty()) {
 		                    additionalAmount = Integer.parseInt(input);
 		                    if (additionalAmount <= 0) {
-		                        ErrorDialog.showError("Lỗi", "Vui lòng nhập số tiền đã nộp là một số nguyên dương cho khoản thu " + fee.getName());
+		                        ErrorDialog.showError("Lá»—i", "Vui lÃ²ng nháº­p sá»‘ tiá»�n Ä‘Ã£ ná»™p lÃ  má»™t sá»‘ nguyÃªn dÆ°Æ¡ng cho khoáº£n thu " + fee.getName());
 		                        return;
 		                    }
 		                }
 		            } catch (NumberFormatException e) {
-		                ErrorDialog.showError("Lỗi", "Vui lòng nhập số tiền đã nộp hợp lệ cho khoản thu " + fee.getName());
+		                ErrorDialog.showError("Lá»—i", "Vui lÃ²ng nháº­p sá»‘ tiá»�n Ä‘Ã£ ná»™p há»£p lá»‡ cho khoáº£n thu " + fee.getName());
 		                return;
 		            }
 
@@ -198,10 +198,10 @@ public class UpdateChargeFeeHandler extends BaseScreenHandler {
 		            }
 		        }
 		    }
-			InformationDialog.showNotification("Thành công", "Cập nhật tình hình thu phí thành công");
+			InformationDialog.showNotification("ThÃ nh cÃ´ng", "Cáº­p nháº­t tÃ¬nh hÃ¬nh thu phÃ­ thÃ nh cÃ´ng");
 		    this.stage.close();
 		} catch (SQLException e) {
-			ErrorDialog.showError("Lỗi", "Không truy cập được vào CSDL");
+			ErrorDialog.showError("Lá»—i", "KhÃ´ng truy cáº­p Ä‘Æ°á»£c vÃ o CSDL");
 			e.printStackTrace();
 		}
 	}

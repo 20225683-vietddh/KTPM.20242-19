@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.MemberDetailsDialogHandler">
+   <children>
+      <VBox prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <!-- Header Section -->
+            <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="700.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-background-radius: 10 10 0 0;">
+               <children>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../assets/images/members-icon.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <VBox>
+                     <children>
+                        <Label alignment="CENTER" prefHeight="25.0" prefWidth="500.0" text="Chi tiết thành viên hộ khẩu" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblHouseholdInfo" alignment="CENTER" prefHeight="20.0" prefWidth="500.0" text="Hộ khẩu: [Số hộ khẩu] - Chủ hộ: [Tên chủ hộ]" textFill="WHITE">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+            
+            <!-- Content Section -->
+            <ScrollPane fitToWidth="true" prefHeight="380.0" prefWidth="700.0" style="-fx-background-color: white;">
+               <content>
+                  <VBox prefWidth="680.0" spacing="15.0" style="-fx-background-color: white;">
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <!-- Member Count Info and Action Buttons -->
+                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                           <children>
+                              <!-- Member Count Section -->
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label text="Tổng số thành viên:" textFill="#43a5dc">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="lblMemberCount" text="0" textFill="#FF7BAC">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="người" textFill="#43a5dc">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              
+                              <!-- Action Buttons Section -->
+                              <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Button fx:id="btnMakeOwner" mnemonicParsing="false" onAction="#handleMakeOwner" prefHeight="32.0" prefWidth="140.0" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;" text="Đặt làm chủ hộ">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="btnRemoveMember" mnemonicParsing="false" onAction="#handleRemoveMember" prefHeight="32.0" prefWidth="120.0" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;" text="Xóa thành viên">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                        
+                        <!-- Add Member Section -->
+                        <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 5; -fx-border-color: #dee2e6; -fx-border-radius: 5;">
+                           <children>
+                              <Label text="Thêm thành viên:" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtMemberId" prefHeight="32.0" prefWidth="200.0" promptText="Nhập ID thành viên..." style="-fx-background-radius: 5; -fx-border-color: #ced4da; -fx-border-radius: 5;">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </TextField>
+                              <Button fx:id="btnAddMember" mnemonicParsing="false" onAction="#handleAddMember" prefHeight="32.0" prefWidth="120.0" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;" text="Thêm vào hộ">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
+                        
+                        <!-- Members Table -->
+                        <TableView fx:id="tblMembers" prefHeight="300.0" prefWidth="660.0" style="-fx-background-color: white; -fx-border-color: #d0d0d0; -fx-border-radius: 5;">
+                           <columns>
+                              <TableColumn fx:id="colMemberId" prefWidth="80.0" text="ID" />
+                              <TableColumn fx:id="colFullName" prefWidth="150.0" text="Họ và tên" />
+                              <TableColumn fx:id="colGender" prefWidth="80.0" text="Giới tính" />
+                              <TableColumn fx:id="colDateOfBirth" prefWidth="100.0" text="Ngày sinh" />
+                              <TableColumn fx:id="colIdCard" prefWidth="120.0" text="CCCD/CMND" />
+                              <TableColumn fx:id="colRelationship" prefWidth="100.0" text="Quan hệ" />
+                              <TableColumn fx:id="colIsHead" prefWidth="70.0" text="Chủ hộ" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </ScrollPane>
+            
+            <!-- Button Section -->
+            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="700.0" spacing="20.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #d0d0d0; -fx-border-width: 1 0 0 0;">
+               <children>
+                  <Button fx:id="btnClose" mnemonicParsing="false" onAction="#handleClose" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;" text="Đóng">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="7.5" top="7.5" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

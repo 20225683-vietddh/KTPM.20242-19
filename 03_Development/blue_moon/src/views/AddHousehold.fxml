@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="650.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.AddHouseholdDialogHandler">
+   <children>
+      <VBox prefHeight="650.0" prefWidth="500.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <!-- Header Section -->
+            <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="500.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-background-radius: 10 10 0 0;">
+               <children>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../assets/images/household-icon.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label text="Thêm hộ khẩu mới" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            
+            <!-- Content Section -->
+            <ScrollPane fx:id="scrollPane" fitToWidth="true" prefHeight="520.0" prefWidth="500.0" style="-fx-background-color: white;">
+               <content>
+                  <VBox fx:id="contentVBox" prefWidth="480.0" spacing="15.0" style="-fx-background-color: white;">
+                     <padding>
+                        <Insets bottom="20.0" left="30.0" right="30.0" top="30.0" />
+                     </padding>
+                     <children>
+                        <!-- Leader ID -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="ID chủ hộ: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtLeaderId" prefHeight="35.0" promptText="Nhập ID chủ hộ" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Label fx:id="lblLeaderIdError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Address -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Địa chỉ: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtAddress" prefHeight="35.0" promptText="Nhập địa chỉ" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Label fx:id="lblAddressError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Area -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Khu vực: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtArea" prefHeight="35.0" promptText="Nhập khu vực" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Label fx:id="lblAreaError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Phone -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Số điện thoại: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtPhone" prefHeight="35.0" promptText="Nhập số điện thoại (9-10 chữ số)" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Label fx:id="lblPhoneError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Email -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Email: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtEmail" prefHeight="35.0" promptText="Nhập địa chỉ email" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Label fx:id="lblEmailError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Number of Members -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Số thành viên: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <HBox spacing="10.0">
+                                 <children>
+                                    <TextField fx:id="txtMemberCount" prefHeight="35.0" prefWidth="150.0" promptText="Số thành viên" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                    <Button fx:id="btnGenerateFields" onAction="#handleGenerateMemberFields" prefHeight="35.0" text="Tạo trường nhập" style="-fx-background-color: #17a2b8; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <Label fx:id="lblMemberCountError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Dynamic Member ID Fields Container -->
+                        <VBox fx:id="memberFieldsContainer" spacing="10.0" visible="false">
+                        </VBox>
+                        
+                        <!-- Required fields note -->
+                        <Label text="* Các trường bắt buộc" textFill="#666666">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+               </content>
+            </ScrollPane>
+            
+            <!-- Button Section -->
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="500.0" spacing="20.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #d0d0d0; -fx-border-width: 1 0 0 0;">
+               <children>
+                  <Button fx:id="btnAdd" onAction="#handleAdd" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;" text="Thêm">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnCancel" onAction="#handleCancel" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;" text="Hủy">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

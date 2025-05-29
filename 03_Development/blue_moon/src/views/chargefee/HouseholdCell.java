@@ -38,7 +38,7 @@ public class HouseholdCell extends HBox {
 		Label name = new Label("Hộ: ");
 	    name.setStyle("-fx-font-size: 16px; -fx-text-fill: gray;");
 	    
-	    Label householdName = new Label(household.getHouseNumber());
+	    Label householdName = new Label(household.getHouseholdNumber());
 	    householdName.setPrefWidth(620);
 	    householdName.setMaxWidth(620);
 	    householdName.setStyle("-fx-font-size: 16px; -fx-text-fill: black;");

@@ -19,22 +19,26 @@ public abstract class BaseScreenWithLogoutAndGoBackHandler extends BaseScreenHan
 	
 	@FXML
 	public void initialize() {
-		btnLogout.setOnAction(e -> handleLogout());
-		btnGoBack.setOnAction(e -> handleGoBack());
+		if (btnLogout != null) {
+			btnLogout.setOnAction(e -> handleLogout());
+		}
+		if (btnGoBack != null) {
+			btnGoBack.setOnAction(e -> handleGoBack());
+		}
 	}
 	
-	private void handleLogout() {
+	protected void handleLogout() {
 		try {
 			ScreenNavigator.clear();
 			BaseScreenHandler loginPage = new LoginPageHandler(this.stage);
 			loginPage.show();
-		} catch (Exception e){
+		} catch (Exception e) {
 			ErrorDialog.showError("Lỗi hệ thống", "Không thể đăng xuất!");
 			e.printStackTrace();
 		}
 	}
 	
-	private void handleGoBack() {
+	protected void handleGoBack() {
 		try {
 			ScreenNavigator.goBack();
 		} catch (Exception e) {

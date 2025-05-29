@@ -1,0 +1,9 @@
+/AuthenticationException.class
+/InvalidInputException.class
+/HouseholdNotExist.class
+/HouseholdAlreadyExistsException.class
+/InvalidHouseholdDataException.class
+/MemberNotFound.class
+/MemberNotFoundException.class
+/ServiceException.class
+/InvalidDateRangeException.class
