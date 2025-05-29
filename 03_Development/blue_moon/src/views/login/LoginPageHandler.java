@@ -73,11 +73,11 @@ public class LoginPageHandler extends BaseScreenHandler {
 		BaseScreenHandler handler;
 		switch (responseDTO.getRole()) {
 		case ACCOUNTANT:
-			handler = new AccountantHomePageHandler(this.stage, responseDTO.getUserName());
+			handler = new AccountantHomePageHandler(this.stage);
 			handler.show();
 			break;
 		case LEADER:
-			handler = new LeaderHomePageHandler(this.stage, responseDTO.getUserName());
+			handler = new LeaderHomePageHandler(this.stage);
 			handler.show();
 			break;
 		default:

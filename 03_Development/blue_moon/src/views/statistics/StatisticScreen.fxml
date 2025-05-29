@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1078.0" prefWidth="1550.0" style="-fx-border-width: 1; -fx-border-color: black;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <AnchorPane prefHeight="1039.0" prefWidth="1446.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);" stylesheets="@../../assets/css/style.css">
+         <children>
+            <VBox prefHeight="987.0" prefWidth="264.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="26.0">
+               <children>
+                  <VBox prefHeight="743.0" prefWidth="264.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: black; -fx-border-width: 1; -fx-border-radius: 10;">
+                     <VBox.margin>
+                        <Insets bottom="17.0" />
+                     </VBox.margin>
+                     <children>
+                        <ImageView fitHeight="128.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../assets/images/statistics.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets left="68.0" top="16.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <VBox prefWidth="100.0" style="-fx-border-width: 1; -fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;">
+                           <VBox.margin>
+                              <Insets left="16.0" right="16.0" top="30.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="3.0" />
+                           </padding>
+                           <children>
+                              <Button fx:id="btnThongKe" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-background-color: white;" text="Thống kê">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="3.0" right="3.0" top="3.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets right="98.0" />
+                                 </padding>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/images/statistics.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="btnTheoGioiTinh" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Theo giới tính">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/images/list-icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <VBox.margin>
+                                    <Insets left="3.0" right="3.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets right="65.0" />
+                                 </padding>
+                              </Button>
+                              <Button fx:id="btnTheoDoTuoi" layoutX="11.0" layoutY="64.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Theo độ tuổi">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="3.0" right="3.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets right="75.0" />
+                                 </padding>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/images/list-icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="btnTamTruTamVang" layoutX="11.0" layoutY="64.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Tạm trú tạm vắng">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="3.0" right="3.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets right="35.0" />
+                                 </padding>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/images/absence.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="btnKhoangThoiGian" layoutX="11.0" layoutY="165.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Khoảng thời gian">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="3.0" right="3.0" />
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/images/time-icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <padding>
+                                    <Insets right="35.0" />
+                                 </padding>
+                              </Button>
+                           </children>
+                        </VBox>
+                        <Button fx:id="btnGoBack" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-cursor: hand;" text="Quay lại" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="52.0" right="52.0" top="230.0" />
+                           </VBox.margin>
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../assets/images/back.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="227.0" prefWidth="264.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;">
+                     <children>
+                        <ImageView fitHeight="124.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../assets/images/logo-2.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets bottom="16.0" left="70.0" right="70.0" top="30.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-cursor: hand;" text="Đăng xuất" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="52.0" right="52.0" top="15.0" />
+                           </VBox.margin>
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../assets/images/exit.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children></VBox>
+            <VBox prefHeight="987.0" prefWidth="1106.0" AnchorPane.leftAnchor="314.0" AnchorPane.topAnchor="26.0">
+               <children>
+                  <VBox prefWidth="100.0">
+                     <children>
+                        <HBox prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                           <children>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../assets/images/statistics.png" />
+                                 </image>
+                              </ImageView>
+                              <Label prefHeight="40.0" text="Thống kê">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Line endX="1006.0" startX="-100.0" />
+                        <Label alignment="CENTER" prefWidth="1106.0" text="Chào mừng đến với trang thống kê">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="32.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="836.0" prefWidth="1106.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;">
+                     <VBox.margin>
+                        <Insets top="32.0" />
+                     </VBox.margin>
+                     <children>
+                        <TabPane fx:id="statisticTabPane" prefHeight="836.0" prefWidth="1106.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab fx:id="ThongKeMainMenuTab" text="ThongKeMainMenu">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-radius: 10;">
+                                       <children>
+                                          <HBox prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                             <children>
+                                                <HBox prefHeight="90.0" prefWidth="500.0" style="-fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;">
+                                                   <HBox.margin>
+                                                      <Insets left="36.0" />
+                                                   </HBox.margin>
+                                                   <children>
+                                                      <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../assets/images/resident-icon.png" />
+                                                         </image>
+                                                         <HBox.margin>
+                                                            <Insets left="50.0" top="15.0" />
+                                                         </HBox.margin>
+                                                      </ImageView>
+                                                      <Label text="Tổng số dân cư:">
+                                                         <font>
+                                                            <Font size="24.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets top="23.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                      <Label fx:id="lblTotalResidents" text="1000">
+                                                         <HBox.margin>
+                                                            <Insets left="15.0" top="23.0" />
+                                                         </HBox.margin>
+                                                         <font>
+                                                            <Font size="24.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children></HBox>
+                                                <HBox prefHeight="90.0" prefWidth="500.0" style="-fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;">
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                   <HBox.margin>
+                                                      <Insets left="30.0" />
+                                                   </HBox.margin>
+                                                   <children>
+                                                      <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../assets/images/home-page.png" />
+                                                         </image>
+                                                         <HBox.margin>
+                                                            <Insets left="50.0" top="15.0" />
+                                                         </HBox.margin>
+                                                      </ImageView>
+                                                      <Label text="Tỉ lệ căn hộ đã thuê">
+                                                         <HBox.margin>
+                                                            <Insets top="23.0" />
+                                                         </HBox.margin>
+                                                         <font>
+                                                            <Font size="24.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="lblPercentHousehold" text="80%">
+                                                         <HBox.margin>
+                                                            <Insets left="15.0" top="23.0" />
+                                                         </HBox.margin>
+                                                         <font>
+                                                            <Font size="24.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children></HBox>
+                                             </children>
+                                          </HBox>
+                                          <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 19;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="36.0" AnchorPane.rightAnchor="36.0" AnchorPane.topAnchor="130.0">
+                                             <children>
+                                                <Label text="Biểu đồ gia tăng dân số">
+                                                   <font>
+                                                      <Font size="20.0" />
+                                                   </font>
+                                                   <VBox.margin>
+                                                      <Insets left="20.0" top="15.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Line endX="100.0" startX="1097.2928466796875" startY="0.6213234066963196">
+                                                   <VBox.margin>
+                                                      <Insets left="15.0" />
+                                                   </VBox.margin>
+                                                </Line>
+                                                <BarChart fx:id="barChartPopulation" prefHeight="657.0" prefWidth="1031.0">
+                                                  <xAxis>
+                                                    <CategoryAxis side="BOTTOM" />
+                                                  </xAxis>
+                                                  <yAxis>
+                                                    <NumberAxis side="LEFT" />
+                                                  </yAxis>
+                                                </BarChart>
+                                             </children>
+                                          </VBox>
+                                       </children></AnchorPane>
+                              </content>
+                            </Tab>
+                            <Tab fx:id="GioiTinhMenuTab" text="GioiTinhMenu">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <HBox style="-fx-border-color: black; -fx-border-width: 1; -fx-border-radius: 10;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                             <children>
+                                                <PieChart fx:id="pieChartGender" prefHeight="300.0" prefWidth="450.0" style="-fx-background-radius: 10;" title="Biểu đồ giới tính">
+                                                   <HBox.margin>
+                                                      <Insets bottom="10.0" left="10.0" top="10.0" />
+                                                   </HBox.margin>
+                                                </PieChart>
+                                                <Line endX="-98.70710754394531" endY="320.29290771484375" startX="-100.0" />
+                                                <VBox prefWidth="600.0">
+                                                   <HBox.margin>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </HBox.margin>
+                                                   <children>
+                                                      <HBox prefWidth="200.0">
+                                                         <children>
+                                                            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../../assets/images/resident-icon.png" />
+                                                               </image>
+                                                               <HBox.margin>
+                                                                  <Insets left="100.0" />
+                                                               </HBox.margin>
+                                                            </ImageView>
+                                                            <Label text="Nam: ">
+                                                               <font>
+                                                                  <Font size="32.0" />
+                                                               </font>
+                                                               <HBox.margin>
+                                                                  <Insets left="30.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                            <Label fx:id="lblMale" text="500">
+                                                               <font>
+                                                                  <Font size="32.0" />
+                                                               </font>
+                                                               <HBox.margin>
+                                                                  <Insets left="20.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets top="50.0" />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                      <HBox prefWidth="200.0">
+                                                         <VBox.margin>
+                                                            <Insets top="20.0" />
+                                                         </VBox.margin>
+                                                         <children>
+                                                            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../../assets/images/resident-icon.png" />
+                                                               </image>
+                                                               <HBox.margin>
+                                                                  <Insets left="100.0" />
+                                                               </HBox.margin>
+                                                            </ImageView>
+                                                            <Label text="Nữ   :">
+                                                               <font>
+                                                                  <Font size="32.0" />
+                                                               </font>
+                                                               <HBox.margin>
+                                                                  <Insets left="30.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                            <Label fx:id="lblFemale" text="500">
+                                                               <font>
+                                                                  <Font size="32.0" />
+                                                               </font>
+                                                               <HBox.margin>
+                                                                  <Insets left="30.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox prefWidth="200.0">
+                                                         <children>
+                                                            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../../assets/images/resident-icon.png" />
+                                                               </image>
+                                                               <HBox.margin>
+                                                                  <Insets left="100.0" />
+                                                               </HBox.margin>
+                                                            </ImageView>
+                                                            <Label text="Tổng:">
+                                                               <font>
+                                                                  <Font size="32.0" />
+                                                               </font>
+                                                               <HBox.margin>
+                                                                  <Insets left="30.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                            <Label fx:id="lblTotalResidentsAge" text="1000">
+                                                               <font>
+                                                                  <Font size="32.0" />
+                                                               </font>
+                                                               <HBox.margin>
+                                                                  <Insets left="25.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets top="20.0" />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </HBox>
+                                          <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: black; -fx-border-width: 1; -fx-border-radius: 10;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="350.0">
+                                             <children>
+                                                <TableView fx:id="tableViewAgeGender" prefHeight="441.0" prefWidth="1081.0" style="-fx-background-radius: 10;">
+                                                  <columns>
+                                                      <TableColumn fx:id="colAgeRange" prefWidth="240.0" text="Độ tuổi" />
+                                                    <TableColumn fx:id="colMale" minWidth="0.0" prefWidth="267.0" text="Nam" />
+                                                    <TableColumn fx:id="colFemale" prefWidth="283.0" text="Nữ" />
+                                                      <TableColumn fx:id="colTotal" prefWidth="290.0" text="Tổng" />
+                                                  </columns>
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                              <Tab fx:id="DoTuoiMenuTab" text="DoTuoiMenu">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <HBox prefWidth="200.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="30.0">
+                                             <children>
+                                                <HBox prefHeight="90.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-width: 1; -fx-background-radius: 10; -fx-border-radius: 10;">
+                                                   <HBox.margin>
+                                                      <Insets left="36.0" right="24.0" />
+                                                   </HBox.margin>
+                                                   <children>
+                                                      <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                         <HBox.margin>
+                                                            <Insets left="50.0" top="15.0" />
+                                                         </HBox.margin>
+                                                         <image>
+                                                            <Image url="@../../assets/images/resident-icon.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                      <Label text="Độ tuổi trung bình:">
+                                                         <font>
+                                                            <Font size="24.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets top="23.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                      <Label fx:id="labelAverageAge" text="35">
+                                                         <font>
+                                                            <Font size="24.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" top="23.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="90.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-width: 1; -fx-background-radius: 10; -fx-border-radius: 10;">
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                   <children>
+                                                      <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                         <HBox.margin>
+                                                            <Insets left="50.0" top="15.0" />
+                                                         </HBox.margin>
+                                                         <image>
+                                                            <Image url="@../../assets/images/resident-icon.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                      <Label text="Độ tuổi phổ biến:">
+                                                         <font>
+                                                            <Font size="24.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets top="23.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                      <Label fx:id="labelMostCommonAgeGroup" text="30-35">
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" top="23.0" />
+                                                         </HBox.margin>
+                                                         <font>
+                                                            <Font size="24.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </HBox>
+                                          <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: black; -fx-border-width: 1; -fx-background-radius: 10; -fx-border-radius: 10;" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="43.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="145.0">
+                                             <children>
+                                                <Label text="Thống kê theo từng nhóm tuổi">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                   <VBox.margin>
+                                                      <Insets left="25.0" top="10.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Line endX="1479.1607666015625" endY="-5.020799160003662" startX="495.53448486328125" startY="-5.020815372467041">
+                                                   <VBox.margin>
+                                                      <Insets left="20.0" />
+                                                   </VBox.margin>
+                                                </Line>
+                                                <BarChart fx:id="barChartAgeGroup" prefHeight="585.0" prefWidth="1027.0">
+                                                  <xAxis>
+                                                    <CategoryAxis side="BOTTOM" />
+                                                  </xAxis>
+                                                  <yAxis>
+                                                    <NumberAxis side="LEFT" />
+                                                  </yAxis>
+                                                </BarChart>
+                                             </children>
+                                          </VBox>
+                                       </children></AnchorPane>
+                                </content>
+                              </Tab>
+                              <Tab fx:id="TamTruTamVangMenuTab" text="TamTruTamVangMenu">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <HBox prefWidth="200.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0">
+                                             <children>
+                                                <Label text="Loại">
+                                                   <font>
+                                                      <Font size="25.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="180.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <ComboBox fx:id="cbStayAbsence" prefHeight="35.0" prefWidth="150.0">
+                                                   <HBox.margin>
+                                                      <Insets left="20.0" />
+                                                   </HBox.margin>
+                                                </ComboBox>
+                                                <Label text=" Tháng">
+                                                   <font>
+                                                      <Font size="25.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="100.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <ComboBox fx:id="cbMonthSA" prefHeight="35.0" prefWidth="70.0">
+                                                   <HBox.margin>
+                                                      <Insets left="20.0" />
+                                                   </HBox.margin></ComboBox>
+                                                <Label text="Năm">
+                                                   <font>
+                                                      <Font size="25.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="30.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <ComboBox fx:id="cbYearSA" prefHeight="35.0" prefWidth="100.0">
+                                                   <HBox.margin>
+                                                      <Insets left="20.0" />
+                                                   </HBox.margin></ComboBox>
+                                             </children>
+                                          </HBox>
+                                          <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0">
+                                             <children>
+                                                <Label text="Thông tin dân cư về tạm trú, tạm vắng">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                   <VBox.margin>
+                                                      <Insets left="20.0" top="10.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Line endX="919.6262817382812" endY="-0.8284271955490112" startX="-100.0">
+                                                   <VBox.margin>
+                                                      <Insets left="20.0" />
+                                                   </VBox.margin>
+                                                </Line>
+                                                <TableView fx:id="tableViewStayAbsence" prefHeight="689.0" prefWidth="1063.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="colResidentId" prefWidth="60.0" text="ID" />
+                                                    <TableColumn fx:id="colFullName" prefWidth="150.0" text="Họ và tên" />
+                                                      <TableColumn fx:id="colGender" prefWidth="59.0" text="Giới tính" />
+                                                      <TableColumn fx:id="colDateOfBirth" prefWidth="126.0" text="Ngày sinh" />
+                                                      <TableColumn fx:id="colHouseholdId" prefWidth="76.0" text="Số hộ khẩu" />
+                                                      <TableColumn fx:id="colCreatedDate" prefWidth="124.0" text="Ngày tạo" />
+                                                      <TableColumn fx:id="colPeriod" prefWidth="181.0" text="Thời gian" />
+                                                      <TableColumn fx:id="colRequestDesc" prefWidth="272.0" text="Mô tả" />
+                                                  </columns>
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </VBox.margin>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </children></AnchorPane>
+                                </content>
+                              </Tab>
+                              <Tab fx:id="KhoangThoiGianMenuTab" text="KhoangThoiGianMenu">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <HBox prefWidth="200.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                             <children>
+                                                <Label text="Từ     Tháng">
+                                                   <font>
+                                                      <Font size="25.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="80.0" />
+                                                   </HBox.margin></Label>
+                                                <ComboBox fx:id="cbBeginMonthPeriod" prefHeight="36.0" prefWidth="60.0">
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" right="20.0" />
+                                                   </HBox.margin></ComboBox>
+                                                <Label text="Năm">
+                                                   <font>
+                                                      <Font size="25.0" />
+                                                   </font>
+                                                </Label>
+                                                <ComboBox fx:id="cbBeginYearPeriod" prefHeight="36.0" prefWidth="80.0">
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin></ComboBox>
+                                                <Label text="Đến       Tháng">
+                                                   <font>
+                                                      <Font size="25.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="150.0" />
+                                                   </HBox.margin></Label>
+                                                <ComboBox fx:id="cbEndMonthPeriod" prefHeight="36.0" prefWidth="60.0">
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin></ComboBox>
+                                                <Label text="Năm">
+                                                   <font>
+                                                      <Font size="25.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="20.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <ComboBox fx:id="cbEndYearPeriod" prefHeight="36.0" prefWidth="80.0">
+                                                   <opaqueInsets>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </opaqueInsets>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </ComboBox>
+                                             </children>
+                                          </HBox>
+                                          <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="80.0">
+                                             <children>
+                                                <Label text="Lịch sử biến động nhân khẩu">
+                                                   <font>
+                                                      <Font size="20.0" />
+                                                   </font>
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Line endX="1144.7928466796875" endY="1.4497535228729248" startX="152.5">
+                                                   <VBox.margin>
+                                                      <Insets left="20.0" />
+                                                   </VBox.margin>
+                                                </Line>
+                                                <TableView fx:id="tableViewChangeHistory" prefHeight="682.0" prefWidth="1043.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="colResidentIdGapTime" prefWidth="76.0" text="ID" />
+                                                    <TableColumn fx:id="colFullNameGapTime" prefWidth="176.0" text="Họ và tên" />
+                                                      <TableColumn fx:id="colDateOfBirthGapTime" prefWidth="129.0" text="Ngày sinh" />
+                                                      <TableColumn fx:id="colGenderGapTime" prefWidth="74.0" text="Giới tính" />
+                                                      <TableColumn fx:id="colHouseholdIdGapTime" text="Số hộ khẩu" />
+                                                      <TableColumn fx:id="colChangeTypeGapTime" prefWidth="229.666748046875" text="Loại thay đổi" />
+                                                      <TableColumn fx:id="colChangeDateGapTime" prefWidth="245.333251953125" text="Thời gian" />
+                                                  </columns>
+                                                   <VBox.margin>
+                                                      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                                   </VBox.margin>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </children></AnchorPane>
+                                </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </content>
+</ScrollPane>

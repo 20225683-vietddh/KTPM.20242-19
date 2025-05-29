@@ -6,7 +6,13 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX"/>
-	<classpathentry kind="lib" path="C:/Users/QA/Downloads/postgresql-42.7.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/UFO/javafx-sdk-23.0.1/lib/javafx.base.jar"/>
+	<classpathentry kind="lib" path="C:/Users/UFO/javafx-sdk-23.0.1/lib/javafx.controls.jar"/>
+	<classpathentry kind="lib" path="C:/Users/UFO/javafx-sdk-23.0.1/lib/javafx.fxml.jar"/>
+	<classpathentry kind="lib" path="C:/Users/UFO/javafx-sdk-23.0.1/lib/javafx.graphics.jar"/>
+	
+	<classpathentry kind="lib" path="C:/Users/UFO/postgresql-42.7.5/postgresql-42.7.5.jar"/>
+
+
 	<classpathentry kind="output" path="bin"/>
 </classpath>

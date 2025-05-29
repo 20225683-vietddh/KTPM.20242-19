@@ -1,6 +1,3 @@
-/**
- * This class aims to store the informations of unauthorized user
- */
 package dto.login;
 
 import utils.Role;

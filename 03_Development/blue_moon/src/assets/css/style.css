@@ -6,12 +6,12 @@
 	-fx-background-color: linear-gradient(from 100% 0% to 0% 0%, #43A5DC, #FF7BAC);
 }
 
-.menu-button {
-	-fx-text-fill: black;
-	-fx-background-color: white;
-}
-
-.menu-button:hover {
-	-fx-text-fill: white;
-	-fx-background-color: linear-gradient(from 100% 0% to 0% 0%, #43A5DC, #FF7BAC);
+.tab-pane .tab-header-area {
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+    visibility: hidden;
 }

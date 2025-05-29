@@ -1,3 +1,4 @@
 .metadata/
 blue_moon/bin/
 blue_moon/src/config.properties
+.vscode/

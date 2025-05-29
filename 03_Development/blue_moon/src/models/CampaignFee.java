@@ -4,17 +4,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class CampaignFee {
-	private int id;
+	private String id;
 	private String name;
 	private LocalDate createdDate;
 	private LocalDate startDate;
 	private LocalDate dueDate;
-	private String status;
+	private int status;
 	private String description;
-	private List<Fee> fees;
+	private List<Fee> feeList;
 	
-	public CampaignFee(int id, String name, LocalDate createdDate, LocalDate startDate, LocalDate dueDate,
-			String status, String description) {
+	public CampaignFee(String id, String name, LocalDate createdDate, LocalDate startDate, LocalDate dueDate,
+			int status, String description) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -24,14 +24,12 @@ public class CampaignFee {
 		this.status = status;
 		this.description = description;
 	}
-	
-	public CampaignFee() {}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	
@@ -67,11 +65,11 @@ public class CampaignFee {
 		this.dueDate = dueDate;
 	}
 	
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 	
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 	
@@ -83,11 +81,11 @@ public class CampaignFee {
 		this.description = description;
 	}
 	
-	public List<Fee> getFees() {
-		return fees;
+	public List<Fee> getFeeList() {
+		return feeList;
 	}
 
-	public void setFees(List<Fee> fees) {
-		this.fees = fees;
+	public void setFeeList(List<Fee> feeList) {
+		this.feeList = feeList;
 	}
 }
