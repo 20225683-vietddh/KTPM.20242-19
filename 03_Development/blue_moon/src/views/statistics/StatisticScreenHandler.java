@@ -102,8 +102,8 @@ public class StatisticScreenHandler extends BaseScreenWithLogoutAndGoBackHandler
     public StatisticScreenHandler(Stage stage, String screenPath) throws Exception{
         super(stage, screenPath,  utils.Configs.LOGO_PATH, "Thống kê");
         loader.setController(this);
-        this.setContent();  // nếu có nội dung cần set
-        this.setScene();    // cần thiết để gán scene cho stage
+        this.setContent();  
+        this.setScene();    
     }
 
 
@@ -194,6 +194,32 @@ public class StatisticScreenHandler extends BaseScreenWithLogoutAndGoBackHandler
     private void showTab(Tab selectedTab) {
         statisticTabPane.getTabs().clear();           
         statisticTabPane.getTabs().add(selectedTab);  
+
+        resetButtonStyles();
+
+        if (selectedTab == DoTuoiMenuTab) {
+            highlightButton(btnTheoDoTuoi);
+        } else if (selectedTab == GioiTinhMenuTab) {
+            highlightButton(btnTheoGioiTinh);
+        } else if (selectedTab == KhoangThoiGianMenuTab) {
+            highlightButton(btnKhoangThoiGian);
+        } else if (selectedTab == TamTruTamVangMenuTab) {
+            highlightButton(btnTamTruTamVang);
+        } else if (selectedTab == ThongKeMainMenuTab) {
+            highlightButton(btnThongKe);
+        }
+    }
+
+    private void resetButtonStyles() {
+        btnTheoDoTuoi.setStyle("-fx-background-color: white");
+        btnTheoGioiTinh.setStyle("-fx-background-color: white");
+        btnKhoangThoiGian.setStyle("-fx-background-color: white");
+        btnTamTruTamVang.setStyle("-fx-background-color: white");
+        btnThongKe.setStyle("-fx-background-color: white");
+    }
+
+    private void highlightButton(Button button) {
+        button.setStyle("-fx-background-color: linear-gradient(from 100% 0% to 0% 0%, #43A5DC, #FF7BAC)");
     }
 
 

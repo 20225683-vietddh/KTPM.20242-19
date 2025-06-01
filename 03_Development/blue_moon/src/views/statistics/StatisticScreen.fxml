@@ -347,7 +347,7 @@
                                                          <children>
                                                             <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../../assets/images/resident-icon.png" />
+                                                                  <Image url="@../../assets/images/male.jpg" />
                                                                </image>
                                                                <HBox.margin>
                                                                   <Insets left="100.0" />
@@ -381,7 +381,7 @@
                                                          <children>
                                                             <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../../assets/images/resident-icon.png" />
+                                                                  <Image url="@../../assets/images/female.png" />
                                                                </image>
                                                                <HBox.margin>
                                                                   <Insets left="100.0" />
