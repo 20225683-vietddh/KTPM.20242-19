@@ -17,7 +17,6 @@ public class FeeListPageHandler extends BaseScreenWithLogoutAndGoBackHandler {
     @FXML private TextField tfSearch;
     @FXML private Label lblUserName;
     @FXML private VBox vbFeeList;
-
     private final FeeService service = new FeeService();
 
     public FeeListPageHandler(Stage stage, String userName) throws Exception {
@@ -29,7 +28,6 @@ public class FeeListPageHandler extends BaseScreenWithLogoutAndGoBackHandler {
             this.lblUserName.setText(userName);
         }
         
-        // Lưu trữ tham chiếu đến FeeListPageHandler trong userData của Scene
         if (this.scene != null) {
             this.scene.setUserData(this);
         }
@@ -50,7 +48,6 @@ public class FeeListPageHandler extends BaseScreenWithLogoutAndGoBackHandler {
         if (btnAddFee != null) {
             btnAddFee.setOnAction(e -> handleAddFee());
         }
-
     }
 
 

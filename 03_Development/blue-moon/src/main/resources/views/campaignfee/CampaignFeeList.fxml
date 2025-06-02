@@ -119,12 +119,12 @@
                            </VBox.margin>
                         </HBox>
                         <Line endX="1006.0" startX="-100.0" />
-                        <HBox prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;">
+                        <HBox prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 5;">
                            <VBox.margin>
                               <Insets top="27.0" />
                            </VBox.margin>
                            <children>
-                              <TextField prefHeight="40.0" prefWidth="1000.0" promptText="Tìm kiếm..." style="-fx-background-color: white; -fx-font-size: 16;">
+                              <TextField fx:id="tfSearch" prefHeight="40.0" prefWidth="1000.0" promptText="Nhập tên đợt thu..." style="-fx-background-color: white; -fx-font-size: 16;">
                                  <HBox.margin>
                                     <Insets bottom="2.0" left="10.0" top="2.0" />
                                  </HBox.margin>
@@ -145,7 +145,41 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="1080.0" style="-fx-background-color: white;">
                            <children>
-                              <VBox fx:id="vbCampaignFeeList" prefWidth="1019.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0" />
+                              <HBox prefWidth="1019.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="25.0">
+                                 <children>
+                                    <HBox>
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #F3F3F3; -fx-background-radius: 5;" text="Mới tạo">
+                                             <HBox.margin>
+                                                <Insets right="10.0" />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font></Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox layoutX="10.0" layoutY="10.0">
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #FFEAEA; -fx-background-radius: 5;" text="Đang diễn ra">
+                                             <HBox.margin>
+                                                <Insets right="10.0" />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font></Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox layoutX="210.0" layoutY="10.0">
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #e1e8fa; -fx-background-radius: 5;" text="Đã kết thúc">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font></Label>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <VBox fx:id="vbCampaignFeeList" prefWidth="1019.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="95.0" />
                            </children></AnchorPane>
                     </content>
                      <VBox.margin>

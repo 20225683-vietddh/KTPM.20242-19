@@ -12,19 +12,11 @@ import views.trackcampaignfee.TrackCampaignFeeHandler;
 import models.CampaignFee;
 
 public class AccountantHomePageHandler extends HomePageHandler {
-	@FXML
-	private Button btnViewCampaignFees;
+	@FXML private Button btnViewCampaignFees;
+	@FXML private Button btnViewFees;
+	@FXML private Button btnViewHouseHolds;
+	@FXML private Button btnTrackCampaignFee;
 	
-	@FXML
-	private Button btnViewFees;
-	
-	@FXML
-	private Button btnViewHouseHolds;
-	
-	@FXML
-	private Button btnTrackCampaignFee;
-	
-	// Constructor without userName parameter
 	public AccountantHomePageHandler(Stage stage) throws Exception {
 		super(stage, utils.Configs.ACCOUNTANT_HOME_PAGE_PATH);
 		loader.setController(this);

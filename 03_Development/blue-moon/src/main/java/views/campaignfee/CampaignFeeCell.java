@@ -39,22 +39,31 @@ public class CampaignFeeCell extends HBox {
 		this.setMinSize(1019, 50);
 		this.setPadding(new Insets(15, 20, 15, 20));
 		this.setAlignment(Pos.CENTER_LEFT);
-		this.setStyle("-fx-border-color: black; -fx-border-radius: 8px; -fx-background-color: #F7F7F7; -fx-background-radius: 8px;");
-	
+		String created = utils.Configs.STATUS[0];
+		String occurring = utils.Configs.STATUS[1];
+		String ended = utils.Configs.STATUS[2];
+		if (campaignFee.getStatus().equals(created)) {
+			this.setStyle("-fx-background-color: #F3F3F3; -fx-background-radius: 8px;");
+		} else if (campaignFee.getStatus().equals(occurring)) {
+			this.setStyle("-fx-background-color: #FFEAEA; -fx-background-radius: 8px;");
+		} else if (campaignFee.getStatus().equals(ended)) {
+			this.setStyle("-fx-background-color: #e1e8fa; -fx-background-radius: 8px;");
+		}
+			
 	    Label name = new Label("Tên: ");
 	    name.setStyle("-fx-font-size: 16px; -fx-text-fill: gray;");
 	    
 	    Label campaignFeeName = new Label(campaignFee.getName());
-	    campaignFeeName.setPrefWidth(270);
-	    campaignFeeName.setMaxWidth(270);
+	    campaignFeeName.setPrefWidth(250);
+	    campaignFeeName.setMaxWidth(250);
 	    campaignFeeName.setStyle("-fx-font-size: 16px; -fx-text-fill: black;");
 	    
 	    Label startDate = new Label("Ngày bắt đầu: ");
 	    startDate.setStyle("-fx-font-size: 16px; -fx-text-fill: gray;");
 	    
 	    Label campaignFeeStartDate = new Label(campaignFee.getStartDate().toString());
-	    campaignFeeStartDate.setPrefWidth(105);
-	    campaignFeeStartDate.setMaxWidth(105);
+	    campaignFeeStartDate.setPrefWidth(125);
+	    campaignFeeStartDate.setMaxWidth(125);
 	    campaignFeeStartDate.setStyle("-fx-font-size: 16px; -fx-text-fill: black;");
 	    
 	    Label status = new Label("Trạng thái: ");
@@ -103,11 +112,9 @@ public class CampaignFeeCell extends HBox {
 		try {
 			Stage popupStage = new Stage();
 			UpdateCampaignFeeHandler updateCampaignFeeHandler = new UpdateCampaignFeeHandler(this.stage, campaignFee);
-			
-			// Get reference to the popup stage that was created in the handler
+
 			popupStage = updateCampaignFeeHandler.getStage();
-			
-			// Add a listener to refresh the list when the update form is closed
+	
 			popupStage.setOnHiding(e -> refreshCampaignFeeList());
 		} catch (Exception e) {
 			ErrorDialog.showError("Lỗi hệ thống", "Không thể mở form điền thông tin chỉnh sửa!");
@@ -132,7 +139,7 @@ public class CampaignFeeCell extends HBox {
 	private void refreshCampaignFeeList() {
 		try {
 			if (campaignFeeListHandler != null) {
-				campaignFeeListHandler.loadCampaignFeeList();
+				campaignFeeListHandler.loadCampaignFeeList("");
 			} else {
 				reloadCampaignFeeListPage();
 			}
@@ -145,7 +152,6 @@ public class CampaignFeeCell extends HBox {
 	
 	private void reloadCampaignFeeListPage() {
 		try {
-			// Reload the campaign fee list page
 			CampaignFeeListHandler handler = new CampaignFeeListHandler(stage, "");
 			handler.show();
 		} catch (Exception e) {

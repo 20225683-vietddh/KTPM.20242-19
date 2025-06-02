@@ -35,7 +35,7 @@ public class NewCampaignFeeHandler extends CampaignFeeFormHandler {
 	@FXML
 	public void initialize() {
 		super.initialize();
-		FeeCell firstCell = new FeeCell(allFees, super::handleAddNewFee);
+		FeeCell firstCell = new FeeCell(allFees, super::handleAddNewFee, super::handleDeleteFee);
 		vbFeesList.getChildren().add(firstCell.getContainer());
 		feeCells.add(firstCell);
 	}
@@ -66,10 +66,9 @@ public class NewCampaignFeeHandler extends CampaignFeeFormHandler {
 	
 	private void refreshCampaignFeeList() {
 		try {
-			// Sử dụng phương thức tĩnh để lấy handler từ stage chủ
 			CampaignFeeListHandler listHandler = CampaignFeeListHandler.getHandlerFromStage(ownerStage);
 			if (listHandler != null) {
-				listHandler.loadCampaignFeeList();
+				listHandler.loadCampaignFeeList("");
 			}
 		} catch (Exception e) {
 			ErrorDialog.showError("Lỗi", "Không thể làm mới danh sách đợt thu: " + e.getMessage());

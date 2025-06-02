@@ -19,39 +19,17 @@ import views.BaseScreenHandler;
 import views.messages.ErrorDialog;
 
 public abstract class CampaignFeeFormHandler extends BaseScreenHandler {
-	@FXML
-	protected Button btnDelete;
-
-	@FXML
-	protected Button btnSave;
-
-	@FXML
-	protected ComboBox<String> cbDueDay;
-
-	@FXML
-	protected ComboBox<String> cbDueMonth;
-
-	@FXML
-	protected ComboBox<String> cbDueYear;
-
-	@FXML
-	protected ComboBox<String> cbStartDay;
-
-	@FXML
-	protected ComboBox<String> cbStartMonth;
-
-	@FXML
-	protected ComboBox<String> cbStartYear;
-
-	@FXML
-	protected TextArea taDescription;
-
-	@FXML
-	protected TextField tfName;
-
-	@FXML
-	protected VBox vbFeesList;
-	
+	@FXML protected Button btnDelete;
+	@FXML protected Button btnSave;
+	@FXML protected ComboBox<String> cbDueDay;
+	@FXML protected ComboBox<String> cbDueMonth;
+	@FXML protected ComboBox<String> cbDueYear;
+	@FXML protected ComboBox<String> cbStartDay;
+	@FXML protected ComboBox<String> cbStartMonth;
+	@FXML protected ComboBox<String> cbStartYear;
+	@FXML protected TextArea taDescription;
+	@FXML protected TextField tfName;
+	@FXML protected VBox vbFeesList;
 	private final FeeService service = new FeeService();
 	protected List<Fee> allFees = service.getAllFeesAsModel();
 	protected List<FeeCell> feeCells = new ArrayList<>();
@@ -100,9 +78,18 @@ public abstract class CampaignFeeFormHandler extends BaseScreenHandler {
 	        return;
 	    }
 
-	    FeeCell newRow = new FeeCell(remaining, this::handleAddNewFee);
+	    FeeCell newRow = new FeeCell(remaining, this::handleAddNewFee, this::handleDeleteFee);
 	    vbFeesList.getChildren().add(newRow.getContainer());
 	    feeCells.add(newRow);
+	}
+	
+	protected void handleDeleteFee(FeeCell cell) {
+	    if (feeCells.size() == 1) {
+	        ErrorDialog.showError("Lỗi", "Không được xóa. Phải có ít nhất một khoản thu.");
+	        return;
+	    }
+	    vbFeesList.getChildren().remove(cell.getContainer());
+	    feeCells.remove(cell);
 	}
 
 	protected abstract void handleSave();

@@ -17,9 +17,7 @@ import views.messages.ErrorDialog;
 import views.messages.InformationDialog;
 
 public class UpdateCampaignFeeHandler extends CampaignFeeFormHandler {
-    @FXML
-    private ComboBox<String> cbStatus;
-    
+    @FXML private ComboBox<String> cbStatus;
     private CampaignFee campaignFee;
     private final Stage ownerStage;
     
@@ -50,7 +48,7 @@ public class UpdateCampaignFeeHandler extends CampaignFeeFormHandler {
 		cbStatus.getItems().addAll(utils.Configs.STATUS);
 		
 		for (Fee fee : campaignFee.getFees()) {
-			FeeCell feeCell = new FeeCell(allFees, super::handleAddNewFee);
+			FeeCell feeCell = new FeeCell(allFees, super::handleAddNewFee, super::handleDeleteFee);
 			feeCell.getComboBox().setValue(fee);
 			vbFeesList.getChildren().add(feeCell.getContainer());
 			feeCells.add(feeCell);
@@ -86,7 +84,7 @@ public class UpdateCampaignFeeHandler extends CampaignFeeFormHandler {
 		try {
 			CampaignFeeListHandler listHandler = CampaignFeeListHandler.getHandlerFromStage(ownerStage);
 			if (listHandler != null) {
-				listHandler.loadCampaignFeeList();
+				listHandler.loadCampaignFeeList("");
 			}
 		} catch (Exception e) {
 			ErrorDialog.showError("Lỗi", "Không thể làm mới danh sách đợt thu: " + e.getMessage());

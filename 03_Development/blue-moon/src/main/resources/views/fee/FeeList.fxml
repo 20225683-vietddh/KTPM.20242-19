@@ -119,12 +119,12 @@
                            </VBox.margin>
                         </HBox>
                         <Line endX="1006.0" startX="-100.0" />
-                        <HBox prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;">
+                        <HBox prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 5;">
                            <VBox.margin>
                               <Insets top="27.0" />
                            </VBox.margin>
                            <children>
-                              <TextField fx:id="tfSearch" prefHeight="40.0" prefWidth="1000.0" promptText="Tìm kiếm..." style="-fx-background-color: white; -fx-font-size: 16;">
+                              <TextField fx:id="tfSearch" prefHeight="40.0" prefWidth="1000.0" promptText="Nhập tên khoản thu..." style="-fx-background-color: white; -fx-font-size: 16;">
                                  <HBox.margin>
                                     <Insets bottom="2.0" left="10.0" top="2.0" />
                                  </HBox.margin>
