@@ -1,5 +1,5 @@
 .metadata/
 blue-moon/target/
 .idea/
-blue-moon/lib/
+lib/
 blue-moon/src/test/
