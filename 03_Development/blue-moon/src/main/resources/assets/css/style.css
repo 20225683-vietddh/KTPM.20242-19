@@ -15,3 +15,18 @@
 	-fx-text-fill: white;
 	-fx-background-color: linear-gradient(from 100% 0% to 0% 0%, #43A5DC, #FF7BAC);
 }
+
+/* TableView header gradient */
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);
+}
+
+.table-view .column-header, 
+.table-view .filler {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}

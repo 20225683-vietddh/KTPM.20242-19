@@ -181,4 +181,69 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 			throw e;
 		}
 	}
+
+	@Override
+	public List<Map<String, Object>> getLastNCampaigns(int n) {
+		List<Map<String, Object>> result = new ArrayList<>();
+		String sql = "SELECT cf.campaign_fee_id, cf.name, cf.start_date, cf.due_date, " +
+					"COALESCE(SUM(fpr.paid_amount), 0) as total_amount " +
+					"FROM campaign_fees cf " +
+					"LEFT JOIN fee_payment_records fpr ON cf.campaign_fee_id = fpr.campaign_fee_id " +
+					"GROUP BY cf.campaign_fee_id, cf.name, cf.start_date, cf.due_date " +
+					"ORDER BY cf.start_date DESC LIMIT ?";
+		
+		try (PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, n);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Map<String, Object> campaign = new LinkedHashMap<>();
+					campaign.put("id", rs.getInt("campaign_fee_id"));
+					campaign.put("name", rs.getString("name"));
+					campaign.put("start_date", rs.getDate("start_date"));
+					campaign.put("end_date", rs.getDate("due_date"));
+					campaign.put("total_amount", rs.getDouble("total_amount"));
+					result.add(campaign);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<Map<String, Object>> getLastNCampaignsWithStatus(int n) {
+		List<Map<String, Object>> result = new ArrayList<>();
+		String sql = "SELECT cf.campaign_fee_id, cf.name, cf.start_date, cf.due_date, " +
+					"COUNT(DISTINCT h.household_id) as total_households, " +
+					"COUNT(DISTINCT CASE WHEN fpr.is_fully_paid THEN h.household_id END) as paid_households, " +
+					"CASE WHEN COUNT(DISTINCT h.household_id) > 0 " +
+					"THEN ROUND(COUNT(DISTINCT CASE WHEN fpr.is_fully_paid THEN h.household_id END) * 100.0 / COUNT(DISTINCT h.household_id), 2) " +
+					"ELSE 0 END as completion_rate " +
+					"FROM campaign_fees cf " +
+					"LEFT JOIN fee_payment_records fpr ON cf.campaign_fee_id = fpr.campaign_fee_id " +
+					"LEFT JOIN households h ON fpr.household_id = h.household_id " +
+					"GROUP BY cf.campaign_fee_id, cf.name, cf.start_date, cf.due_date " +
+					"ORDER BY cf.start_date DESC LIMIT ?";
+		
+		try (PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, n);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Map<String, Object> campaign = new LinkedHashMap<>();
+					campaign.put("id", rs.getInt("campaign_fee_id"));
+					campaign.put("name", rs.getString("name"));
+					campaign.put("start_date", rs.getDate("start_date"));
+					campaign.put("end_date", rs.getDate("due_date"));
+					campaign.put("total_households", rs.getInt("total_households"));
+					campaign.put("paid_households", rs.getInt("paid_households"));
+					campaign.put("completion_rate", rs.getDouble("completion_rate"));
+					result.add(campaign);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
