@@ -78,7 +78,7 @@ public abstract class CampaignFeeFormHandler extends BaseScreenHandler {
 	        return;
 	    }
 
-	    FeeCell newRow = new FeeCell(remaining, this::handleAddNewFee, this::handleDeleteFee);
+	    FeeCell newRow = new FeeCell(remaining, true, this::handleAddNewFee, this::handleDeleteFee);
 	    vbFeesList.getChildren().add(newRow.getContainer());
 	    feeCells.add(newRow);
 	}

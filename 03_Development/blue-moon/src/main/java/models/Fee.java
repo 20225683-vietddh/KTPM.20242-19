@@ -1,6 +1,7 @@
 package models;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Fee {
 	private int id;
@@ -63,5 +64,18 @@ public class Fee {
 	@Override 
 	public String toString() {
 		return this.name;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Fee fee = (Fee) o;
+		return id == fee.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

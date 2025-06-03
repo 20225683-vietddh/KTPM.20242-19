@@ -179,7 +179,7 @@
                                     </HBox>
                                  </children>
                               </HBox>
-                              <VBox fx:id="vbCampaignFeeList" prefWidth="1019.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="95.0" />
+                              <VBox fx:id="vbCampaignFeeList" prefWidth="1019.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="80.0" />
                            </children></AnchorPane>
                     </content>
                      <VBox.margin>

@@ -2,6 +2,10 @@ package views.campaignfee;
 
 import java.sql.SQLException;
 import java.time.DateTimeException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 import controllers.ManageCampaignFeeController;
 import dto.campaignfee.CampaignFeeDTO;
 import exception.InvalidDateRangeException;
@@ -48,11 +52,40 @@ public class UpdateCampaignFeeHandler extends CampaignFeeFormHandler {
 		cbStatus.getItems().addAll(utils.Configs.STATUS);
 		
 		for (Fee fee : campaignFee.getFees()) {
-			FeeCell feeCell = new FeeCell(allFees, super::handleAddNewFee, super::handleDeleteFee);
+			FeeCell feeCell = new FeeCell(List.of(fee), false, this::handleAddNewFee, super::handleDeleteFee);
 			feeCell.getComboBox().setValue(fee);
 			vbFeesList.getChildren().add(feeCell.getContainer());
 			feeCells.add(feeCell);
 		}
+	}
+	
+	@Override
+	protected void handleAddNewFee() {
+		FeeCell lastCell = feeCells.get(feeCells.size() - 1);
+		Fee selected = lastCell.getComboBox().getValue();
+
+		if (selected == null) {
+			ErrorDialog.showError("Lỗi", "Vui lòng chọn khoản thu trước!");
+			return;
+		}
+
+		Set<Fee> selectedFees = feeCells.stream()
+				.map(FeeCell::getSelectedFee)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet());
+
+		List<Fee> remaining = allFees.stream()
+				.filter(f -> !selectedFees.contains(f))
+				.collect(Collectors.toList());
+
+		if (remaining.isEmpty()) {
+			ErrorDialog.showError("Lỗi", "Không còn khoản thu nào!");
+			return;
+		}
+
+		FeeCell newRow = new FeeCell(remaining, true, this::handleAddNewFee, super::handleDeleteFee);
+		vbFeesList.getChildren().add(newRow.getContainer());
+		feeCells.add(newRow);
 	}
 	
 	@Override 
@@ -66,8 +99,6 @@ public class UpdateCampaignFeeHandler extends CampaignFeeFormHandler {
 			stage.close();
 			InformationDialog.showNotification("Cập nhật thành công",
 					"Chúc mừng bạn! Đợt thu phí " + requestDTO.getName() + " đã được cập nhật thành công!");
-			
-			// Refresh the campaign fee list instead of navigating back
 			refreshCampaignFeeList();
 		} catch (InvalidInputException e) {
 			ErrorDialog.showError("Lỗi nhập liệu", e.getMessage());

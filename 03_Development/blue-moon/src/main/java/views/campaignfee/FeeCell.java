@@ -16,9 +16,16 @@ public class FeeCell {
 	private final Button addButton;
 	private final Button deleteButton;
 
-	public FeeCell(List<Fee> feeOptions, Runnable onAddNewFee, Consumer<FeeCell> onDeleteFee) {
+	public FeeCell(List<Fee> feeOptions, boolean isEditable, Runnable onAddNewFee, Consumer<FeeCell> onDeleteFee) {
 		comboBox = new ComboBox<>(FXCollections.observableArrayList(feeOptions));
-
+		
+		if (!isEditable) {
+			if (!feeOptions.isEmpty()) {
+				comboBox.getSelectionModel().select(0); 
+			}
+			comboBox.setDisable(true);
+		}
+		
 		comboBox.setCellFactory(lv -> new ListCell<>() {
 			@Override
 			protected void updateItem(Fee item, boolean empty) {
@@ -26,6 +33,7 @@ public class FeeCell {
 				setText(empty || item == null ? null : item.getName());
 			}
 		});
+		
 		comboBox.setButtonCell(new ListCell<>() {
 			@Override
 			protected void updateItem(Fee item, boolean empty) {

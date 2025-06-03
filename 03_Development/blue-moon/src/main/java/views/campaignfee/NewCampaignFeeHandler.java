@@ -35,7 +35,7 @@ public class NewCampaignFeeHandler extends CampaignFeeFormHandler {
 	@FXML
 	public void initialize() {
 		super.initialize();
-		FeeCell firstCell = new FeeCell(allFees, super::handleAddNewFee, super::handleDeleteFee);
+		FeeCell firstCell = new FeeCell(allFees, true, super::handleAddNewFee, super::handleDeleteFee);
 		vbFeesList.getChildren().add(firstCell.getContainer());
 		feeCells.add(firstCell);
 	}
