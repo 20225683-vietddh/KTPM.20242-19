@@ -17,7 +17,7 @@ public class Resident {
     private LocalDate addedDate;
     private String relationshipWithHead;
     private int householdId;
-
+    
     public Resident(int id, String fullName, LocalDate dateOfBirth, String gender, String ethnicity, 
                     String religion, String citizenId, LocalDate dateOfIssue, String placeOfIssue, 
                     String occupation, String notes, LocalDate addedDate, String relationshipWithHead, int householdId) {

@@ -23,7 +23,7 @@ public abstract class BaseScreenWithLogoutAndGoBackHandler extends BaseScreenHan
 		btnGoBack.setOnAction(e -> handleGoBack());
 	}
 	
-	private void handleLogout() {
+	protected void handleLogout() {
 		try {
 			ScreenNavigator.clear();
 			BaseScreenHandler loginPage = new LoginPageHandler(this.stage);
@@ -34,7 +34,7 @@ public abstract class BaseScreenWithLogoutAndGoBackHandler extends BaseScreenHan
 		}
 	}
 	
-	private void handleGoBack() {
+	protected void handleGoBack() {
 		try {
 			ScreenNavigator.goBack();
 		} catch (Exception e) {

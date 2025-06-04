@@ -84,8 +84,8 @@ public class NewResidentFormHandler {
         if (tfReligion != null) tfReligion.setEditable(true);
         if (tfCitizenId != null) tfCitizenId.setEditable(true);
         if (tfOccupation != null) tfOccupation.setEditable(true);
-        if (tfRelationshipWithHead != null) tfRelationshipWithHead.setEditable(true);
-        if (tfHouseHoldId != null) tfHouseHoldId.setEditable(true);
+        //if (tfRelationshipWithHead != null) tfRelationshipWithHead.setEditable(true);
+       // if (tfHouseHoldId != null) tfHouseHoldId.setEditable(true);
         if (tfNote != null) tfNote.setEditable(true);
     }
     private void handleSave() {
@@ -134,23 +134,24 @@ public class NewResidentFormHandler {
             
             resident.setAddedDate(LocalDate.now());
             
-            String relationshipText = tfRelationshipWithHead.getText().trim();
-            if (relationshipText.isEmpty()) {
-                throw new InvalidInputException("Quan hệ với chủ hộ không được để trống.");
-            }
-            resident.setRelationshipWithHead(relationshipText);
+//            String relationshipText = tfRelationshipWithHead.getText().trim();
+//            if (relationshipText.isEmpty()) {
+//                throw new InvalidInputException("Quan hệ với chủ hộ không được để trống.");
+//            }
+//            resident.setRelationshipWithHead(relationshipText);
 
             resident.setNotes(tfNote.getText().trim());
+           // resident.setHouseholdId(null); // Luôn đặt household_id là NULL
 
-            String householdIdText = tfHouseHoldId.getText().trim();
-            if (!householdIdText.isEmpty()) {
-                try {
-                    int householdId = Integer.parseInt(householdIdText);
-                    resident.setHouseholdId(householdId);
-                } catch (NumberFormatException e) {
-                    throw new InvalidInputException("ID hộ phải là một số nguyên.");
-                }
-            }
+//            String householdIdText = tfHouseHoldId.getText().trim();
+//            if (!householdIdText.isEmpty()) {
+//                try {
+//                    int householdId = Integer.parseInt(householdIdText);
+//                    resident.setHouseholdId(householdId);
+//                } catch (NumberFormatException e) {
+//                    throw new InvalidInputException("ID hộ phải là một số nguyên.");
+//                }
+//            }
 
             System.out.println("Gọi addResident");
             controller.handleAddResident(resident); // Giả định phương thức thêm mới

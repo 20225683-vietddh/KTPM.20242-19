@@ -20,6 +20,8 @@ public class LeaderHomePageHandler extends HomePageHandler {
 	@FXML
     public void initialize() {
 		btnResidentList.setOnAction(e -> handleResidentList()); // Gán sự kiện cho nút
+		btnLogout.setOnAction(e -> handleLogout());
+		btnGoBack.setOnAction(e -> handleGoBack());
     }
 
     private void handleResidentList() {

@@ -9,12 +9,13 @@ import controllers.ManageResidentController;
 import javafx.stage.Stage;
 import models.Resident;
 import views.BaseScreenHandler;
+import views.BaseScreenWithLogoutAndGoBackHandler;
 import views.ScreenNavigator;
 import views.messages.ErrorDialog;
 import java.io.IOException;
 import java.util.List;
 
-public class ResidentListHandler extends BaseScreenHandler {
+public class ResidentListHandler extends BaseScreenWithLogoutAndGoBackHandler {
 
     @FXML 
     private TableView<Resident> tableResident;
@@ -32,6 +33,8 @@ public class ResidentListHandler extends BaseScreenHandler {
     private Button btnAddResident;
     @FXML 
     private Button btnGoBack;
+    @FXML 
+    private Button btnLogout;
     
     private final ManageResidentController controller = new ManageResidentController();
 
@@ -46,6 +49,7 @@ public class ResidentListHandler extends BaseScreenHandler {
     public void initialize() {
         initializeTable();
         loadResidentList();
+        btnLogout.setOnAction(e -> handleLogout());
         if (btnAddResident != null) {
             btnAddResident.setOnAction(e -> handleAddResident());
         } else {
@@ -80,7 +84,7 @@ public class ResidentListHandler extends BaseScreenHandler {
         System.out.println("Đã làm mới TableView");
     }
     
-    private void handleGoBack() {
+    protected void handleGoBack() {
         System.out.println("Quay lại màn hình trước đó");
         ScreenNavigator.goBack();
     }
