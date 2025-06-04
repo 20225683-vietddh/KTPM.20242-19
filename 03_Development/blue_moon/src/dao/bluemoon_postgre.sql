@@ -49,6 +49,8 @@ CREATE TABLE IF NOT EXISTS residents (
     household_id INTEGER REFERENCES households(household_id)
 );
 
+ALTER TABLE residents ADD COLUMN isHouseholdHead BOOLEAN DEFAULT FALSE;
+
 --- Thêm khóa ngoài (mã chủ hộ) cho bảng households ---
 ALTER TABLE households
 ADD CONSTRAINT fk_head_resident

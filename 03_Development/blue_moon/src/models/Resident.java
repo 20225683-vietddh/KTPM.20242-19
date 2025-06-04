@@ -16,11 +16,12 @@ public class Resident {
     private String notes;
     private LocalDate addedDate;
     private String relationshipWithHead;
+    private boolean isHouseholdHead;
     private int householdId;
     
     public Resident(int id, String fullName, LocalDate dateOfBirth, String gender, String ethnicity, 
                     String religion, String citizenId, LocalDate dateOfIssue, String placeOfIssue, 
-                    String occupation, String notes, LocalDate addedDate, String relationshipWithHead, int householdId) {
+                    String occupation, String notes, LocalDate addedDate, String relationshipWithHead, boolean isHouseholdHead, int householdId) {
         this.id = id;
         this.fullName = fullName;
         this.dateOfBirth = dateOfBirth;
@@ -34,6 +35,7 @@ public class Resident {
         this.notes = notes;
         this.addedDate = addedDate;
         this.relationshipWithHead = relationshipWithHead;
+        this.isHouseholdHead = isHouseholdHead;
         this.householdId = householdId;
     }
 
@@ -55,6 +57,7 @@ public class Resident {
             this.notes = other.notes;
             this.addedDate = other.addedDate;
             this.relationshipWithHead = other.relationshipWithHead;
+            this.isHouseholdHead = other.isHouseholdHead;
             this.householdId = other.householdId;
         }
     }
@@ -97,6 +100,10 @@ public class Resident {
 
     public String getRelationshipWithHead() { return relationshipWithHead; }
     public void setRelationshipWithHead(String relationshipWithHead) { this.relationshipWithHead = relationshipWithHead; }
+    
+    public boolean isHouseholdHead() { return isHouseholdHead; }
+    public void setisHouseholdHead(boolean isHouseholdHead) { this.isHouseholdHead = isHouseholdHead; }
+
 
     public int getHouseholdId() { return householdId; }
     public void setHouseholdId(int householdId) { this.householdId = householdId; }
@@ -117,7 +124,8 @@ public class Resident {
                ", notes='" + notes + '\'' +
                ", addedDate=" + addedDate +
                ", relationshipWithHead='" + relationshipWithHead + '\'' +
-               ", householdId=" + householdId +
+               ", isHouseholdHead=" + isHouseholdHead +
+               ", householdId=" + householdId + 
                '}';
     }
 }

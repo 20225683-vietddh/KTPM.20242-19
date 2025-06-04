@@ -94,6 +94,7 @@ public class ResidentDAO {
             rs.getString("notes"),
             rs.getDate("added_date").toLocalDate(),
             rs.getString("relationship_with_head"),
+            rs.getBoolean("isHouseholdHead") ,
             rs.getInt("household_id")
         );
     }
