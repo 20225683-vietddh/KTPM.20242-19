@@ -1,3 +1,6 @@
 .metadata/
 blue_moon/bin/
 blue_moon/src/config.properties
+blue_moon/.classpath
+blue_moon/.project
+blue_moon/.settings/
