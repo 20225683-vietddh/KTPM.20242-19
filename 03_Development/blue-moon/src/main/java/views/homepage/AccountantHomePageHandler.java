@@ -10,6 +10,9 @@ import views.messages.*;
 import views.chargefee.ChargeFeeHandler;
 import views.trackcampaignfee.TrackCampaignFeeHandler;
 import models.CampaignFee;
+import services.AccountantDashboardService;
+import javafx.scene.control.TableColumn;
+import java.util.Map;
 
 public class AccountantHomePageHandler extends HomePageHandler {
 	@FXML private Button btnViewCampaignFees;
@@ -19,6 +22,7 @@ public class AccountantHomePageHandler extends HomePageHandler {
 	
 	public AccountantHomePageHandler(Stage stage) throws Exception {
 		super(stage, utils.Configs.ACCOUNTANT_HOME_PAGE_PATH);
+		this.dashboardService = new AccountantDashboardService();
 		loader.setController(this);
 		this.setContent();
 		this.setScene();
@@ -26,12 +30,14 @@ public class AccountantHomePageHandler extends HomePageHandler {
 
 	public AccountantHomePageHandler(Stage stage, String userName) throws Exception {
 		super(stage, utils.Configs.ACCOUNTANT_HOME_PAGE_PATH);
+		this.dashboardService = new AccountantDashboardService();
 		loader.setController(this);
 		this.setContent();
 		this.setScene();
 		super.lblUserName.setText(userName);
 	}
 	
+	@Override
 	@FXML
 	public void initialize() {
 		super.initialize();
@@ -39,6 +45,11 @@ public class AccountantHomePageHandler extends HomePageHandler {
 		btnViewFees.setOnAction(e -> handleViewFees());
 		btnTrackCampaignFee.setOnAction(e -> handleTrackCampaignFee());
 		btnViewHouseHolds.setOnAction(e -> handleChargeFee());
+	}
+	
+	@Override
+	protected void loadDashboardData() {
+		super.loadDashboardData(); 
 	}
 
 	private void handleViewCampaignFees() {
@@ -61,7 +72,6 @@ public class AccountantHomePageHandler extends HomePageHandler {
 			e.printStackTrace();
 		}
 	}
-
 
 	private void handleTrackCampaignFee() {
 		try {

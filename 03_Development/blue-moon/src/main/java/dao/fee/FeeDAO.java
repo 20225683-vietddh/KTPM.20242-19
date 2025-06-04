@@ -2,6 +2,7 @@ package dao.fee;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import models.Fee;
 
 public interface FeeDAO {
@@ -17,4 +18,8 @@ public interface FeeDAO {
 	
 	public boolean isPartOfCampaignFee(int feeId) throws SQLException;
 	
+	List<Map<String, Object>> getLastNFees(int n);
+	List<Map<String, Object>> getLastNFeesWithStatus(int n);
+	List<Map<String, Object>> getFeeStatistics(int months);
+	List<Map<String, Object>> getRecentPayments(int limit);
 }

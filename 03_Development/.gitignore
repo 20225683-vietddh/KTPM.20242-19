@@ -1,3 +1,9 @@
 .metadata/
+<<<<<<< HEAD
 blue-moon/target
+=======
+blue-moon/target/
+.idea/
+lib/
+>>>>>>> feature/homepage
 blue-moon/src/main/resources/config/config.properties
