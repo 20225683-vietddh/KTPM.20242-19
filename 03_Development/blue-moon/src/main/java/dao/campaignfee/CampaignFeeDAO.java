@@ -7,10 +7,8 @@ import dto.campaignfee.CampaignFeeDTO;
 
 public interface CampaignFeeDAO {
 	public List<CampaignFee> getCampaignFees();
-
 	public void addNewCampaignFee(CampaignFeeDTO dto) throws SQLException;
-	
 	public void deleteCampaignFee(CampaignFee campaignFee) throws SQLException;
-	
 	public void updateCampaignFee(CampaignFeeDTO dto) throws SQLException;
+	public boolean isFeesExisted(int campaignFeeId, List<Integer> feeIds) throws SQLException;
 }

@@ -2,6 +2,7 @@ package views.campaignfee;
 
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
+import models.Fee;
 import javafx.scene.Parent;
 import javafx.scene.effect.GaussianBlur;
 import views.messages.*;
@@ -9,6 +10,10 @@ import dto.campaignfee.CampaignFeeDTO;
 import controllers.ManageCampaignFeeController;
 import exception.*;
 import java.time.DateTimeException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.sql.SQLException;
 
 public class NewCampaignFeeHandler extends CampaignFeeFormHandler {
@@ -35,9 +40,38 @@ public class NewCampaignFeeHandler extends CampaignFeeFormHandler {
 	@FXML
 	public void initialize() {
 		super.initialize();
-		FeeCell firstCell = new FeeCell(allFees, true, super::handleAddNewFee, super::handleDeleteFee);
+		FeeCell firstCell = new FeeCell(allFees, true, this::handleAddNewFee, super::handleDeleteFee);
 		vbFeesList.getChildren().add(firstCell.getContainer());
 		feeCells.add(firstCell);
+	}
+	
+	@Override
+	protected void handleAddNewFee() {
+	    FeeCell lastCell = feeCells.get(feeCells.size() - 1);
+	    Fee selected = lastCell.getSelectedFee();
+
+	    if (selected == null) {
+	        ErrorDialog.showError("Lỗi", "Vui lòng chọn khoản thu trước!");
+	        return;
+	    }
+
+	    Set<Fee> selectedFees = feeCells.stream()
+	        .map(FeeCell::getSelectedFee)
+	        .filter(Objects::nonNull)
+	        .collect(Collectors.toSet());
+
+	    List<Fee> remaining = allFees.stream()
+	        .filter(f -> !selectedFees.contains(f))
+	        .collect(Collectors.toList());
+
+	    if (remaining.isEmpty()) {
+	        ErrorDialog.showError("Lỗi", "Không còn khoản thu nào!");
+	        return;
+	    }
+
+	    FeeCell newRow = new FeeCell(remaining, true, this::handleAddNewFee, this::handleDeleteFee);
+	    vbFeesList.getChildren().add(newRow.getContainer());
+	    feeCells.add(newRow);
 	}
 	
 	@Override
@@ -50,8 +84,6 @@ public class NewCampaignFeeHandler extends CampaignFeeFormHandler {
 			Stage stage = (Stage) btnSave.getScene().getWindow(); 
 			stage.close();
 			InformationDialog.showNotification("Thêm vào CSDL thành công",  "Chúc mừng bạn! Đợt thu phí " + requestDTO.getName() + " đã được thêm thành công!");
-		    
-			// Refresh the campaign fee list instead of navigating back
 			refreshCampaignFeeList();
 		} catch (InvalidInputException e) {
 			ErrorDialog.showError("Lỗi nhập liệu", e.getMessage());

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.util.List;
 import java.util.Objects;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
 import controllers.ManageCampaignFeeController;
@@ -91,14 +92,12 @@ public class UpdateCampaignFeeHandler extends CampaignFeeFormHandler {
 	@Override 
 	protected void handleSave() {
 		CampaignFeeDTO requestDTO = this.getUserInputs();
-
 		try {
 			this.controller = new ManageCampaignFeeController();
-			((ManageCampaignFeeController) controller).handleUpdateCampaignFee(requestDTO);
+			((ManageCampaignFeeController) controller).handleUpdateCampaignFee(requestDTO, getCurrentSelectedFees());
 			Stage stage = (Stage) btnSave.getScene().getWindow();
 			stage.close();
-			InformationDialog.showNotification("Cập nhật thành công",
-					"Chúc mừng bạn! Đợt thu phí " + requestDTO.getName() + " đã được cập nhật thành công!");
+			InformationDialog.showNotification("Cập nhật thành công", "Chúc mừng bạn! Đợt thu phí " + requestDTO.getName() + " đã được cập nhật thành công!");
 			refreshCampaignFeeList();
 		} catch (InvalidInputException e) {
 			ErrorDialog.showError("Lỗi nhập liệu", e.getMessage());
@@ -108,6 +107,10 @@ public class UpdateCampaignFeeHandler extends CampaignFeeFormHandler {
 			ErrorDialog.showError("Lỗi ngày tháng", e.getMessage());
 		} catch (SQLException e) {
 			ErrorDialog.showError("Lỗi hệ thống", e.getMessage());
+		} catch (IllegalStateException e) {
+			ErrorDialog.showError("Không thể cập nhật", e.getMessage());
+			Stage stage = (Stage) btnSave.getScene().getWindow();
+			stage.close();
 		}
 	}
 	
@@ -121,6 +124,14 @@ public class UpdateCampaignFeeHandler extends CampaignFeeFormHandler {
 			ErrorDialog.showError("Lỗi", "Không thể làm mới danh sách đợt thu: " + e.getMessage());
 			e.printStackTrace();
 		}
+	}
+	
+	private List<Integer> getCurrentSelectedFees() {
+		List<Integer> selectedFeeIds = new ArrayList<>();
+		for (Fee fee : campaignFee.getFees()) {
+			selectedFeeIds.add(fee.getId());
+		}
+		return selectedFeeIds;
 	}
 	
 	@Override 

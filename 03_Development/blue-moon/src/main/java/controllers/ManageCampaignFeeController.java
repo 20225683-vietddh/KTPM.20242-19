@@ -7,6 +7,9 @@ import exception.*;
 import services.CampaignFeeService;
 import java.time.DateTimeException;
 import java.sql.SQLException;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class ManageCampaignFeeController extends BaseController {
 	private final CampaignFeeService service ;
@@ -21,10 +24,36 @@ public class ManageCampaignFeeController extends BaseController {
 		addNewCampaignFee(requestDTO);
 	}
 	
-	public void handleUpdateCampaignFee(CampaignFeeDTO requestDTO) throws InvalidInputException, DateTimeException, InvalidDateRangeException, SQLException {
+	public void handleUpdateCampaignFee(CampaignFeeDTO requestDTO, List<Integer> originalSelectedFeeIds) throws InvalidInputException, DateTimeException, InvalidDateRangeException, SQLException {
 		validateInputs(requestDTO);
 		validateStartAndDueDate(requestDTO);
-		updateCampaignFee(requestDTO);
+		
+		try {
+			int campaignFeeId = requestDTO.getId();
+			List<Integer> updatedSelectedFeeIds = requestDTO.getFeeIds();
+			List<Integer> removedFeeIds = getRemovedFeeIds(originalSelectedFeeIds, updatedSelectedFeeIds);
+			System.out.println(campaignFeeId + "\n" + originalSelectedFeeIds + "\n" + updatedSelectedFeeIds + "\n" + removedFeeIds);
+			
+			if (removedFeeIds.isEmpty() || !hasCollectionBeenProcessed(campaignFeeId, removedFeeIds)) {
+				updateCampaignFee(requestDTO);
+			} else {
+				throw new IllegalStateException("Không thể cập nhật đợt thu phí vì một số khoản thu mà bạn xóa " + removedFeeIds + " đã được thu!");
+			}
+		} catch (SQLException e) {
+			throw e;
+		}
+	}
+	
+	private List<Integer> getRemovedFeeIds(List<Integer> originalSelectedFeeIds, List<Integer> updatedSelectedFeeIds) {
+	    Set<Integer> updatedSet = new HashSet<>(updatedSelectedFeeIds);
+	    
+	    return originalSelectedFeeIds.stream()
+	        .filter(feeId -> !updatedSet.contains(feeId))
+	        .collect(Collectors.toList());
+	}
+	
+	private boolean hasCollectionBeenProcessed(int campaignFeeId, List<Integer> removedFeeIds) throws SQLException {
+		return service.isFeesExisted(campaignFeeId, removedFeeIds);
 	}
 	
 	private void validateInputs(CampaignFeeDTO dto) throws InvalidInputException {

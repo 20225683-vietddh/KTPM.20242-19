@@ -181,4 +181,27 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 			throw e;
 		}
 	}
+	
+	@Override
+	public boolean isFeesExisted(int campaignFeeId, List<Integer> feeIds) throws SQLException {
+		String sql = "SELECT 1 FROM fee_payment_records WHERE campaign_fee_id = ? AND fee_id = ? LIMIT 1";
+	    
+	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        for (int feeId : feeIds) {
+	            stmt.setInt(1, campaignFeeId);
+	            stmt.setInt(2, feeId);
+	            
+	            try (ResultSet rs = stmt.executeQuery()) {
+	                if (rs.next()) {
+	                    return true;
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
+	    
+	    return false;
+	}
 }

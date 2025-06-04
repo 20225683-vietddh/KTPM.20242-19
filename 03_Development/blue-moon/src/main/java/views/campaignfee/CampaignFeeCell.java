@@ -128,10 +128,10 @@ public class CampaignFeeCell extends HBox {
 		case "YES":
 			try {
 				service.deleteCampaignFee(campaignFee);
-				InformationDialog.showNotification("Xóa thành công", "Đợt thu phí " + campaignFee.getName() + " đã được xóa thành công!");
+				InformationDialog.showNotification("Xóa thành công", "Đợt thu phí " + campaignFee.getName() + " đã được xóa khỏi CSDL!");
 				refreshCampaignFeeList();
 			} catch (SQLException e) {
-				ErrorDialog.showError("Lỗi hệ thống", e.getMessage());
+				ErrorDialog.showError("Xóa không thành công", e.getMessage() + ". Chúng tôi không thể xóa đợt thu này. Đây là một đợt thu đã có lịch sử thu phí.");
 			}
 		}
 	}

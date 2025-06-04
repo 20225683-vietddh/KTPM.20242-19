@@ -3,7 +3,6 @@ package views.campaignfee;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import dto.campaignfee.CampaignFeeDTO;
 import javafx.fxml.FXML;
@@ -55,33 +54,7 @@ public abstract class CampaignFeeFormHandler extends BaseScreenHandler {
 		 stage.close();
 	}
 	
-	protected void handleAddNewFee() {
-	    FeeCell lastCell = feeCells.get(feeCells.size() - 1);
-	    Fee selected = lastCell.getSelectedFee();
-
-	    if (selected == null) {
-	        ErrorDialog.showError("Lỗi", "Vui lòng chọn khoản thu trước!");
-	        return;
-	    }
-
-	    Set<Fee> selectedFees = feeCells.stream()
-	        .map(FeeCell::getSelectedFee)
-	        .filter(Objects::nonNull)
-	        .collect(Collectors.toSet());
-
-	    List<Fee> remaining = allFees.stream()
-	        .filter(f -> !selectedFees.contains(f))
-	        .collect(Collectors.toList());
-
-	    if (remaining.isEmpty()) {
-	        ErrorDialog.showError("Lỗi", "Không còn khoản thu nào!");
-	        return;
-	    }
-
-	    FeeCell newRow = new FeeCell(remaining, true, this::handleAddNewFee, this::handleDeleteFee);
-	    vbFeesList.getChildren().add(newRow.getContainer());
-	    feeCells.add(newRow);
-	}
+	protected abstract void handleAddNewFee();
 	
 	protected void handleDeleteFee(FeeCell cell) {
 	    if (feeCells.size() == 1) {

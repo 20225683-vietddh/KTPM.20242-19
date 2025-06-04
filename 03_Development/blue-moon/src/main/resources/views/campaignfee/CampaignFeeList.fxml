@@ -154,7 +154,7 @@
                                                 <Insets right="10.0" />
                                              </HBox.margin>
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="16.0" />
                                              </font></Label>
                                        </children>
                                     </HBox>
@@ -165,7 +165,7 @@
                                                 <Insets right="10.0" />
                                              </HBox.margin>
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="16.0" />
                                              </font></Label>
                                        </children>
                                     </HBox>
@@ -173,7 +173,7 @@
                                        <children>
                                           <Label alignment="CENTER" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #e1e8fa; -fx-background-radius: 5;" text="Đã kết thúc">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="16.0" />
                                              </font></Label>
                                        </children>
                                     </HBox>

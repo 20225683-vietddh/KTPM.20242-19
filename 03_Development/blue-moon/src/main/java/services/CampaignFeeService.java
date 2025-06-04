@@ -28,4 +28,8 @@ public class CampaignFeeService {
 	public void updateCampaignFee(CampaignFeeDTO dto) throws SQLException {
 		campaignFeeDAO.updateCampaignFee(dto);
 	}
+	
+	public boolean isFeesExisted(int campaignFeeId, List<Integer> feeIds) throws SQLException {
+		return campaignFeeDAO.isFeesExisted(campaignFeeId, feeIds);
+	}
 }
