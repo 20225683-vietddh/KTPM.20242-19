@@ -2,4 +2,5 @@
 blue-moon/target/
 .idea/
 lib/
-blue-moon/src/test/
+blue-moon/src/main/resources/config/config.properties
+
