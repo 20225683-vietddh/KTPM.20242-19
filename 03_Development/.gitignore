@@ -4,3 +4,5 @@ blue_moon/bin/
 blue_moon/.idea/
 lib/
 blue_moon/src/config.properties
+blue_moon/.classpath
+blue_moon/.project
