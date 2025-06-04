@@ -11,8 +11,6 @@ import views.chargefee.ChargeFeeHandler;
 import views.trackcampaignfee.TrackCampaignFeeHandler;
 import models.CampaignFee;
 import services.AccountantDashboardService;
-import javafx.scene.control.TableColumn;
-import java.util.Map;
 
 public class AccountantHomePageHandler extends HomePageHandler {
 	@FXML private Button btnViewCampaignFees;

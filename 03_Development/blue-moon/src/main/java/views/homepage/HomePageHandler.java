@@ -7,7 +7,6 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import views.BaseScreenWithLogoutAndGoBackHandler;
@@ -15,27 +14,13 @@ import services.DashboardService;
 import java.util.Map;
 
 public abstract class HomePageHandler extends BaseScreenWithLogoutAndGoBackHandler {
-	@FXML
-	protected Label lblUserName;
-	
-	@FXML
-	protected Label lblTotalHouseHolds;
-	
-	@FXML
-	protected Label lblTotalResidents;
-	
-	@FXML
-	protected BarChart<String, Number> bChartCamPaignFees;
-	
-	@FXML
-	protected LineChart<String, Number> lChartResidentChange;
-	
-	@FXML
-	protected TableView<Map<String, Object>> tblTypicalFees;
-	
-	@FXML
-	protected TableView<Map<String, Object>> tblAnnualResidentChange;
-	
+	@FXML protected Label lblUserName;
+	@FXML protected Label lblTotalHouseHolds;
+	@FXML protected Label lblTotalResidents;
+	@FXML protected BarChart<String, Number> bChartCamPaignFees;
+	@FXML protected LineChart<String, Number> lChartResidentChange;
+	@FXML protected TableView<Map<String, Object>> tblTypicalFees;
+	@FXML protected TableView<Map<String, Object>> tblAnnualResidentChange;
 	protected DashboardService dashboardService;
 	
 	public HomePageHandler(Stage stage, String screenPath) throws Exception {
