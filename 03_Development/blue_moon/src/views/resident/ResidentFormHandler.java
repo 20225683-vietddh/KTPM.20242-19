@@ -8,6 +8,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Resident;
 import utils.Configs;
+import utils.enums.RelationshipType;
 import controllers.ManageResidentController;
 import exception.InvalidInputException;
 import views.messages.ErrorDialog;
@@ -105,7 +106,7 @@ public class ResidentFormHandler {
             tfReligion.setText(resident.getReligion() != null ? resident.getReligion() : "");
             tfCitizenId.setText(resident.getCitizenId() != null ? resident.getCitizenId() : "");
             tfOccupation.setText(resident.getOccupation() != null ? resident.getOccupation() : "");
-            tfRelationshipWithHead.setText(resident.getRelationshipWithHead() != null ? resident.getRelationshipWithHead() : "");
+            tfRelationshipWithHead.setText(resident.getRelationship() != null ? resident.getRelationship().toString() : "");
             tfNote.setText(resident.getNotes() != null ? resident.getNotes() : "");
         }
     }
@@ -122,7 +123,7 @@ public class ResidentFormHandler {
             resident.setReligion(tfReligion.getText().trim());
             resident.setCitizenId(tfCitizenId.getText().trim());
             resident.setOccupation(tfOccupation.getText().trim());
-            resident.setRelationshipWithHead(tfRelationshipWithHead.getText().trim());
+            resident.setRelationship(RelationshipType.valueOf(tfRelationshipWithHead.getText().trim()));
             resident.setNotes(tfNote.getText().trim());
 
 

@@ -2,6 +2,8 @@ package models;
 
 import java.time.LocalDate;
 
+import utils.enums.RelationshipType;
+
 public class Resident {
     private int id;
     private String fullName;
@@ -15,13 +17,13 @@ public class Resident {
     private String occupation;
     private String notes;
     private LocalDate addedDate;
-    private String relationshipWithHead;
+    private RelationshipType relationship;
     private boolean isHouseholdHead;
     private int householdId;
     
     public Resident(int id, String fullName, LocalDate dateOfBirth, String gender, String ethnicity, 
                     String religion, String citizenId, LocalDate dateOfIssue, String placeOfIssue, 
-                    String occupation, String notes, LocalDate addedDate, String relationshipWithHead, boolean isHouseholdHead, int householdId) {
+                    String occupation, String notes, LocalDate addedDate, RelationshipType relationship, boolean isHouseholdHead, int householdId) {
         this.id = id;
         this.fullName = fullName;
         this.dateOfBirth = dateOfBirth;
@@ -34,7 +36,7 @@ public class Resident {
         this.occupation = occupation;
         this.notes = notes;
         this.addedDate = addedDate;
-        this.relationshipWithHead = relationshipWithHead;
+        this.relationship = relationship;
         this.isHouseholdHead = isHouseholdHead;
         this.householdId = householdId;
     }
@@ -56,7 +58,7 @@ public class Resident {
             this.occupation = other.occupation;
             this.notes = other.notes;
             this.addedDate = other.addedDate;
-            this.relationshipWithHead = other.relationshipWithHead;
+            this.relationship = other.relationship;
             this.isHouseholdHead = other.isHouseholdHead;
             this.householdId = other.householdId;
         }
@@ -98,8 +100,8 @@ public class Resident {
     public LocalDate getAddedDate() { return addedDate; }
     public void setAddedDate(LocalDate addedDate) { this.addedDate = addedDate; }
 
-    public String getRelationshipWithHead() { return relationshipWithHead; }
-    public void setRelationshipWithHead(String relationshipWithHead) { this.relationshipWithHead = relationshipWithHead; }
+    public RelationshipType getRelationship() { return relationship; }
+    public void setRelationship(RelationshipType relationship) { this.relationship = relationship; }
     
     public boolean isHouseholdHead() { return isHouseholdHead; }
     public void setisHouseholdHead(boolean isHouseholdHead) { this.isHouseholdHead = isHouseholdHead; }
@@ -123,7 +125,7 @@ public class Resident {
                ", occupation='" + occupation + '\'' +
                ", notes='" + notes + '\'' +
                ", addedDate=" + addedDate +
-               ", relationshipWithHead='" + relationshipWithHead + '\'' +
+               ", relationshipWithHead='" + relationship + '\'' +
                ", isHouseholdHead=" + isHouseholdHead +
                ", householdId=" + householdId + 
                '}';

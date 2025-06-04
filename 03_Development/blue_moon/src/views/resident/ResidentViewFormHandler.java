@@ -89,7 +89,7 @@ public class ResidentViewFormHandler {
             tfCitizenId.setText(resident.getCitizenId());
             tfPlaceOfIssue.setText(resident.getPlaceOfIssue());
             tfOccupation.setText(resident.getOccupation());
-            tfRelationship_with_head.setText(resident.getRelationshipWithHead());
+            tfRelationship_with_head.setText(resident.getRelationship().toString());
             tfNote.setText(resident.getNotes());
         }
     }
