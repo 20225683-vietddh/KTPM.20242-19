@@ -1,7 +1,7 @@
-package dao;
+package dao.household;
 
 import java.util.List;
-import dao.HouseholdDAO;
+
 import models.Household;
 import exception.HouseholdNotExist;
 
@@ -49,7 +49,7 @@ public class HouseholdDAOTest {
         
         System.out.println("\n=== Testing findByHouseholdNumber('HH1') ===");
         try {
-            Household household = dao.findByHouseholdNumber("HH1");
+            Household household = dao.findById(1);
             System.out.println("Found household: " + household.toString());
         } catch (HouseholdNotExist e) {
             System.err.println("Household 'HH1' not found: " + e.getMessage());

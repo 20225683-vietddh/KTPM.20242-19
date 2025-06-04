@@ -2,12 +2,13 @@ package views.homepage;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import controllers.HouseholdController;
 import controllers.MemberService;
-import dao.HouseholdDB;
+import dao.household.HouseholdDB;
 import exception.ServiceException;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -38,12 +39,13 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Household;
+import models.Resident;
 import services.HouseholdServiceImpl;
 import services.MemberServiceImpl;
 import utils.AlertUtils;
 import utils.Configs;
 import utils.SceneUtils;
-import utils.Test;
+import utils.Utils;
 
 	public class LeaderHomePageHandler extends HomePageHandler implements Initializable {
 		// Service layer
@@ -72,12 +74,8 @@ import utils.Test;
 	    // Table and columns
 	    @FXML private TableView<Household> tblHouseholds;
 	    @FXML private TableColumn<Household, Integer> colId;
-	    
-	    @FXML private TableColumn<Household, String> colHouseholdNumber;
 	    @FXML private TableColumn<Household, String> colOwnerName;
-	    
 	    @FXML private TableColumn<Household, String> colAddress;
-	    
 	    @FXML private TableColumn<Household, Void> colActions;
 	    
 	    protected FXMLLoader loader;
@@ -133,15 +131,13 @@ import utils.Test;
 	            
 	            // Set up basic columns with property values
 	            colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-	            colHouseholdNumber.setCellValueFactory(new PropertyValueFactory<>("householdNumber"));
 	            colOwnerName.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
 	            colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
 	            
 	            // Sử dụng tỷ lệ phần trăm
 	            colId.prefWidthProperty().bind(tblHouseholds.widthProperty().multiply(0.1)); // 10%
-	            colHouseholdNumber.prefWidthProperty().bind(tblHouseholds.widthProperty().multiply(0.15)); // 15%
-	            colOwnerName.prefWidthProperty().bind(tblHouseholds.widthProperty().multiply(0.25)); // 25%
-	            colAddress.prefWidthProperty().bind(tblHouseholds.widthProperty().multiply(0.3)); // 30%
+	            colOwnerName.prefWidthProperty().bind(tblHouseholds.widthProperty().multiply(0.35)); // 35%
+	            colAddress.prefWidthProperty().bind(tblHouseholds.widthProperty().multiply(0.35)); // 35%
 	            colActions.prefWidthProperty().bind(tblHouseholds.widthProperty().multiply(0.2)); // 20%
 	            
 	            // Set up action column with View/Edit/Delete buttons
@@ -199,25 +195,28 @@ import utils.Test;
 	    
 	    private void loadHouseholdData() {
 	        try {
-	        	System.out.println(memberService.getMembersByHouseholdId(1).toString());
-	        	
-	        	txtSearch.setText("");
-	            // Get all households from service
+	            // Get all households from the controller
 	            householdList = FXCollections.observableArrayList(householdController.getAllHouseholds());
 	            
-	            // Create a filtered list wrapper
+	            // Initialize filtered list
 	            filteredHouseholdList = new FilteredList<>(householdList, p -> true);
 	            
-	            // Wrap FilteredList in SortedList for proper sorting
+	            // Initialize sorted list
 	            sortedHouseholdList = new SortedList<>(filteredHouseholdList);
 	            sortedHouseholdList.comparatorProperty().bind(tblHouseholds.comparatorProperty());
 	            
-	            // Set the table items to the filtered list
+	            // Set the sorted/filtered data to the table
 	            tblHouseholds.setItems(sortedHouseholdList);
 	            
+	        } catch (ServiceException e) {
+	            System.err.println("Error loading household data: " + e.getMessage());
+	            AlertUtils.showErrorAlert("Error", "Failed to Load Data", 
+	                "Could not load household data. Please try again later.\n\nError: " + e.getMessage());
 	        } catch (Exception e) {
-	            AlertUtils.showErrorAlert("Lỗi", "Không thể tải dữ liệu hộ khẩu", e.getMessage());
+	            System.err.println("Unexpected error: " + e.getMessage());
 	            e.printStackTrace();
+	            AlertUtils.showErrorAlert("Error", "System Error", 
+	                "An unexpected error occurred. Please contact support.\n\nError: " + e.getMessage());
 	        }
 	    }
 	    
@@ -231,10 +230,7 @@ import utils.Test;
 	                
 	                String lowerCaseFilter = newValue.toLowerCase();
 	                
-	                // Match against multiple fields
-	                if (household.getHouseholdNumber().toLowerCase().contains(lowerCaseFilter)) {
-	                    return true; // Match by household number
-	                } else if (household.getOwnerName().toLowerCase().contains(lowerCaseFilter)) {
+	                if (household.getOwnerName().toLowerCase().contains(lowerCaseFilter)) {
 	                    return true; // Match by owner name
 	                } else if (household.getAddress().toLowerCase().contains(lowerCaseFilter)) {
 	                    return true; // Match by address

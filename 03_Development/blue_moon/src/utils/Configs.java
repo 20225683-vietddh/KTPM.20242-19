@@ -5,6 +5,11 @@ public class Configs {
 	public static final String LOGO_PATH = "/assets/images/logo-2.png";
 	public static final String ACCOUNTANT_HOME_PAGE_PATH = "/views/homepage/AccountantHomePage.fxml";
 	public static final String LEADER_HOME_PAGE_PATH = "/views/homepage/LeaderHomePage.fxml";
+	public static final String ADD_HOUSEHOLD_DIALOG_PATH = "/views/household/AddHouseholdDialog.fxml";
+	public static final String VIEW_HOUSEHOLD_DIALOG_PATH = "/views/household/ViewHouseholdDialog.fxml";
+	public static final String MEMBER_DETAILS_DIALOG_PATH = "/views/household/MemberDetailsDialog.fxml";
+	public static final String TEMPORARY_RESIDENCE_ABSENCE_PATH = "/views/tempresidenceabsence/TemporaryResidenceAbsencePage.fxml";
+	
 	public static final String FEE_LIST_PATH = "/views/fee/FeeList.fxml";
 	public static final String ADD_FEE_FORM_PATH = "/views/fee/AddFeeForm.fxml";
 	public static final String UPDATE_FEE_FORM_PATH = "/views/fee/UpdateFeeForm.fxml";
@@ -20,5 +25,5 @@ public class Configs {
 			                            "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
 	public static final String[] MONTH = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
 	public static final String[] YEAR = {"2024", "2025", "2026"};
-	public static final String[] STATUS = {"Mới tạo", "Đang diễn ra", "Đã kết thúc"};
+	public static final String[] STATUS = {"Má»›i táº¡o", "Ä�ang diá»…n ra", "Ä�Ã£ káº¿t thÃºc"};
 }

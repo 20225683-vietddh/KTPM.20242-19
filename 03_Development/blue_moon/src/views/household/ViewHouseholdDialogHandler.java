@@ -1,4 +1,4 @@
-package views;
+package views.household;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,11 +23,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import models.Household;
-import models.Member;
+import models.Resident;
 import services.HouseholdService;
 import services.HouseholdServiceImpl;
 import services.MemberService;
 import services.MemberServiceImpl;
+import utils.Configs;
 import utils.SceneUtils.HouseholdDialogHandler;
 
 public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
@@ -45,8 +46,6 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 	// Text fields
 	@FXML
 	private TextField txtId;
-	@FXML
-	private TextField txtHouseholdNumber;
 	@FXML
 	private TextField txtOwnerId;
 	@FXML
@@ -124,15 +123,8 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 	private void fillFormData() {
 		if (currentHousehold != null) {
 			txtId.setText(String.valueOf(currentHousehold.getId()));
-			txtHouseholdNumber.setText(currentHousehold.getHouseholdNumber());
-
-			// For owner ID, extract from ownerName field or use separate field if available
-			// Assuming you have a way to get owner ID from your Household model
-			if (currentHousehold.getOwnerId() != null) {
-				txtOwnerId.setText(currentHousehold.getOwnerId());
-			}
+			txtOwnerId.setText(currentHousehold.getOwnerId());
 			txtOwnerName.setText(currentHousehold.getOwnerName());
-
 			txtAddress.setText(currentHousehold.getAddress());
 			txtArea.setText(currentHousehold.getArea());
 			txtPhone.setText(currentHousehold.getPhone());
@@ -161,9 +153,8 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 				"-fx-background-color: #ffffff; -fx-text-fill: #43A5DC; -fx-cursor: hand; -fx-background-radius: 15;");
 
 		// Disable all editable fields
-		setFieldEditable(txtHouseholdNumber, false);
 		setFieldEditable(txtOwnerId, false);
-		setFieldEditable(txtOwnerName, false);
+        setFieldEditable(txtOwnerName, false);
 		setFieldEditable(txtAddress, false);
 		setFieldEditable(txtArea, false);
 		setFieldEditable(txtPhone, false);
@@ -186,8 +177,6 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 				"-fx-background-color: #43A5DC; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 15;");
 
 		// Enable editable fields (but not system-generated ones)
-		
-		
 		setFieldEditable(txtAddress, true);
 		setFieldEditable(txtArea, true);
 		setFieldEditable(txtPhone, true);
@@ -195,7 +184,6 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 
 		// System-generated fields remain disabled
 		setFieldEditable(txtOwnerId, false); 
-		setFieldEditable(txtHouseholdNumber, false);
 		setFieldEditable(txtOwnerName, false);
 		setFieldEditable(txtId, false);
 		setFieldEditable(txtHouseholdSize, false);
@@ -263,8 +251,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 	}
 
 	private boolean validateRequiredFields() {
-		return !txtHouseholdNumber.getText().trim().isEmpty() && !txtOwnerId.getText().trim().isEmpty()
-				&& !txtAddress.getText().trim().isEmpty() && !txtArea.getText().trim().isEmpty();
+		return !txtAddress.getText().trim().isEmpty() && !txtArea.getText().trim().isEmpty();
 	}
 
 
@@ -300,7 +287,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 		try {
 			System.out.println("Getting members for household ID: " + currentHousehold.getId());
 			// Get members directly from the controller
-			List<Member> members = householdController.getMembers(currentHousehold.getId());
+			List<Resident> members = householdController.getMembers(currentHousehold.getId());
 
 			if (members == null || members.isEmpty()) {
 				System.out.println("No members found for household ID: " + currentHousehold.getId());
@@ -309,7 +296,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 			}
 
 			System.out.println("Found " + members.size() + " members for household " + currentHousehold.getId());
-			for (Member member : members) {
+			for (Resident member : members) {
 				System.out.println("Member: " + member.getId() + " - " + member.getFullName() + " - " + member.getHouseholdId());
 			}
 
@@ -331,27 +318,37 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 		}
 	}
 
-	private void openMemberDetailsDialog( Household household, TextField txtHouseholdSize, List<Member> members, Runnable onSuccess) {
+	private void openMemberDetailsDialog(Household household, TextField txtHouseholdSize, List<Resident> members, Runnable onSuccess) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/MemberDetailsDialog.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(Configs.MEMBER_DETAILS_DIALOG_PATH));
 			Parent root = loader.load();
-//			System.out.println("openMemberDetailsDialog  1");
 			
 			MemberDetailsDialogHandler controller = loader.getController();
-//			System.out.println("openMemberDetailsDialog  1");
-			controller.setMembers(members);
+			
+			// First set the controllers and services
 			controller.setHouseholdController(householdController);
+			
+			// Then set the household which will trigger UI updates
 			controller.setHousehold(household);
+			
+			// Set the members after household is set
+			if (members != null && !members.isEmpty()) {
+				controller.setMembers(members);
+			}
+			
+			// Set additional UI components
 			controller.setTxtHouseholdSize(txtHouseholdSize);
-			controller.setHouseholdInfo(currentHousehold.getHouseholdNumber(), currentHousehold.getOwnerName());
+			controller.setHouseholdInfo(household.getOwnerName());
+			
+			// Set the callback last
 			controller.setOnSuccessCallback(onSuccess);
-//			System.out.println("openMemberDetailsDialog  1");
+			
+			// Create and show the dialog
 			Stage stage = new Stage();
 			stage.setTitle("Chi tiết thành viên hộ khẩu");
 			stage.setScene(new Scene(root));
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initOwner(btnMemberDetails.getScene().getWindow());
-//			System.out.println("openMemberDetailsDialog  1");
 			stage.show();
 
 		} catch (IOException e) {

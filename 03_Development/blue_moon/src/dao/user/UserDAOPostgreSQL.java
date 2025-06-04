@@ -1,7 +1,7 @@
 package dao.user;
 
 import dto.login.*;
-import utils.Role;
+import utils.enums.Role;
 import dao.PostgreSQLConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -9,17 +9,17 @@ import exception.InvalidHouseholdDataException;
 import exception.MemberNotFoundException;
 import exception.ServiceException;
 import models.Household;
-import models.Member;
+import models.Resident;
 
 public interface HouseholdService {
 	
     
     
-    List<Household> getAllHouseholds();
+    List<Household> getAllHouseholds() throws ServiceException;
     
-    Household getHouseholdById(int householdId) throws HouseholdNotExist;
+    Household getHouseholdById(int householdId) throws HouseholdNotExist, ServiceException;
   
-    List<Member> getMembers(int householdId) throws HouseholdNotExist;
+    List<Resident> getMembers(int householdId) throws HouseholdNotExist, ServiceException;
     
     List<String> getMemberIds(int householdId) throws HouseholdNotExist;
     
@@ -33,7 +33,7 @@ public interface HouseholdService {
   
     boolean deleteHousehold(int id) throws HouseholdNotExist, SQLException;
     
-    int getMemberCount(int id) throws HouseholdNotExist;
+    int getMemberCount(int id) throws HouseholdNotExist, ServiceException;
 
 	void removeMember(Household h, String memberId) throws HouseholdNotExist, ServiceException, SQLException;
 

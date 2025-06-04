@@ -80,21 +80,6 @@ public class FieldVerifier {
     }
     
     /**
-     * Validates household number (positive integer)
-     */
-    public static boolean isValidHouseholdNumber(String householdNumber) {
-        if (!isNotEmpty(householdNumber)) {
-            return false;
-        }
-        try {
-            int number = Integer.parseInt(householdNumber.trim());
-            return number > 0;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-    
-    /**
      * Validates member count (positive integer, reasonable range)
      */
     public static boolean isValidMemberCount(String memberCount) {

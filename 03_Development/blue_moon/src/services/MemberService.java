@@ -4,28 +4,33 @@ import java.sql.SQLException;
 import java.util.List;
 
 import exception.ServiceException;
-import models.Member;
+import models.Resident;
 
 //MemberService interface
 public interface MemberService {
-	Member getMemberById(String memberId) throws ServiceException;
+	
+	Resident getMemberById(String memberId) throws ServiceException;
 
-	List<Member> getMembersByHouseholdId(int householdId) throws ServiceException;
+	List<Resident> getMembersByHouseholdId(int householdId) throws ServiceException;
+	
+	List<Resident> getAll() throws ServiceException;
 
 
+	List<Resident> getMembersByMemberIds(List<String> memIds) throws ServiceException;
+	
 	boolean memberExists(String memberId);
 
-	boolean addMember(Member member) throws ServiceException, SQLException;
+	boolean addMember(Resident member) throws ServiceException, SQLException;
 
-	boolean updateMember(Member member) throws ServiceException, SQLException;
+	boolean updateMember(Resident member) throws ServiceException, SQLException;
 	
-	void updateMembers(List<Member> members) throws ServiceException, SQLException;
+	void updateMembers(List<Resident> members) throws ServiceException, SQLException;
 	
 	
 
 	boolean deleteMember(String memberId) throws ServiceException, SQLException;
 
-	Member getHouseholdHead(int householdId) throws ServiceException;
+	Resident getHouseholdHead(int householdId) throws ServiceException;
 
 	
 	

@@ -11,3 +11,5 @@
 /ChargeFeeService.class
 /FeeService.class
 /TrackCampaignFeeService.class
+/TemporaryResidenceAbsenceServiceImpl.class
+/TemporaryResidenceAbsenceServiceImpl$RequestStatistics.class

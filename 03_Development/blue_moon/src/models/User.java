@@ -1,6 +1,6 @@
 package models;
 
-import utils.Role;
+import utils.enums.Role;
 
 public class User {
 	private int id;

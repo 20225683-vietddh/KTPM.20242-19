@@ -5,12 +5,24 @@ import java.security.NoSuchAlgorithmException;
 import javafx.scene.image.ImageView;
 import javafx.animation.RotateTransition;
 import javafx.util.Duration;
+import models.Household;
+import models.Resident;
+import services.HouseholdService;
+import services.HouseholdServiceImpl;
+import services.MemberService;
+import services.MemberServiceImpl;
 import javafx.animation.Interpolator;
 import java.time.LocalDate;
+import java.util.List;
 import java.time.DateTimeException;
 import exception.InvalidDateRangeException;
+import exception.ServiceException;
 
 public class Utils {
+	private final static HouseholdServiceImpl householdService = new HouseholdServiceImpl();
+	private final static MemberServiceImpl memberService = new MemberServiceImpl();
+	
+	
 	public static String toSHA256(String input) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -51,7 +63,7 @@ public class Utils {
 		LocalDate dueDate = parseDateSafely(dDay, dMonth, dYear);
 		
 		if (!startDate.isBefore(dueDate)) {
-			throw new InvalidDateRangeException("Ngày bắt đầu phải nhỏ hơn ngày kết thúc!");
+			throw new InvalidDateRangeException("NgÃ y báº¯t Ä‘áº§u pháº£i nhá»� hÆ¡n ngÃ y káº¿t thÃºc!");
 		}
 	}
 	
@@ -74,4 +86,18 @@ public class Utils {
 		return Integer.parseInt(plainNumber);
 	   
 	}
+	
+	public static void printAllHousehold() throws ServiceException {
+		System.out.println("-------------------------------------------");
+		List<Household> households = householdService.getAllHouseholds();
+		for (Household h : households) System.out.println(h.toString());
+	}
+	
+	public static void printAllMember() throws ServiceException {
+		System.out.println("-------------------------------------------");
+		List<Resident> members = memberService.getAll();
+		for (Resident m : members) System.out.println(m.toString());
+	}
+	
+	
 }

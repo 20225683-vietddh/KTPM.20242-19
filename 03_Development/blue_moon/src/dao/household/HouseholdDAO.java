@@ -1,4 +1,4 @@
-package dao;
+package dao.household;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import java.util.List;
 import exception.HouseholdNotExist;
 import exception.ServiceException;
 import models.Household;
-import models.Member;
+import models.Resident;
 import services.MemberService;
 import services.MemberServiceImpl;
 import utils.DatabaseConnection;
@@ -100,9 +100,9 @@ public class HouseholdDAO {
         this.conn = DatabaseConnection.getConnection();
     }
 
-    public List<Household> findAll() {
-    	MemberServiceImpl memberService = new MemberServiceImpl();  
-    	
+    public List<Household> findAll() throws ServiceException {
+        MemberServiceImpl memberService = new MemberServiceImpl();  
+        
         List<Household> households = new ArrayList<>();
         String sql = "SELECT * FROM households";
 
@@ -111,48 +111,36 @@ public class HouseholdDAO {
             while (rs.next()) {
                 Household h = new Household();
                 h.setId(rs.getInt("id"));
-                h.setHouseholdNumber(rs.getString("household_number"));
                 h.setEmail(rs.getString("email"));
                 h.setPhone(rs.getString("phone"));
                 h.setAddress(rs.getString("address"));
                 h.setOwnerName(rs.getString("owner_name"));
-                
-                // Set additional fields from your new schema
                 h.setArea(rs.getString("area"));
                 h.setHouseholdSize(rs.getInt("household_size"));
-                try {
-					h.setOwnerId(rs.getString("owner_id"));
-				} catch (ServiceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                h.setOwnerId(rs.getString("owner_id"));
                 h.setCreationDate(rs.getDate("creation_date"));
                 
-                // 👉 Thêm bước lấy danh sách member của household
+                // Get members for this household
                 try {
-                    List<Member> members = memberService.getMembersByHouseholdId(h.getId());
-                    
-                    for (Member member : members) System.out.println(member.toString());
-                    
-                    h.setMembers(members); // gán danh sách member vào household
+                    List<Resident> members = memberService.getMembersByHouseholdId(h.getId());
+                    h.setMembers(members);
                 } catch (ServiceException e) {
-                    // Nếu không có member cũng không sao, chỉ in log
                     System.err.println("No members for household ID " + h.getId());
                     h.setMembers(new ArrayList<>());
                 }
-                
                 
                 households.add(h);
             }
         } catch (SQLException e) {
             System.err.println("Error in findAll(): " + e.getMessage());
             e.printStackTrace();
+            throw new ServiceException("Database error when finding all households: " + e.getMessage());
         }
 
         return households;
     }
 
-    public Household findById(int id) throws HouseholdNotExist {
+    public Household findById(int id) throws HouseholdNotExist, ServiceException {
         String sql = "SELECT * FROM households WHERE id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -161,23 +149,14 @@ public class HouseholdDAO {
             if (rs.next()) {
                 Household h = new Household();
                 h.setId(rs.getInt("id"));
-                h.setHouseholdNumber(rs.getString("household_number"));
                 h.setEmail(rs.getString("email"));
                 h.setPhone(rs.getString("phone"));
                 h.setAddress(rs.getString("address"));
                 h.setOwnerName(rs.getString("owner_name"));
-                
-                // Set additional fields from your new schema
                 h.setArea(rs.getString("area"));
                 h.setHouseholdSize(rs.getInt("household_size"));
-                try {
-					h.setOwnerId(rs.getString("owner_id"));
-				} catch (ServiceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                h.setOwnerId(rs.getString("owner_id"));
                 h.setCreationDate(rs.getDate("creation_date"));
-                
                 return h;
             } else {
                 throw new HouseholdNotExist("Cannot find household with id: " + id);
@@ -188,72 +167,64 @@ public class HouseholdDAO {
         }
     }
 
-    public Household findByHouseholdNumber(String householdNumber) throws HouseholdNotExist {
-        String sql = "SELECT * FROM households WHERE household_number = ?";
+    
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, householdNumber);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                Household h = new Household();
-                h.setId(rs.getInt("id"));
-                h.setHouseholdNumber(rs.getString("household_number"));
-                h.setEmail(rs.getString("email"));
-                h.setPhone(rs.getString("phone"));
-                h.setAddress(rs.getString("address"));
-                h.setOwnerName(rs.getString("owner_name"));
-                
-                // Set additional fields from your new schema
-                h.setArea(rs.getString("area"));
-                h.setHouseholdSize(rs.getInt("household_size"));
-                try {
-					h.setOwnerId(rs.getString("owner_id"));
-				} catch (ServiceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-                h.setCreationDate(rs.getDate("creation_date"));
-                
-                return h;
-            } else {
-                throw new HouseholdNotExist("Cannot find household with number: " + householdNumber);
-            }
-        } catch (SQLException e) {
-            System.err.println("Database error in findByHouseholdNumber(): " + e.getMessage());
-            throw new HouseholdNotExist("Database error when finding household number: " + householdNumber);
-        }
-    }
-
-    public void add(Household household) throws SQLException {
-        String sql = "INSERT INTO households (household_number, email, phone, address, owner_name, area, household_size, owner_id, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, household.getHouseholdNumber());
-            stmt.setString(2, household.getEmail());
-            stmt.setString(3, household.getPhone());
-            stmt.setString(4, household.getAddress());
-            stmt.setString(5, household.getOwnerName());
-            stmt.setString(6, household.getArea());
-            stmt.setInt(7, household.getHouseholdSize());
-            stmt.setString(8, household.getOwnerId());
+    public int add(Household household) throws SQLException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = DatabaseConnection.getConnection();
+            conn.setAutoCommit(false); // Start transaction
+            
+            // Insert with auto-generated ID from sequence
+            String sql = "INSERT INTO households (email, phone, address, owner_name, area, household_size, owner_id, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
+            stmt = conn.prepareStatement(sql);
+            
+            stmt.setString(1, household.getEmail());
+            stmt.setString(2, household.getPhone());
+            stmt.setString(3, household.getAddress());
+            stmt.setString(4, household.getOwnerName());
+            stmt.setString(5, household.getArea());
+            stmt.setInt(6, household.getHouseholdSize());
+            stmt.setString(7, household.getOwnerId());
             
             // Convert String to Date for database
-            if (household.getCreationDate() != null ) {
-                stmt.setDate(9, household.getCreationDate());
+            if (household.getCreationDate() != null) {
+                stmt.setDate(8, household.getCreationDate());
             } else {
-                stmt.setDate(9, new java.sql.Date(System.currentTimeMillis()));
+                stmt.setDate(8, new java.sql.Date(System.currentTimeMillis()));
             }
             
-            int rowsAffected = stmt.executeUpdate();
-            System.out.println("Inserted " + rowsAffected + " household(s)");
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                int generatedId = rs.getInt("id");
+                household.setId(generatedId);
+                conn.commit();
+                return generatedId;
+            }
+            
+            throw new SQLException("Failed to get generated ID for household");
+            
         } catch (SQLException e) {
-            System.err.println("Error in add(): " + e.getMessage());
-            throw e;
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error rolling back transaction", ex);
+                }
+            }
+            throw new SQLException("Error adding household: " + e.getMessage(), e);
+        } finally {
+            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignored */ }
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { /* ignored */ }
+            if (conn != null) try { conn.setAutoCommit(true); } catch (SQLException e) { /* ignored */ }
         }
     }
 
     public void update(Household household) throws SQLException {
-        String sql = "UPDATE households SET email = ?, phone = ?, address = ?, owner_name = ?, area = ?, household_size = ?, owner_id = ? WHERE household_number = ?";
+        String sql = "UPDATE households SET email = ?, phone = ?, address = ?, owner_name = ?, area = ?, household_size = ?, owner_id = ? WHERE id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, household.getEmail());
@@ -263,11 +234,11 @@ public class HouseholdDAO {
             stmt.setString(5, household.getArea());
             stmt.setInt(6, household.getHouseholdSize());
             stmt.setString(7, household.getOwnerId());
-            stmt.setString(8, household.getHouseholdNumber());
+            stmt.setInt(8, household.getId());
             
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
-                throw new SQLException("No household updated with household number: " + household.getHouseholdNumber());
+                throw new SQLException("No household updated with ID: " + household.getId());
             }
             System.out.println("Updated " + rowsAffected + " household(s)");
         } catch (SQLException e) {
@@ -312,18 +283,18 @@ public class HouseholdDAO {
     }
 
     // Method to get household with members
-    public Household findByIdWithMembers(int id) throws HouseholdNotExist {
+    public Household findByIdWithMembers(int id) throws HouseholdNotExist, ServiceException {
         Household household = findById(id);
         
         // Get members for this household
         String sql = "SELECT * FROM member WHERE household_id = ?";
-        List<Member> members = new ArrayList<>();
+        List<Resident> members = new ArrayList<>();
         
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Member member = new Member();
+                Resident member = new Resident();
                 member.setId(rs.getString("id"));
                 member.setHouseholdId(rs.getInt("household_id"));
                 member.setFullName(rs.getString("full_name"));
@@ -345,13 +316,13 @@ public class HouseholdDAO {
         return household;
     }
 
-	public void removeMember(Household household, Member member) throws SQLException {
+	public void removeMember(Household household, Resident member) throws SQLException {
 		household.getMembers().remove(member);
 		update(household);
 		
 	}
 
-	public void addMemberToHousehold(Household household, Member member) throws SQLException {
+	public void addMemberToHousehold(Household household, Resident member) throws SQLException {
 		household.getMembers().add(member);
 		update(household);
 	}

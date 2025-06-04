@@ -3,17 +3,18 @@ package services;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import dao.HouseholdDAO;
+import dao.household.HouseholdDAO;
 import exception.HouseholdAlreadyExistsException;
 import exception.HouseholdNotExist;
 import exception.InvalidHouseholdDataException;
 import exception.MemberNotFoundException;
 import exception.ServiceException;
 import models.Household;
-import models.Member;
+import models.Resident;
 
 public class HouseholdServiceImpl implements HouseholdService {
 	private HouseholdDAO householdDAO;
@@ -23,31 +24,31 @@ public class HouseholdServiceImpl implements HouseholdService {
 		this.householdDAO = new HouseholdDAO();
 	}
 
-	public List<Household> getAllHouseholds() {
+	public List<Household> getAllHouseholds() throws ServiceException {
 		return householdDAO.findAll();
 	}
 
 	@Override
-	public Household getHouseholdById(int householdId) throws HouseholdNotExist {
+	public Household getHouseholdById(int householdId) throws HouseholdNotExist, ServiceException {
 		return householdDAO.findById(householdId);
 	}
 
 
 	@Override
 	public void addMemberToHousehold(Household h, String memberId) throws HouseholdNotExist, ServiceException, SQLException {
-		Member m = memberService.getMemberById(memberId);
+		Resident m = memberService.getMemberById(memberId);
 		householdDAO.addMemberToHousehold(h,m);
 	}
 
 	@Override
 	public void removeMember(Household h, String memberId) throws HouseholdNotExist, ServiceException, SQLException {
-		Member m = memberService.getMemberById(memberId);
+		Resident m = memberService.getMemberById(memberId);
 		householdDAO.removeMember(h,m);
 		
 	}
 
 	@Override
-	public List<Member> getMembers(int householdId) throws HouseholdNotExist, ServiceException {
+	public List<Resident> getMembers(int householdId) throws HouseholdNotExist, ServiceException {
 		try {
 			return memberService.getMembersByHouseholdId(householdId);
 		} catch (ServiceException e) {
@@ -59,13 +60,13 @@ public class HouseholdServiceImpl implements HouseholdService {
 	@Override
 	public List<String> getMemberIds(int householdId) throws HouseholdNotExist {
 		try {
-			List<Member> members = getMembers(householdId);
+			List<Resident> members = getMembers(householdId);
 			return members.stream()
-				.map(Member::getId)
+				.map(Resident::getId)
 				.collect(Collectors.toList());
 		} catch (ServiceException e) {
 			System.err.println("Error getting member IDs for household " + householdId + ": " + e.getMessage());
-			return List.of(); // Return empty list if no members found
+			return new ArrayList<>(); // Return empty list if no members found
 		}
 	}
 
@@ -75,7 +76,33 @@ public class HouseholdServiceImpl implements HouseholdService {
 		if (!validateAdd(household)) {
 			return;
 		}
-		householdDAO.add(household);
+		
+		// 1. Create household first and get the generated ID
+		int generatedId = householdDAO.add(household);
+		household.setId(generatedId);
+		
+		// 2. Update all members with the new household ID
+		List<Resident> members = household.getMembers();
+		for (Resident member : members) {
+			member.setHouseholdId(generatedId);
+			if (member.getId().equals(household.getOwnerId())) {
+				member.setHouseholdHead(true);
+				member.setRelationship("Chủ hộ");
+			}
+		}
+		
+		// 3. Update all members in one transaction
+		try {
+			memberService.updateMembers(members);
+		} catch (ServiceException e) {
+			// If member update fails, we should rollback the household creation
+			try {
+				householdDAO.delete(generatedId);
+			} catch (SQLException ex) {
+				throw new SQLException("Failed to rollback household creation after member update failure", ex);
+			}
+			throw new MemberNotFoundException("Failed to update members for new household: " + e.getMessage());
+		}
 	}
 
 	@Override
@@ -94,34 +121,19 @@ public class HouseholdServiceImpl implements HouseholdService {
 	}
 
 	@Override
-	public int getMemberCount(int id) throws HouseholdNotExist {
+	public int getMemberCount(int id) throws HouseholdNotExist, ServiceException {
 		return getHouseholdById(id).getHouseholdSize();
 	}
 
 	private boolean validateAdd(Household household)
 			throws HouseholdAlreadyExistsException, MemberNotFoundException, HouseholdNotExist, InvalidHouseholdDataException{
-
-		// 1. Check if household number already exists
-	    if (isHouseholdNumberExists(household.getHouseholdNumber())) {
-	        throw new HouseholdAlreadyExistsException("Hộ khẩu với số '" + household.getHouseholdNumber() + "' đã tồn tại.");
-	    }
-	    
-		// 2. Call business rules validation
+		// Call business rules validation
 		return validateBusinessRules(household);
 	}
 
 	private boolean validateUpdate(Household household) throws HouseholdNotExist, HouseholdAlreadyExistsException,
 			MemberNotFoundException, InvalidHouseholdDataException {
-
-
-		// 2. Check if household number is unique (excluding current household)
-		Household existingWithSameNumber = householdDAO.findByHouseholdNumber(household.getHouseholdNumber());
-		if (existingWithSameNumber != null && existingWithSameNumber.getId() != household.getId()) {
-			throw new HouseholdAlreadyExistsException("Số hộ khẩu '" + household.getHouseholdNumber()
-					+ "' đã được sử dụng bởi hộ khẩu khác (ID: " + existingWithSameNumber.getId() + ")");
-		}
-
-		// 3. Apply the same business logic validations as in validateAdd()
+		// Apply business logic validations
 		return validateBusinessRules(household);
 	}
 
@@ -133,37 +145,34 @@ public class HouseholdServiceImpl implements HouseholdService {
 	private boolean validateBusinessRules(Household household)
 			throws MemberNotFoundException, HouseholdNotExist, InvalidHouseholdDataException {
 		
-		
-
-		// 2. Check if owner exists
+		// 1. Check if owner exists
 		if (!doesMemberExist(household.getOwnerId())) {
 			throw new MemberNotFoundException(
 					"Chủ hộ với ID '" + household.getOwnerId() + "' không tồn tại trong hệ thống");
 		}
 		
-		// 3. Check if owner already belongs to another household
-	    if (isMemberInAnotherHousehold(household.getOwnerId(), household.getHouseholdNumber())) {
+		// 2. Check if owner already belongs to another household
+	    if (isMemberInAnotherHousehold(household.getOwnerId(), household.getId())) {
 	        throw new InvalidHouseholdDataException("Chủ hộ đang thuộc về một hộ khẩu khác. Cần tách hộ trước khi thêm.");
 	    }
 
-	 // 4. Validate all member IDs exist and not in another household
+		// 3. Validate all member IDs exist and not in another household
 		if (household.getMemberIds() != null && !household.getMemberIds().isEmpty()) {
 			List<String> memberIds = household.getMemberIds();
 			for (String memberId : memberIds) {
-
 				if (!doesMemberExist(memberId)) {
 					throw new MemberNotFoundException(
 							"Thành viên với ID '" + memberId + "' không tồn tại trong hệ thống");
 				}
 				
-				 // Check member is not already in another household
-	            if (isMemberInAnotherHousehold(memberId, household.getHouseholdNumber())) {
+				// Check member is not already in another household
+	            if (isMemberInAnotherHousehold(memberId, household.getId())) {
 	                throw new InvalidHouseholdDataException("Thành viên ID '" + memberId + "' đã thuộc hộ khẩu khác.");
 	            }
 			}
 		}
 
-		// 5. Owner must be in the member list
+		// 4. Owner must be in the member list
 		if (household.getMemberIds() != null && !household.getMemberIds().isEmpty()) {
 			boolean ownerInMembers = household.getMemberIds().stream()
 					.anyMatch(member -> member.equals(household.getOwnerId()));
@@ -191,40 +200,17 @@ public class HouseholdServiceImpl implements HouseholdService {
 		return true;
 	}
 
-	private boolean isMemberInAnotherHousehold(String memberId, String currentHouseholdNumber) {
-	    List<Household> allHouseholds = householdDAO.findAll();
-	    for (Household h : allHouseholds) {
-	        if (!h.getHouseholdNumber().equals(currentHouseholdNumber) && h.getMemberIds() != null && h.getMemberIds().contains(memberId)) {
-	            return true;
-	        }
-	    }
-	    return false;
-	} 
-
-	// Helper methods
-
-	/**
-	 * Check if household number already exists
-	 */
-	private boolean isHouseholdNumberExists(String householdNumber) {
+	private boolean isMemberInAnotherHousehold(String memberId, int currentHouseholdId) {
 		try {
-			Household existing = householdDAO.findByHouseholdNumber(householdNumber);
-			return existing != null;
-		} catch (Exception e) {
+			Resident member = memberService.getMemberById(memberId);
+			return member.getHouseholdId() != 0 && member.getHouseholdId() != currentHouseholdId;
+		} catch (ServiceException e) {
 			return false;
 		}
 	}
-	/**
-	 * Check if member exists by ID
-	 */
+
 	private boolean doesMemberExist(String memberId) {
-		try {
-//        	return true;
-			Member member = memberService.getMemberById(memberId);
-			return member != null;
-		} catch (Exception e) {
-			return false;
-		}
+		return memberService.memberExists(memberId);
 	}
 
 }

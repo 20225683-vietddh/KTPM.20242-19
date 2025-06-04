@@ -2,6 +2,7 @@ package views.login;
 
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
+import utils.enums.Role;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ComboBox;
@@ -14,7 +15,6 @@ import dto.login.LoginRequestDTO;
 import dto.login.LoginResponseDTO;
 import exception.*;
 import views.messages.ErrorDialog;
-import utils.Role;
 
 public class LoginPageHandler extends BaseScreenHandler {
 	@FXML

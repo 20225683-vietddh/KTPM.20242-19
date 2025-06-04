@@ -12,9 +12,26 @@ public class TemporaryResidenceAbsence {
     private LocalDate endDate;
     private String address;
     private String status; // "PENDING", "APPROVED", "REJECTED"
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
     
-    public TemporaryResidenceAbsence() {
-    }
+    public LocalDate getCreateAt() {
+		return createdAt;
+	}
+
+	public void setCreateAt(LocalDate createAt) {
+		this.createdAt = createAt;
+	}
+
+	public LocalDate getUpdateAt() {
+		return updatedAt;
+	}
+
+	public void setUpdateAt(LocalDate updateAt) {
+		this.updatedAt = updateAt;
+	}
+
+	public TemporaryResidenceAbsence() {}
     
     public TemporaryResidenceAbsence(int id, int memberId, String memberName, String type, 
                                    String reason, LocalDate startDate, LocalDate endDate, 

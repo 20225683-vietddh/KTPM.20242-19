@@ -1,6 +1,6 @@
 package dto.login;
 
-import utils.Role;
+import utils.enums.Role;
 
 public class LoginResponseDTO {
 	public String userName;

@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
+import utils.enums.Gender;
+import utils.enums.RelationshipType;
+
 public class RelationshipHelper {
 
     public static RelationshipType determineRelationship(String birthDate, Gender gender) {
@@ -13,9 +16,9 @@ public class RelationshipHelper {
 
         if (age >= 60) {
             if (gender == Gender.MALE) {
-                return RelationshipType.GRAND_FATHER;
+                return RelationshipType.GRANDFATHER;
             } else if (gender == Gender.FEMALE) {
-                return RelationshipType.GRAND_MOTHER;
+                return RelationshipType.GRANDMOTHER;
             }
         } else if (age >= 30) {
             if (gender == Gender.MALE) {
@@ -32,5 +35,22 @@ public class RelationshipHelper {
         }
 
         return RelationshipType.UNKNOWN;
+    }
+
+    public static String getDisplayText(RelationshipType type) {
+        if (type == null) return "";
+        return type.name();
+    }
+    
+    public static RelationshipType fromDisplayText(String displayText) {
+        if (displayText == null || displayText.isEmpty()) {
+            return null;
+        }
+        
+        try {
+            return RelationshipType.valueOf(displayText.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return RelationshipType.UNKNOWN;
+        }
     }
 }

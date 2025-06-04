@@ -1,4 +1,4 @@
-package dao;
+package dao.household;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import javafx.collections.ObservableList;
 import models.Household;
-import models.Member;
+import models.Resident;
 
 public class HouseholdDB {
 

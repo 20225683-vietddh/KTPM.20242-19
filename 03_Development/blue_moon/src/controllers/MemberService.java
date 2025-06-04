@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import exception.ServiceException;
-import models.Member;
+import models.Resident;
 import services.MemberServiceImpl;
 
 public class MemberService {
@@ -25,7 +25,7 @@ public class MemberService {
 
 
 	// Lấy member theo ID
-    public Member getMemberById(String memberId) {
+    public Resident getMemberById(String memberId) {
         try {
             return memberService.getMemberById(memberId);
         } catch (ServiceException e) {
@@ -35,7 +35,7 @@ public class MemberService {
     }
 
     // Lấy danh sách member của 1 hộ gia đình
-    public List<Member> getMembersByHouseholdId(int householdId) {
+    public List<Resident> getMembersByHouseholdId(int householdId) {
         try {
             return memberService.getMembersByHouseholdId(householdId);
         } catch (ServiceException e) {
@@ -50,7 +50,7 @@ public class MemberService {
     }
 
     // Thêm member
-    public boolean addMember(Member member) throws SQLException {
+    public boolean addMember(Resident member) throws SQLException {
         try {
             boolean result = memberService.addMember(member);
             if (result) {
@@ -64,7 +64,7 @@ public class MemberService {
     }
 
     // Cập nhật member
-    public boolean updateMember(Member member) throws SQLException {
+    public boolean updateMember(Resident member) throws SQLException {
         try {
             boolean result = memberService.updateMember(member);
             if (result) {
@@ -92,7 +92,7 @@ public class MemberService {
     }
 
     // Lấy chủ hộ
-    public Member getHouseholdHead(int householdId) {
+    public Resident getHouseholdHead(int householdId) {
         try {
             return memberService.getHouseholdHead(householdId);
         } catch (ServiceException e) {

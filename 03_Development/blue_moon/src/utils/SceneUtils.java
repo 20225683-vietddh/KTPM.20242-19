@@ -11,8 +11,9 @@ import javafx.stage.StageStyle;
 import models.Household;
 import services.MemberService;
 import services.MemberServiceImpl;
-import views.AddHouseholdDialogHandler;
-import views.ViewHouseholdDialogHandler;
+import views.household.AddHouseholdDialogHandler;
+import views.household.ViewHouseholdDialogHandler;
+import utils.Configs;
 
 import java.io.IOException;
 
@@ -116,7 +117,7 @@ public class SceneUtils {
      * @throws IOException If the FXML file cannot be loaded
      */
     public static void openAddHouseholdDialog(HouseholdController householdController, MemberService memberService, Node sourceNode, Runnable onSuccess) throws IOException {
-        FXMLLoader loader = new FXMLLoader(SceneUtils.class.getResource("/views/AddHouseholdDialog.fxml"));
+        FXMLLoader loader = new FXMLLoader(SceneUtils.class.getResource(Configs.ADD_HOUSEHOLD_DIALOG_PATH));
         Parent root = loader.load();
 
         // Get the controller, set the household and callback
@@ -134,7 +135,7 @@ public class SceneUtils {
 
     public static void openViewHouseholdDialog(HouseholdController householdController, MemberService memberService, 
     		Household household, Node sourceNode, Runnable onSuccess) throws IOException {
-        FXMLLoader loader = new FXMLLoader(SceneUtils.class.getResource("/views/ViewHouseholdDialog.fxml"));
+        FXMLLoader loader = new FXMLLoader(SceneUtils.class.getResource(Configs.VIEW_HOUSEHOLD_DIALOG_PATH));
         Parent root = loader.load();
 
         // Get the controller, set the household and callback

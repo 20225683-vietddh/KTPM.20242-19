@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -19,6 +20,7 @@
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1039.0" prefWidth="1446.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);" stylesheets="@../../assets/css/style.css">
          <children>
+            <!-- Sidebar -->
             <VBox prefHeight="987.0" prefWidth="264.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="26.0">
                <children>
                   <VBox prefHeight="743.0" prefWidth="264.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;">
@@ -59,7 +61,7 @@
                                     <Insets right="98.0" />
                                  </padding>
                               </Button>
-                              <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-content-display: left;" text="Danh sách hộ khẩu">
+                              <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left;" text="Danh sách hộ khẩu">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -95,7 +97,7 @@
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Tạm trú, tạm vắng">
+                              <Button layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-content-display: left; -fx-cursor: hand;" text="Tạm trú, tạm vắng">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -185,6 +187,8 @@
                   </VBox>
                </children>
             </VBox>
+            
+            <!-- Main Content -->
             <VBox prefHeight="987.0" prefWidth="1106.0" AnchorPane.leftAnchor="314.0" AnchorPane.topAnchor="26.0">
                <children>
                   <VBox prefWidth="100.0">
@@ -193,10 +197,10 @@
                            <children>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../assets/images/home-page.png" />
+                                    <Image url="@../../assets/images/absence.png" />
                                  </image>
                               </ImageView>
-                              <Label prefHeight="40.0" text="Hộ khẩu">
+                              <Label prefHeight="40.0" text="Tạm trú, Tạm vắng">
                                  <font>
                                     <Font name="System Bold" size="22.0" />
                                  </font>
@@ -213,7 +217,7 @@
                      </children>
                   </VBox>
                   
-                  <!-- Content Box for Household Management -->
+                  <!-- Content Box for Temporary Residence/Absence Management -->
                   <VBox prefHeight="837.0" prefWidth="1106.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-width: 1; -fx-border-radius: 10; -fx-border-color: black;">
                      <VBox.margin>
                         <Insets top="32.0" />
@@ -222,14 +226,14 @@
                         <!-- Title and Search Bar -->
                         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1106.0">
                            <children>
-                              <Label text="Danh sách hộ khẩu" textFill="#43a5dc">
+                              <Label text="Quản lý tạm trú, tạm vắng" textFill="#43a5dc">
                                  <font>
                                     <Font name="System Bold" size="24.0" />
                                  </font>
                               </Label>
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <TextField fx:id="txtSearch" prefHeight="40.0" prefWidth="250.0" promptText="Tìm kiếm hộ khẩu...">
+                                    <TextField fx:id="txtSearch" prefHeight="40.0" prefWidth="250.0" promptText="Tìm kiếm theo tên...">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
@@ -242,34 +246,110 @@
                            </VBox.margin>
                         </HBox>
                         
-                        <!-- Function Buttons -->
+                        <!-- Filter and Function Buttons -->
                         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1106.0" spacing="15.0">
                            <children>
-                              <Button fx:id="btnAddHousehold" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #43A5DC; -fx-text-fill: white; -fx-cursor: hand;" text="+ Thêm hộ khẩu mới">
+                              <Button fx:id="btnAddRequest" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #43A5DC; -fx-text-fill: white; -fx-cursor: hand;" text="+ Thêm đơn mới">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
+                              <ComboBox fx:id="cmbFilterType" prefHeight="40.0" prefWidth="140.0" promptText="Loại đơn">
+                              </ComboBox>
+                              <ComboBox fx:id="cmbFilterStatus" prefHeight="40.0" prefWidth="140.0" promptText="Trạng thái">
+                              </ComboBox>
                               <Button fx:id="btnRefresh" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-cursor: hand;" text="Làm mới">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                              
                            </children>
                            <VBox.margin>
                               <Insets left="20.0" right="20.0" top="10.0" />
                            </VBox.margin>
                         </HBox>
                         
-                        <!-- Household Table -->
-                        <TableView fx:id="tblHouseholds" prefHeight="600.0" prefWidth="1066.0" style="-fx-cursor: hand;">
+                        <!-- Statistics Summary -->
+                        <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1106.0" spacing="30.0" style="-fx-background-color: #f5f5f5; -fx-background-radius: 5;">
+                           <children>
+                              <VBox alignment="CENTER">
+                                 <children>
+                                    <Label fx:id="lblTotalRequests" text="0" textFill="#43a5dc">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Tổng số đơn" textFill="#666666">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                 <children>
+                                    <Label fx:id="lblResidenceRequests" text="0" textFill="#4CAF50">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Tạm trú" textFill="#666666">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                 <children>
+                                    <Label fx:id="lblAbsenceRequests" text="0" textFill="#FF9800">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Tạm vắng" textFill="#666666">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                 <children>
+                                    <Label fx:id="lblPendingRequests" text="0" textFill="#F44336">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Chờ duyệt" textFill="#666666">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" top="10.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        
+                        <!-- Temporary Residence/Absence Table -->
+                        <TableView fx:id="tblTemporaryRequests" prefHeight="550.0" prefWidth="1066.0" style="-fx-cursor: hand;">
                           <columns>
-						        <TableColumn fx:id="colId" prefWidth="50.0" text="ID" />
-						        <TableColumn fx:id="colOwnerName" prefWidth="200.0" text="Chủ hộ" />
-						        <TableColumn fx:id="colAddress" prefWidth="250.0" text="Địa chỉ" />
-						        <TableColumn fx:id="colActions" prefWidth="150.0" text="Thao tác" />
-						    </columns>
+                              <TableColumn fx:id="colId" prefWidth="50.0" text="ID" />
+                              <TableColumn fx:id="colMemberName" prefWidth="150.0" text="Tên nhân khẩu" />
+                              <TableColumn fx:id="colType" prefWidth="100.0" text="Loại" />
+                              <TableColumn fx:id="colReason" prefWidth="180.0" text="Lý do" />
+                              <TableColumn fx:id="colStartDate" prefWidth="100.0" text="Ngày bắt đầu" />
+                              <TableColumn fx:id="colEndDate" prefWidth="100.0" text="Ngày kết thúc" />
+                              <TableColumn fx:id="colAddress" prefWidth="150.0" text="Địa chỉ" />
+                              <TableColumn fx:id="colStatus" prefWidth="100.0" text="Trạng thái" />
+                              <TableColumn fx:id="colActions" prefWidth="130.0" text="Thao tác" />
+                          </columns>
                            <VBox.margin>
                               <Insets left="20.0" right="20.0" top="20.0" />
                            </VBox.margin>
@@ -278,6 +358,7 @@
                   </VBox>
                </children>
             </VBox>
-         </children></AnchorPane>
+         </children>
+      </AnchorPane>
   </content>
 </ScrollPane>

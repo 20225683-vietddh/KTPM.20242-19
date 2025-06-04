@@ -1,33 +1,49 @@
 package models;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
-import utils.Gender;
-import utils.RelationshipType;
-import utils.Role;
+import utils.enums.Gender;
+import utils.enums.RelationshipType;
+import utils.enums.Role;
 
-public class Member {
+public class Resident {
     private String id;
-    private int householdId;
     private String fullName;
-    private Gender gender;
-    private Date dateOfBirth;
-    private String idCard;
-    private RelationshipType relationship;
+    
+    private LocalDate dateOfBirth;
+    private String gender;
+    private String ethnicity;
+    private String religion;
+    
+    private String citizenId;
+    
+    
+    private LocalDate dateOfIssue;
+    private String placeOfIssue;
+    
     private String occupation;
+    private String notes;
+    private LocalDate addedDate;
+    
+    private RelationshipType relationship;
+    
     private boolean isHouseholdHead;
+    private int householdId;
+    
+    
 
-    public Member() {
+    public Resident() {
     }
 
-    public Member(String id, int householdId, String fullName, Gender gender, Date dateOfBirth, 
+    public Resident(String id, int householdId, String fullName, Gender gender, Date dateOfBirth, 
                  String idCard, RelationshipType relationship, String occupation, boolean isHouseholdHead) {
         this.id = id;
         this.householdId = householdId;
         this.fullName = fullName;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
-        this.idCard = idCard;
+        this.citizenId = idCard;
         this.relationship = relationship;
         this.occupation = occupation;
         this.isHouseholdHead = isHouseholdHead;
@@ -84,11 +100,11 @@ public class Member {
     }
 
     public String getIdCard() {
-        return idCard;
+        return citizenId;
     }
 
     public void setIdCard(String idCard) {
-        this.idCard = idCard;
+        this.citizenId = idCard;
     }
 
     public RelationshipType getRelationship() {
@@ -96,17 +112,22 @@ public class Member {
     }
     
     public String getRelationshipString() {
-    	return relationship.toString();
+    	return relationship != null ? relationship.name() : RelationshipType.UNKNOWN.name();
+    }
+
+    public void setRelationship(String relationshipStr) {
+        try {
+            this.relationship = RelationshipType.valueOf(relationshipStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            // If the string doesn't match any enum value, set to UNKNOWN
+            this.relationship = RelationshipType.UNKNOWN;
+        }
     }
 
     public void setRelationship(RelationshipType relationship) {
-        this.relationship = relationship;
+        this.relationship = relationship != null ? relationship : RelationshipType.UNKNOWN;
     }
 
-    public void setRelationship(String relationship) {
-        this.relationship = RelationshipType.valueOf(relationship.toUpperCase());
-    }
-    
     public String getOccupation() {
         return occupation;
     }

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import models.Member;
-import utils.Gender;
-import utils.RelationshipType;
+import models.Resident;
+import utils.enums.Gender;
+import utils.enums.RelationshipType;
 
 //public class MemberDB {
 //	public static final List<Member> MEMBER_SAMPLE = new ArrayList<>(Arrays.asList(

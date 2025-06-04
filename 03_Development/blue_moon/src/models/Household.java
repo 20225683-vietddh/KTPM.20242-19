@@ -3,6 +3,7 @@ package models;
 import java.lang.reflect.Array;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,36 +14,40 @@ import exception.ServiceException;
 import services.MemberServiceImpl;
 
 public class Household {
-	private static int ID = 10;
 	private final MemberServiceImpl memberService = new MemberServiceImpl();
 
+	//giong
 	private int id;
-	private String householdNumber;
-	private String address;
-	private String area;
+	private String houseNumber;
+	private String district;
+	private String ward;
+	private String street;
+	
+	
+	private LocalDate creationDate;
+	
 	private int householdSize;
 	private String ownerId;
-	private String ownerName;
+	
+	//khac
+//	private String address;
+	private Float area;
+	
+	
+	//them
 	private String phone;
 	private String email;
-	private Date creationDate;
-//    private List<Member> members;
-	// put it here temporarily because usually , it is obj, not primitive type like
-	// this
-	private List<Member> members;
+	private String ownerName;
+	private List<Resident> members;
 
 	public Household() {
-		ID = ID + 1;
-		this.id = ID;
-		this.householdNumber = "HH" + id;
 		this.members = new ArrayList<>();
 	}
 
 	// constructor for init data
 	public Household(int id, String address, String area, int householdSize, String ownerId, String ownerName,
-			String phone, String email, Date creationDate, List<Member> members) {
+			String phone, String email, Date creationDate, List<Resident> members) {
 		this.id = id;
-		this.householdNumber = "HH" + id;
 		this.address = address;
 		this.area = area;
 		this.householdSize = householdSize;
@@ -56,10 +61,7 @@ public class Household {
 
 	// constructor for auto gen id
 	public Household(String address, String area, int householdSize, String ownerId, String ownerName, String phone,
-			String email, Date creationDate, List<Member> members) throws ServiceException {
-		ID = ID + 1;
-		this.id = ID;
-		this.householdNumber = "HH" + id;
+			String email, Date creationDate, List<Resident> members) throws ServiceException {
 		this.address = address;
 		this.area = area;
 		this.householdSize = householdSize;
@@ -79,14 +81,6 @@ public class Household {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getHouseholdNumber() {
-		return householdNumber;
-	}
-
-	public void setHouseholdNumber(String householdNumber) {
-		this.householdNumber = householdNumber;
 	}
 
 	public String getOwnerId() {
@@ -153,15 +147,15 @@ public class Household {
 		this.creationDate = creationDate;
 	}
 
-	public List<Member> getMembers() {
+	public List<Resident> getMembers() {
 		return members;
 	}
 	
 	public List<String> getMemberIds(){
-		return members.stream().map(Member::getId).collect(Collectors.toList());
+		return members.stream().map(Resident::getId).collect(Collectors.toList());
 	}
 
-	public void setMembers(List<Member> members) {
+	public void setMembers(List<Resident> members) {
 		this.members = members != null ? members : new ArrayList<>();
 		// Update household size based on member count
 		this.householdSize = this.members.size();
@@ -173,7 +167,7 @@ public class Household {
 	}
 
 	// Utility methods for member management
-	public void addMember(Member member) {
+	public void addMember(Resident member) {
 		if (member != null && !members.contains(member)) {
 			members.add(member);
 			this.householdSize = members.size();
@@ -181,7 +175,7 @@ public class Household {
 	}
 	
 	public void addMemberId(String memberId) throws ServiceException {
-		Member m = memberService.getMemberById(memberId);
+		Resident m = memberService.getMemberById(memberId);
 		members.add(m);
 	}
 	
@@ -192,68 +186,27 @@ public class Household {
 	}
 
 	public void removeMember(String memberId) {
-
 		members.removeIf(member -> member.getId().equals(memberId));
-
 		this.householdSize = members.size();
 	}
 
 	public boolean hasMember(String memberId) {
-		return members.stream().map(Member::getId).collect(Collectors.toList()).contains(memberId);
+		return members.stream().map(Resident::getId).collect(Collectors.toList()).contains(memberId);
 	}
-
-//	// Validation methods
-//    public boolean isValid() {
-//        return householdNumber != null && !householdNumber.trim().isEmpty() &&
-//               ownerId != null && !ownerId.trim().isEmpty() &&
-//               address != null && !address.trim().isEmpty() &&
-//               area != null && !area.trim().isEmpty();
-//    }
-//    
-//    public List<String> getValidationErrors() {
-//        List<String> errors = new ArrayList<>();
-//        
-//        if (householdNumber == null || householdNumber.trim().isEmpty()) {
-//            errors.add("Số hộ khẩu không được để trống");
-//        }
-//        
-//        if (ownerId == null || ownerId.trim().isEmpty()) {
-//            errors.add("ID chủ hộ không được để trống");
-//        }
-//        
-//        if (address == null || address.trim().isEmpty()) {
-//            errors.add("Địa chỉ không được để trống");
-//        }
-//        
-//        if (area == null || area.trim().isEmpty()) {
-//            errors.add("Khu vực không được để trống");
-//        }
-//        
-//        // Optional: Validate phone format
-//        if (phone != null && !phone.trim().isEmpty()) {
-//            if (!phone.matches("^[0-9+\\-\\s()]+$")) {
-//                errors.add("Số điện thoại không hợp lệ");
-//            }
-//        }
-//        
-//        // Optional: Validate email format
-//        if (email != null && !email.trim().isEmpty()) {
-//            if (!email.matches("^[A-Za-z0-9+_.-]+@([A-Za-z0-9.-]+\\.[A-Za-z]{2,})$")) {
-//                errors.add("Email không hợp lệ");
-//            }
-//        }
-//        
-//        return errors;
-//    }
 
 	@Override
 	public String toString() {
-		return String.format(
-				"Household{id=%d, householdNumber='%s', ownerId='%s', ownerName='%s', "
-						+ "address='%s', area='%s', phone='%s', email='%s', householdSize=%d, "
-						+ "creationDate='%s', memberCount=%d}",
-				id, householdNumber, ownerId, ownerName, address, area, phone, email, householdSize, creationDate,
-				members.size());
+		return "Household{" +
+				"id=" + id +
+				", address='" + address + '\'' +
+				", area='" + area + '\'' +
+				", householdSize=" + householdSize +
+				", ownerId='" + ownerId + '\'' +
+				", ownerName='" + ownerName + '\'' +
+				", phone='" + phone + '\'' +
+				", email='" + email + '\'' +
+				", creationDate=" + creationDate +
+				'}';
 	}
 
 	@Override
@@ -262,14 +215,12 @@ public class Household {
 			return true;
 		if (obj == null || getClass() != obj.getClass())
 			return false;
-
-		Household household = (Household) obj;
-		return id == household.id && Objects.equals(householdNumber, household.householdNumber);
+		Household other = (Household) obj;
+		return id == other.id;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, householdNumber);
+		return Objects.hash(id);
 	}
-	
 }

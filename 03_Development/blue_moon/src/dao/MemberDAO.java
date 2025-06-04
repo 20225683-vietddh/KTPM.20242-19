@@ -9,7 +9,7 @@ import java.util.List;
 
 import utils.DatabaseConnection;
 import exception.ServiceException;
-import models.Member;
+import models.Resident;
 import services.MemberServiceImpl;
 
 public class MemberDAO {
@@ -21,16 +21,16 @@ public class MemberDAO {
         this.conn = DatabaseConnection.getConnection();
     }
 
-    public List<Member> findAll() {
+    public List<Resident> findAll() {
     	
     	
-        List<Member> members = new ArrayList<>();
+        List<Resident> members = new ArrayList<>();
         String sql = "SELECT * FROM member";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Member member = new Member();
+                Resident member = new Resident();
                 member.setId(rs.getString("id"));
                 member.setHouseholdId(rs.getInt("household_id"));
                 member.setFullName(rs.getString("full_name"));
@@ -53,14 +53,14 @@ public class MemberDAO {
         return members;
     }
 
-    public Member findById(String id) throws ServiceException {
+    public Resident findById(String id) throws ServiceException {
         String sql = "SELECT * FROM member WHERE id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                Member member = new Member();
+                Resident member = new Resident();
                 member.setId(rs.getString("id"));
                 member.setHouseholdId(rs.getInt("household_id"));
                 member.setFullName(rs.getString("full_name"));
@@ -84,10 +84,9 @@ public class MemberDAO {
         }
     }
 
-    public List<Member> findByHouseholdId(int householdId) throws ServiceException {
-        List<Member> members = new ArrayList<>();
+    public List<Resident> findByHouseholdId(int householdId) throws ServiceException {
+        List<Resident> members = new ArrayList<>();
         String sql = "SELECT * FROM member WHERE household_id = ?";
-        System.out.println("Executing query: " + sql + " with householdId = " + householdId);
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             if (conn == null) {
@@ -96,14 +95,12 @@ public class MemberDAO {
             }
 
             stmt.setInt(1, householdId);
-            System.out.println("Executing query...");
             ResultSet rs = stmt.executeQuery();
-            System.out.println("Query executed successfully");
             
             boolean hasResults = false;
             while (rs.next()) {
                 hasResults = true;
-                Member member = new Member();
+                Resident member = new Resident();
                 member.setId(rs.getString("id"));
                 member.setHouseholdId(rs.getInt("household_id"));
                 member.setFullName(rs.getString("full_name"));
@@ -114,14 +111,11 @@ public class MemberDAO {
                 member.setOccupation(rs.getString("occupation"));
                 member.setHouseholdHead(rs.getBoolean("is_household_head"));
                 members.add(member);
-                System.out.println("Found member: " + member.getId() + " - " + member.getFullName() + " - Household ID: " + member.getHouseholdId());
             }
             
             if (!hasResults) {
                 System.out.println("No members found for household ID: " + householdId);
-            } else {
-                System.out.println("Total members found: " + members.size());
-            }
+            } 
             
             return members;
         } catch (SQLException e) {
@@ -148,7 +142,7 @@ public class MemberDAO {
         return false;
     }
 
-    public void add(Member member) throws ServiceException, SQLException {
+    public void add(Resident member) throws ServiceException, SQLException {
         if (memberExists(member.getId())) {
             throw new ServiceException("Member with ID " + member.getId() + " already exists.");
         }
@@ -170,14 +164,13 @@ public class MemberDAO {
             stmt.setBoolean(9, member.isHouseholdHead());
             
             int rowsAffected = stmt.executeUpdate();
-            System.out.println("Inserted " + rowsAffected + " member(s)");
         } catch (SQLException e) {
             System.err.println("Error in add(): " + e.getMessage());
             throw e;
         }
     }
 
-    public void update(Member member) throws ServiceException, SQLException {
+    public void update(Resident member) throws ServiceException, SQLException {
         if (member == null || member.getId() == null) {
             throw new IllegalArgumentException("Member or Member ID must not be null.");
         }
@@ -203,16 +196,14 @@ public class MemberDAO {
                 throw new ServiceException("Cannot update. Member with ID " + member.getId() + " not found.");
             }
             
-            System.out.println("update: hh head = " + member.getFullName() + " is hh head = " + member.isHouseholdHead());
-            System.out.println("Updated " + rowsAffected + " member(s)");
         } catch (SQLException e) {
             System.err.println("Error in update(): " + e.getMessage());
             throw e;
         }
     }
 
-    public void updateMembers(List<Member> members) throws ServiceException, SQLException {
-        for (Member member : members) {
+    public void updateMembers(List<Resident> members) throws ServiceException, SQLException {
+        for (Resident member : members) {
             update(member);
         }
     }
@@ -226,21 +217,20 @@ public class MemberDAO {
             if (rowsAffected == 0) {
                 throw new ServiceException("No member deleted with id: " + memberId);
             }
-            System.out.println("Deleted " + rowsAffected + " member(s)");
         } catch (SQLException e) {
             System.err.println("Error in delete(): " + e.getMessage());
             throw e;
         }
     }
 
-    public Member getHouseholdHead(int householdId) throws ServiceException {
+    public Resident getHouseholdHead(int householdId) throws ServiceException {
         String sql = "SELECT * FROM member WHERE household_id = ? AND is_household_head = true";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, householdId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                Member member = new Member();
+                Resident member = new Resident();
                 member.setId(rs.getString("id"));
                 member.setHouseholdId(rs.getInt("household_id"));
                 member.setFullName(rs.getString("full_name"));
@@ -265,7 +255,7 @@ public class MemberDAO {
 
     public void setHouseholdOwnerByMemberId(String ownerId) throws ServiceException, SQLException {
         // First, get the member to find their household
-        Member owner = findById(ownerId);
+        Resident owner = findById(ownerId);
         
         // Reset all members in this household to not be household head
         String resetSql = "UPDATE member SET is_household_head = false WHERE household_id = ?";
@@ -282,26 +272,7 @@ public class MemberDAO {
             if (rowsAffected == 0) {
                 throw new ServiceException("Failed to set household head for member: " + ownerId);
             }
-            System.out.println("Set member " + ownerId + " as household head");
         }
     }
 
-    // Helper method to test database connection
-    public boolean testConnection() {
-        try {
-            String sql = "SELECT COUNT(*) FROM member";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    int count = rs.getInt(1);
-                    System.out.println("Total members in database: " + count);
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Connection test failed: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return false;
-    }
 }

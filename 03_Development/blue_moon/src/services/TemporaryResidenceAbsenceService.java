@@ -1,99 +1,68 @@
 package services;
 
+import dto.TemporaryResidenceAbsenceDTO;
+import exception.ServiceException;
+import models.TemporaryResidenceAbsence;
+import services.TemporaryResidenceAbsenceServiceImpl.RequestStatistics;
+
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
-import dao.TemporaryResidenceAbsenceDAO;
-import dto.TemporaryResidenceAbsenceDTO;
-import models.TemporaryResidenceAbsence;
-
-public class TemporaryResidenceAbsenceService {
-    private TemporaryResidenceAbsenceDAO temporaryResidenceAbsenceDAO;
+/**
+ * Service interface for managing temporary residence and absence requests
+ * Provides business logic layer between controller and data access layer
+ */
+public interface TemporaryResidenceAbsenceService {
     
-    public TemporaryResidenceAbsenceService() {
-        this.temporaryResidenceAbsenceDAO = new TemporaryResidenceAbsenceDAO();
-    }
+    // ==================== CRUD Operations ====================
     
-    public List<TemporaryResidenceAbsence> getAllTemporaryResidenceAbsences() {
-        return temporaryResidenceAbsenceDAO.getAll();
-    }
+    TemporaryResidenceAbsence createTemporaryRequest(TemporaryResidenceAbsenceDTO dto) throws ServiceException;
     
-    public List<TemporaryResidenceAbsence> getByMemberId(int memberId) {
-        return temporaryResidenceAbsenceDAO.getByMemberId(memberId);
-    }
+    List<TemporaryResidenceAbsence> getAllTemporaryRequests() throws ServiceException;
     
-    public boolean saveTemporaryResidenceAbsence(TemporaryResidenceAbsenceDTO tempRADTO) {
-        if (!validate(tempRADTO)) {
-            return false;
-        }
-        
-        TemporaryResidenceAbsence tempRA = convertToTemporaryResidenceAbsence(tempRADTO);
-        return save(tempRA);
-    }
+    Optional<TemporaryResidenceAbsence> getTemporaryRequestById(int id) throws ServiceException;
     
-    public boolean updateTemporaryResidenceAbsence(TemporaryResidenceAbsenceDTO tempRADTO) {
-        if (!validate(tempRADTO)) {
-            return false;
-        }
-        
-        TemporaryResidenceAbsence tempRA = convertToTemporaryResidenceAbsence(tempRADTO);
-        return temporaryResidenceAbsenceDAO.update(tempRA);
-    }
+    TemporaryResidenceAbsence updateTemporaryRequest(int id, TemporaryResidenceAbsenceDTO dto) throws ServiceException;
     
-    public boolean deleteTemporaryResidenceAbsence(int id) {
-        return temporaryResidenceAbsenceDAO.delete(id);
-    }
+    boolean deleteTemporaryRequest(int id) throws ServiceException;
     
-    private boolean validate(TemporaryResidenceAbsenceDTO tempRADTO) {
-        // Validate member ID
-        if (tempRADTO.getMemberId() <= 0) {
-            return false;
-        }
-        
-        // Validate type
-        if (tempRADTO.getType() == null || (!tempRADTO.getType().equals("RESIDENCE") && !tempRADTO.getType().equals("ABSENCE"))) {
-            return false;
-        }
-        
-        // Validate dates
-        if (tempRADTO.getStartDate() == null || tempRADTO.getEndDate() == null) {
-            return false;
-        }
-        
-        // End date must be after start date
-        if (tempRADTO.getEndDate().isBefore(tempRADTO.getStartDate())) {
-            return false;
-        }
-        
-        // Start date must not be in the past
-        if (tempRADTO.getStartDate().isBefore(LocalDate.now())) {
-            return false;
-        }
-        
-        // Validate address
-        if (tempRADTO.getAddress() == null || tempRADTO.getAddress().trim().isEmpty()) {
-            return false;
-        }
-        
-        return true;
-    }
+    // ==================== Status Management ====================
     
-    private TemporaryResidenceAbsence convertToTemporaryResidenceAbsence(TemporaryResidenceAbsenceDTO tempRADTO) {
-        TemporaryResidenceAbsence tempRA = new TemporaryResidenceAbsence();
-        tempRA.setId(tempRADTO.getId());
-        tempRA.setMemberId(tempRADTO.getMemberId());
-        tempRA.setMemberName(tempRADTO.getMemberName());
-        tempRA.setType(tempRADTO.getType());
-        tempRA.setReason(tempRADTO.getReason());
-        tempRA.setStartDate(tempRADTO.getStartDate());
-        tempRA.setEndDate(tempRADTO.getEndDate());
-        tempRA.setAddress(tempRADTO.getAddress());
-        tempRA.setStatus("PENDING"); // Default status for new entries
-        
-        return tempRA;
-    }
     
-    private boolean save(TemporaryResidenceAbsence tempRA) {
-        return temporaryResidenceAbsenceDAO.save(tempRA);
-    }
+    TemporaryResidenceAbsence updateRequestStatus(int id, String status) throws ServiceException;
+    
+    // ==================== Search and Filter Operations ====================
+    
+    List<TemporaryResidenceAbsence> searchByMemberName(String memberName) throws ServiceException;
+    
+    List<TemporaryResidenceAbsence> getRequestsByType(String type) throws ServiceException;
+    
+    List<TemporaryResidenceAbsence> getRequestsByStatus(String status) throws ServiceException;
+    
+    List<TemporaryResidenceAbsence> getRequestsByDateRange(LocalDate startDate, LocalDate endDate) throws ServiceException;
+    
+    List<TemporaryResidenceAbsence> getRequestsByMemberId(int memberId) throws ServiceException;
+    
+    // ==================== Statistics ====================
+    
+    int getTotalRequestsCount() throws ServiceException;
+    
+    int getRequestsCountByStatus(String status) throws ServiceException;
+    
+    int getRequestsCountByType(String type) throws ServiceException;
+    
+    // ==================== Business Logic ====================
+    
+    List<TemporaryResidenceAbsence> getActiveRequestsByMemberId(int memberId) throws ServiceException;
+    
+    boolean validateRequestDates(int memberId, LocalDate startDate, LocalDate endDate, Integer excludeRequestId) throws ServiceException;
+    
+    List<TemporaryResidenceAbsence> getCurrentActiveRequests() throws ServiceException;
+    
+    List<TemporaryResidenceAbsence> getExpiringRequests(int daysAhead) throws ServiceException;
+    
+    boolean hasConflictingRequests(int memberId, LocalDate startDate, LocalDate endDate) throws ServiceException;
+    
+    RequestStatistics getRequestStatistics() throws ServiceException;
 }
