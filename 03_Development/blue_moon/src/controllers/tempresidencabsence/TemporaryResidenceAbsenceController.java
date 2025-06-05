@@ -1,14 +1,11 @@
-package controllers;
+package controllers.tempresidencabsence;
 
 import dto.TemporaryResidenceAbsenceDTO;
-import services.TemporaryResidenceAbsenceService;
-
-
 import dto.TemporaryResidenceAbsenceDTO;
 import exception.ServiceException;
 import models.TemporaryResidenceAbsence;
-import services.TemporaryResidenceAbsenceService;
-import services.TemporaryResidenceAbsenceServiceImpl;
+import services.tempresidenceabsence.TemporaryResidenceAbsenceService;
+import services.tempresidenceabsence.TemporaryResidenceAbsenceServiceImpl;
 
 import java.time.LocalDate;
 import java.util.List;

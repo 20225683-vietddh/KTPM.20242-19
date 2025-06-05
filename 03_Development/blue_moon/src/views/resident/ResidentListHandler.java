@@ -1,0 +1,102 @@
+package views.resident;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import controllers.resident.ManageResidentController;
+import javafx.stage.Stage;
+import models.Resident;
+import views.BaseScreenHandler;
+import views.BaseScreenWithLogoutAndGoBackHandler;
+import views.ScreenNavigator;
+import views.messages.ErrorDialog;
+import java.io.IOException;
+import java.util.List;
+
+public class ResidentListHandler extends BaseScreenWithLogoutAndGoBackHandler {
+
+    @FXML 
+    private TableView<Resident> tableResident;
+    @FXML 
+    private TableColumn<Resident, Integer> colId;
+    @FXML 
+    private TableColumn<Resident, String> colFullName;
+    @FXML 
+    private TableColumn<Resident, Integer> colHousehold_id;
+    @FXML 
+    private TableColumn<Resident, String> colRelationship_with_head;
+    @FXML 
+    private TableColumn<Resident, Void> colActions;
+    @FXML 
+    private Button btnAddResident;
+    @FXML 
+    private Button btnGoBack;
+    @FXML 
+    private Button btnLogout;
+    
+    private final ManageResidentController controller = new ManageResidentController();
+
+    public ResidentListHandler(Stage stage) throws Exception {
+        super(stage, utils.Configs.RESIDENT_LIST_PATH, utils.Configs.LOGO_PATH, "Quáº£n lÃ½ nhÃ¢n kháº©u");
+        loader.setController(this);
+        this.setContent();
+        this.setScene();
+    }
+
+    @FXML
+    public void initialize() {
+        initializeTable();
+        loadResidentList();
+        btnLogout.setOnAction(e -> handleLogout());
+        if (btnAddResident != null) {
+            btnAddResident.setOnAction(e -> handleAddResident());
+        } else {
+            System.err.println("btnAddResident is null. Check ResidentList.fxml for fx:id='btnAddResident'.");
+        }
+        btnGoBack.setOnAction(event -> handleGoBack());
+    }
+
+    private void initializeTable() {
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colFullName.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        colHousehold_id.setCellValueFactory(new PropertyValueFactory<>("householdId"));
+        colRelationship_with_head.setCellValueFactory(new PropertyValueFactory<>("relationshipWithHead"));
+        colActions.setCellFactory(param -> new ResidentCellFactory(controller, this));
+    }
+
+    private void loadResidentList() {
+        try {
+            List<Resident> residents = controller.handleGetAllResidents();
+            System.out.println("Táº£i danh sÃ¡ch nhÃ¢n kháº©u: " + residents.size() + " báº£n ghi");
+            tableResident.getItems().setAll(residents);
+            tableResident.refresh(); // LÃ m má»›i giao diá»‡n
+        } catch (Exception e) {
+            ErrorDialog.showError("Lá»—i táº£i danh sÃ¡ch", "KhÃ´ng thá»ƒ táº£i danh sÃ¡ch nhÃ¢n kháº©u tá»« database.");
+            e.printStackTrace();
+        }
+    }
+
+    public void refreshTable() {
+        tableResident.getItems().clear();
+        loadResidentList();
+        System.out.println("Ä�Ã£ lÃ m má»›i TableView");
+    }
+    
+    protected void handleGoBack() {
+        System.out.println("Quay láº¡i mÃ n hÃ¬nh trÆ°á»›c Ä‘Ã³");
+        ScreenNavigator.goBack();
+    }
+
+    private void handleAddResident() {
+        try {
+            System.out.println("Má»Ÿ form thÃªm nhÃ¢n kháº©u má»›i");
+            NewResidentFormHandler formHandler = new NewResidentFormHandler(tableResident, this::refreshTable);
+            formHandler.show();
+        } catch (Exception e) {
+            ErrorDialog.showError("Lá»—i há»‡ thá»‘ng", "KhÃ´ng thá»ƒ hiá»ƒn thá»‹ form thÃªm nhÃ¢n kháº©u: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}

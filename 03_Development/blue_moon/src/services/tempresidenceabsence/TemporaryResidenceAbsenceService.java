@@ -1,9 +1,9 @@
-package services;
+package services.tempresidenceabsence;
 
 import dto.TemporaryResidenceAbsenceDTO;
 import exception.ServiceException;
 import models.TemporaryResidenceAbsence;
-import services.TemporaryResidenceAbsenceServiceImpl.RequestStatistics;
+import services.tempresidenceabsence.TemporaryResidenceAbsenceServiceImpl.RequestStatistics;
 
 import java.time.LocalDate;
 import java.util.List;

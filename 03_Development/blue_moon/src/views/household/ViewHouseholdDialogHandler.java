@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import controllers.HouseholdController;
+import controllers.household.HouseholdController;
 import exception.HouseholdAlreadyExistsException;
 import exception.HouseholdNotExist;
 import exception.InvalidHouseholdDataException;
-import exception.MemberNotFoundException;
+import exception.ResidentNotFoundException;
 import exception.ServiceException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,10 +24,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import models.Household;
 import models.Resident;
-import services.HouseholdService;
-import services.HouseholdServiceImpl;
-import services.MemberService;
-import services.MemberServiceImpl;
+import services.household.HouseholdService;
+import services.household.HouseholdServiceImpl;
+import services.resident.ResidentService;
+import services.resident.ResidentServiceImpl;
 import utils.Configs;
 import utils.SceneUtils.HouseholdDialogHandler;
 
@@ -36,7 +36,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 	
 	// You need to initialize this
 	private HouseholdController householdController; // You need to initialize this
-	private MemberService memberService;
+	private ResidentService memberService;
 	
 	private Household currentHousehold;
 	private Runnable onSuccessCallback;
@@ -76,11 +76,11 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 	private Label lblRequiredNote;
 
 	
-	public MemberService getMemberService() {
+	public ResidentService getMemberService() {
 		return memberService;
 	}
 
-	public void setMemberService(MemberService memberService) {
+	public void setMemberService(ResidentService memberService) {
 		this.memberService = memberService;
 	}
 
@@ -106,7 +106,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 		currentHousehold = householdController.getHouseholdDetails(currentHousehold.getId());
 		System.out.println("do heree");
 		System.out.println(currentHousehold.toString());
-		this.txtOwnerId.setText( currentHousehold.getOwnerId() );;
+		this.txtOwnerId.setText( currentHousehold.getOwnerId()+"" );;
 		this.txtOwnerName.setText(currentHousehold.getOwnerName()); ;
 		this.txtHouseholdSize.setText(currentHousehold.getHouseholdSize()+"");
 	}
@@ -123,9 +123,9 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 	private void fillFormData() {
 		if (currentHousehold != null) {
 			txtId.setText(String.valueOf(currentHousehold.getId()));
-			txtOwnerId.setText(currentHousehold.getOwnerId());
+			txtOwnerId.setText(currentHousehold.getOwnerId()+"" );
 			txtOwnerName.setText(currentHousehold.getOwnerName());
-			txtAddress.setText(currentHousehold.getAddress());
+			txtAddress.setText(currentHousehold.getAddress()+"" );
 			txtArea.setText(currentHousehold.getArea());
 			txtPhone.setText(currentHousehold.getPhone());
 			txtEmail.setText(currentHousehold.getEmail());
@@ -208,7 +208,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 	}
 
 	@FXML
-	private void handleUpdate() throws HouseholdNotExist, HouseholdAlreadyExistsException, MemberNotFoundException,
+	private void handleUpdate() throws HouseholdNotExist, HouseholdAlreadyExistsException, ResidentNotFoundException,
 			InvalidHouseholdDataException {
 		if (!isEditMode) {
 			System.out.println("Update attempted while not in edit mode");
@@ -323,7 +323,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(Configs.MEMBER_DETAILS_DIALOG_PATH));
 			Parent root = loader.load();
 			
-			MemberDetailsDialogHandler controller = loader.getController();
+			ResidentDetailsDialogHandler controller = loader.getController();
 			
 			// First set the controllers and services
 			controller.setHouseholdController(householdController);
@@ -333,7 +333,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 			
 			// Set the members after household is set
 			if (members != null && !members.isEmpty()) {
-				controller.setMembers(members);
+				controller.setResidents(members);
 			}
 			
 			// Set additional UI components

@@ -1,6 +1,6 @@
 package models;
 
-import java.sql.Date;
+
 import java.time.LocalDate;
 
 import utils.enums.Gender;
@@ -8,55 +8,141 @@ import utils.enums.RelationshipType;
 import utils.enums.Role;
 
 public class Resident {
-    private String id;
-    private String fullName;
-    
+    private int id;
+    private String fullName;    
     private LocalDate dateOfBirth;
-    private String gender;
+    private Gender gender;
     private String ethnicity;
-    private String religion;
-    
-    private String citizenId;
-    
-    
+    private String religion;    
+    private String citizenId;      
     private LocalDate dateOfIssue;
     private String placeOfIssue;
-    
+    private RelationshipType relationship;    
     private String occupation;
-    private String notes;
-    private LocalDate addedDate;
-    
-    private RelationshipType relationship;
-    
+    private LocalDate addedDate;    
+    private int householdId;    
     private boolean isHouseholdHead;
-    private int householdId;
     
     
 
     public Resident() {
     }
 
-    public Resident(String id, int householdId, String fullName, Gender gender, Date dateOfBirth, 
-                 String idCard, RelationshipType relationship, String occupation, boolean isHouseholdHead) {
-        this.id = id;
-        this.householdId = householdId;
-        this.fullName = fullName;
-        this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
-        this.citizenId = idCard;
-        this.relationship = relationship;
-        this.occupation = occupation;
-        this.isHouseholdHead = isHouseholdHead;
+    //full construtor
+	public Resident(int id, 
+			String fullName, 
+			LocalDate dateOfBirth, 
+			Gender gender, 
+			String ethnicity, 
+			String religion,
+			String citizenId, 
+			LocalDate dateOfIssue, 
+			String placeOfIssue, 
+			RelationshipType relationship,
+			String occupation, 
+			LocalDate addedDate, 
+			int householdId,
+			boolean isHouseholdHead ) {
+		this.id = id;
+		this.fullName = fullName;
+		this.dateOfBirth = dateOfBirth;
+		this.gender = gender;
+		this.ethnicity = ethnicity;
+		this.religion = religion;
+		this.citizenId = citizenId;
+		this.dateOfIssue = dateOfIssue;
+		this.placeOfIssue = placeOfIssue;
+		this.occupation = occupation;
+		this.addedDate = addedDate;
+		this.relationship = relationship;
+		this.isHouseholdHead = isHouseholdHead;
+		this.householdId = householdId;
+	}
+
+	
+	
+	//TODO: ????
+    public Resident(Resident other) {
+        if (other != null) {
+            this.id = other.id;
+            this.fullName = other.fullName;
+            this.dateOfBirth = other.dateOfBirth;
+            this.gender = other.gender;
+            this.ethnicity = other.ethnicity;
+            this.religion = other.religion;
+            this.citizenId = other.citizenId;
+            this.dateOfIssue = other.dateOfIssue;
+            this.placeOfIssue = other.placeOfIssue;
+            this.occupation = other.occupation;
+            this.addedDate = other.addedDate;
+            this.relationship = other.relationship;
+            this.isHouseholdHead = other.isHouseholdHead;
+            this.householdId = other.householdId;
+        }
     }
 
-    // Getters and Setters
-    public String getId() {
+
+	// Getters and Setters
+    public int getId() {
         return id;
     }
+    public String getIdString() {
+        return id+"";
+    }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
+    
+    public String getEthnicity() {
+		return ethnicity;
+	}
+
+	public void setEthnicity(String ethnicity) {
+		this.ethnicity = ethnicity;
+	}
+
+	public String getReligion() {
+		return religion;
+	}
+
+	public void setReligion(String religion) {
+		this.religion = religion;
+	}
+
+	public String getCitizenId() {
+		return citizenId;
+	}
+
+	public void setCitizenId(String citizenId) {
+		this.citizenId = citizenId;
+	}
+
+	public LocalDate getDateOfIssue() {
+		return dateOfIssue;
+	}
+
+	public void setDateOfIssue(LocalDate dateOfIssue) {
+		this.dateOfIssue = dateOfIssue;
+	}
+
+	public String getPlaceOfIssue() {
+		return placeOfIssue;
+	}
+
+	public void setPlaceOfIssue(String placeOfIssue) {
+		this.placeOfIssue = placeOfIssue;
+	}
+
+	public LocalDate getAddedDate() {
+		return addedDate;
+	}
+
+	public void setAddedDate(LocalDate addedDate) {
+		this.addedDate = addedDate;
+	}
+
+	
 
     public int getHouseholdId() {
         return householdId;
@@ -91,11 +177,11 @@ public class Resident {
     
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -144,14 +230,36 @@ public class Resident {
         isHouseholdHead = householdHead;
     }
 
+//    @Override
+//    public String toString() {
+//        return "Member{" +
+//                "id=" + id +
+//                "householdId=" + householdId +
+//                ", fullName='" + fullName + '\'' +
+//                ", relationship='" + relationship + '\'' +
+//                ", isHouseholdHead=" + isHouseholdHead +
+//                '}';
+//    }
+    
     @Override
     public String toString() {
-        return "Member{" +
-                "id=" + id +
-                "householdId=" + householdId +
-                ", fullName='" + fullName + '\'' +
-                ", relationship='" + relationship + '\'' +
-                ", isHouseholdHead=" + isHouseholdHead +
-                '}';
+        return "Resident{" +
+               "id=" + id +
+               ", fullName='" + fullName + '\'' +
+               ", dateOfBirth=" + dateOfBirth +
+               ", gender='" + gender.toString() + '\'' +
+               ", ethnicity='" + ethnicity + '\'' +
+               ", religion='" + religion + '\'' +
+               ", citizenId='" + citizenId + '\'' +
+               ", dateOfIssue=" + dateOfIssue +
+               ", placeOfIssue='" + placeOfIssue + '\'' +
+               ", occupation='" + occupation + '\'' +
+//               ", notes='" + notes + '\'' +
+               ", addedDate=" + addedDate +
+               ", relationship='" + relationship.toString() + '\'' +
+               ", isHouseholdHead=" + isHouseholdHead +
+               ", householdId=" + householdId + 
+               '}';
     }
 }
+

@@ -9,15 +9,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.Household;
-import services.MemberService;
-import services.MemberServiceImpl;
+import services.resident.ResidentService;
+import services.resident.ResidentServiceImpl;
 import views.household.AddHouseholdDialogHandler;
 import views.household.ViewHouseholdDialogHandler;
 import utils.Configs;
 
 import java.io.IOException;
 
-import controllers.HouseholdController;
+import controllers.household.HouseholdController;
 
 /**
  * Utility class for managing JavaFX scenes and navigation between screens.
@@ -116,14 +116,17 @@ public class SceneUtils {
      * @param memberService 
      * @throws IOException If the FXML file cannot be loaded
      */
-    public static void openAddHouseholdDialog(HouseholdController householdController, MemberService memberService, Node sourceNode, Runnable onSuccess) throws IOException {
+    public static void openAddHouseholdDialog(HouseholdController householdController, 
+    		ResidentService memberService, 
+    		Node sourceNode, 
+    		Runnable onSuccess) throws IOException {
         FXMLLoader loader = new FXMLLoader(SceneUtils.class.getResource(Configs.ADD_HOUSEHOLD_DIALOG_PATH));
         Parent root = loader.load();
 
         // Get the controller, set the household and callback
         AddHouseholdDialogHandler controller = loader.getController();
         controller.setHouseholdController(householdController);
-        controller.setMemberService(memberService);
+        controller.setResidentService(memberService);
         
         if (controller instanceof HouseholdDialogHandler) {
             ((HouseholdDialogHandler) controller).setOnSuccessCallback(onSuccess);
@@ -133,7 +136,7 @@ public class SceneUtils {
     }
 
 
-    public static void openViewHouseholdDialog(HouseholdController householdController, MemberService memberService, 
+    public static void openViewHouseholdDialog(HouseholdController householdController, ResidentService memberService, 
     		Household household, Node sourceNode, Runnable onSuccess) throws IOException {
         FXMLLoader loader = new FXMLLoader(SceneUtils.class.getResource(Configs.VIEW_HOUSEHOLD_DIALOG_PATH));
         Parent root = loader.load();

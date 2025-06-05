@@ -1,1 +1,16 @@
 /.metadata/
+.project
+.classpath
+src/.settings/*
+src/.project
+
+
+03_Development/blue_moon/.metadata/
+03_Development/blue_moon/.classpath
+03_Development/blue_moon/.project
+03_Development/blue_moon/.settings/
+03_Development/blue_moon/bin/
+03_Development/blue_moon/src/.metadata/
+03_Development/blue_moon/src/.settings/
+03_Development/blue_moon/src/.classpath
+03_Development/blue_moon/src/.project

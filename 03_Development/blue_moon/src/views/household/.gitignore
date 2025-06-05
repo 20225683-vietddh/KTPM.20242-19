@@ -4,3 +4,7 @@
 /MemberDetailsDialogHandler.class
 /MemberDetailsDialogHandler$1.class
 /AddHouseholdDialogHandler$1.class
+/ResidentDetailsDialogHandler$MemberChangeListener.class
+/ResidentDetailsDialogHandler.class
+/ResidentDetailsDialogHandler$ResidentChangeListener.class
+/ResidentDetailsDialogHandler$1.class

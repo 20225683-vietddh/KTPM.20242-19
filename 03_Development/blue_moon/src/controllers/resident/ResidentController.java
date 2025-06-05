@@ -1,33 +1,31 @@
-package controllers;
+package controllers.resident;
 
 import java.sql.SQLException;
 import java.util.List;
 
 import exception.ServiceException;
 import models.Resident;
-import services.MemberServiceImpl;
+import services.resident.ResidentServiceImpl;
 
-public class MemberService {
-	private MemberServiceImpl memberService = new MemberServiceImpl();
+public class ResidentController {
+	private ResidentServiceImpl residentService = new ResidentServiceImpl();
 
-    public MemberService() {
+    public ResidentController() {
     }
 
 
-    public MemberServiceImpl getMemberService() {
-		return memberService;
+    public ResidentServiceImpl getMemberService() {
+		return residentService;
 	}
-
-
-	public void setMemberService(MemberServiceImpl memberService) {
-		this.memberService = memberService;
+    
+	public void setMemberService(ResidentServiceImpl memberService) {
+		this.residentService = memberService;
 	}
-
 
 	// Lấy member theo ID
-    public Resident getMemberById(String memberId) {
+    public Resident getMemberById(int memberId) {
         try {
-            return memberService.getMemberById(memberId);
+            return residentService.getResidentById(memberId);
         } catch (ServiceException e) {
             showErrorMessage("Failed to get member by ID: " + e.getMessage());
             return null;
@@ -37,7 +35,7 @@ public class MemberService {
     // Lấy danh sách member của 1 hộ gia đình
     public List<Resident> getMembersByHouseholdId(int householdId) {
         try {
-            return memberService.getMembersByHouseholdId(householdId);
+            return residentService.getResidentsByHouseholdId(householdId);
         } catch (ServiceException e) {
             showErrorMessage("Failed to get members by household ID: " + e.getMessage());
             return null;
@@ -45,14 +43,14 @@ public class MemberService {
     }
 
     // Kiểm tra tồn tại
-    public boolean memberExists(String memberId) {
-        return memberService.memberExists(memberId);
+    public boolean memberExists(int memberId) {
+        return residentService.residentExists(memberId);
     }
 
     // Thêm member
     public boolean addMember(Resident member) throws SQLException {
         try {
-            boolean result = memberService.addMember(member);
+            boolean result = residentService.addResident(member);
             if (result) {
                 System.out.println("Member added successfully.");
             }
@@ -66,7 +64,7 @@ public class MemberService {
     // Cập nhật member
     public boolean updateMember(Resident member) throws SQLException {
         try {
-            boolean result = memberService.updateMember(member);
+            boolean result = residentService.updateResident(member);
             if (result) {
                 System.out.println("Member updated successfully.");
             }
@@ -78,9 +76,9 @@ public class MemberService {
     }
 
     // Xoá member
-    public boolean deleteMember(String memberId) throws SQLException {
+    public boolean deleteMember(int memberId) throws SQLException {
         try {
-            boolean result = memberService.deleteMember(memberId);
+            boolean result = residentService.deleteResident(memberId);
             if (result) {
                 System.out.println("Member deleted successfully.");
             }
@@ -94,7 +92,7 @@ public class MemberService {
     // Lấy chủ hộ
     public Resident getHouseholdHead(int householdId) {
         try {
-            return memberService.getHouseholdHead(householdId);
+            return residentService.getHouseholdHead(householdId);
         } catch (ServiceException e) {
             showErrorMessage("Failed to get household head: " + e.getMessage());
             return null;

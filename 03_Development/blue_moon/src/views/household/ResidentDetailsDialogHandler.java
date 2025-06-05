@@ -16,8 +16,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Household;
 import models.Resident;
-import services.MemberService;
-import services.MemberServiceImpl;
+import services.resident.ResidentService;
+import services.resident.ResidentServiceImpl;
 import utils.RelationshipHelper;
 import utils.enums.RelationshipType;
 
@@ -25,19 +25,19 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import controllers.HouseholdController;
+import controllers.household.HouseholdController;
 import exception.HouseholdAlreadyExistsException;
 import exception.HouseholdNotExist;
 import exception.InvalidHouseholdDataException;
-import exception.MemberNotFoundException;
+import exception.ResidentNotFoundException;
 import exception.ServiceException;
 
-public class MemberDetailsDialogHandler {
+public class ResidentDetailsDialogHandler {
 	private HouseholdController householdController;
-	private MemberService memberService = new MemberServiceImpl();
+	private ResidentService residentService = new ResidentServiceImpl();
 	
 	private Household household;
-	private ObservableList<Resident> memberList = FXCollections.observableArrayList();
+	private ObservableList<Resident> residentList = FXCollections.observableArrayList();
 
 	private Runnable onSuccessCallback;
 
@@ -45,9 +45,9 @@ public class MemberDetailsDialogHandler {
 
 	 
     @FXML private Label lblHouseholdInfo;
-    @FXML private Label lblMemberCount;
-    @FXML private TableView<Resident> tblMembers;
-    @FXML private TableColumn<Resident, String> colMemberId;
+    @FXML private Label lblResidentCount;
+    @FXML private TableView<Resident> tblResidents;
+    @FXML private TableColumn<Resident, String> colResidentId;
     @FXML private TableColumn<Resident, String> colFullName;
     @FXML private TableColumn<Resident, String> colGender;
     @FXML private TableColumn<Resident, String> colDateOfBirth;
@@ -56,9 +56,9 @@ public class MemberDetailsDialogHandler {
     @FXML private TableColumn<Resident, String> colIsHead;
     @FXML private Button btnClose;
     @FXML private Button btnMakeOwner;
-    @FXML private Button btnRemoveMember;
-    @FXML private Button btnAddMember;
-    @FXML private TextField txtMemberId;
+    @FXML private Button btnRemoveResident;
+    @FXML private Button btnAddResident;
+    @FXML private TextField txtResidentId;
     @FXML private ComboBox<RelationshipType> cboRelationship;
     
     
@@ -74,7 +74,7 @@ public class MemberDetailsDialogHandler {
 
 
     
-    public MemberDetailsDialogHandler() {
+    public ResidentDetailsDialogHandler() {
     	
     };
     
@@ -82,13 +82,13 @@ public class MemberDetailsDialogHandler {
 	
     
 	// Interface for callback when changes are made
-    public interface MemberChangeListener {
-        void onMemberOwnerChanged(Resident newOwner);
-        void onMemberRemoved(Resident removedMember);
-        void onMemberAdded(Resident newMember);
+    public interface ResidentChangeListener {
+        void onResidentOwnerChanged(Resident newOwner);
+        void onResidentRemoved(Resident removedResident);
+        void onResidentAdded(Resident newResident);
     }
     
-    private MemberChangeListener changeListener;
+    private ResidentChangeListener changeListener;
     
     @FXML
     private void initialize() {
@@ -99,21 +99,20 @@ public class MemberDetailsDialogHandler {
         // Set up button handlers
         setupButtonHandlers();
         
-        // Initialize member count label
-        updateMemberCount();
+        // Initialize resident count label
+        updateResidentCount();
         
         // Set up relationship combo box
         setupRelationshipComboBox();
         
         // Set up table selection listener
-        tblMembers.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+        tblResidents.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             btnMakeOwner.setDisable(newSelection == null);
-            btnRemoveMember.setDisable(newSelection == null);
+            btnRemoveResident.setDisable(newSelection == null);
         });
         
-     // Set up validation for add member section
 
-        setupAddMemberValidation();
+        setupAddResidentValidation();
 
     }
 
@@ -247,25 +246,25 @@ public class MemberDetailsDialogHandler {
 
     
 
-    private void setupAddMemberValidation() {
+    private void setupAddResidentValidation() {
 
         // Initially disable add button
         
         // Disable add button if relationship not selected
-        btnAddMember.setDisable(true);
+        btnAddResident.setDisable(true);
         // Add listeners for validation
 
 		Runnable validateAddButton = () -> {
 
-			boolean isValidMemberId = txtMemberId.getText() != null && !txtMemberId.getText().trim().isEmpty();
+			boolean isValidResidentId = txtResidentId.getText() != null && !txtResidentId.getText().trim().isEmpty();
 
 			boolean isValidRelationship = cboRelationship.getValue() != null;
 
-			btnAddMember.setDisable(!(isValidMemberId && isValidRelationship));
+			btnAddResident.setDisable(!(isValidResidentId && isValidRelationship));
 
 		};
 
-		txtMemberId.textProperty().addListener((obs, oldVal, newVal) -> {
+		txtResidentId.textProperty().addListener((obs, oldVal, newVal) -> {
 			validateAddButton.run();
 
 		});
@@ -278,19 +277,19 @@ public class MemberDetailsDialogHandler {
 		});
 	}
 
-    private void updateMemberCount() {
-        if (lblMemberCount != null) {
-            lblMemberCount.setText(String.valueOf(memberList != null ? memberList.size() : 0));
+    private void updateResidentCount() {
+        if (lblResidentCount != null) {
+            lblResidentCount.setText(String.valueOf(residentList != null ? residentList.size() : 0));
         }
     }
     
     @FXML
-    private void handleAddMember() {
-        String memberId = txtMemberId.getText().trim();
+    private void handleAddResident() {
+        String textId = txtResidentId.getText().trim();
         RelationshipType selectedRelationship = cboRelationship.getValue();
         
         // Validate input
-        if (memberId.isEmpty()) {
+        if (textId.isEmpty()) {
             showWarningDialog("Lỗi", "Vui lòng nhập ID thành viên.");
             return;
         }
@@ -299,38 +298,38 @@ public class MemberDetailsDialogHandler {
             showWarningDialog("Lỗi", "Vui lòng chọn quan hệ với chủ hộ.");
             return;
         }
+        int residentId  = Integer.parseInt(textId);
         
         try {
-            // Check if member exists
-            Resident memberToAdd = memberService.getMemberById(memberId);
+            Resident residentToAdd = residentService.getResidentById(residentId);
             
-            // Check if member already belongs to this household
-            if (memberToAdd.getHouseholdId() == household.getId()) {
+            // Check if resident already belongs to this household
+            if (residentToAdd.getHouseholdId() == household.getId()) {
                 showWarningDialog("Lỗi", "Thành viên này đã thuộc hộ khẩu hiện tại.");
-                txtMemberId.clear();
+                txtResidentId.clear();
                 cboRelationship.setValue(null);
                 return;
             }
             
-            // Check if member belongs to another household
-            if (memberToAdd.getHouseholdId() != 0) {
+            // Check if resident belongs to another household
+            if (residentToAdd.getHouseholdId() != 0) {
                 showWarningDialog("Lỗi", 
                     String.format("Thành viên '%s' đã thuộc hộ khẩu khác (ID: %d). " +
                                 "Không thể thêm vào hộ khẩu này.", 
-                                memberToAdd.getFullName(), 
-                                memberToAdd.getHouseholdId()));
-                txtMemberId.clear();
+                                residentToAdd.getFullName(), 
+                                residentToAdd.getHouseholdId()));
+                txtResidentId.clear();
                 cboRelationship.setValue(null);
                 return;
             }
             
-            // Check for duplicate in current member list (additional safety check)
-            boolean isDuplicate = memberList.stream()
-                    .anyMatch(member -> member.getId().equals(memberId));
+            // Check for duplicate in current resident list (additional safety check)
+            boolean isDuplicate = residentList.stream()
+                    .anyMatch(resident -> resident.getId() == residentId);
             
             if (isDuplicate) {
                 showWarningDialog("Lỗi", "Thành viên này đã có trong danh sách.");
-                txtMemberId.clear();
+                txtResidentId.clear();
                 cboRelationship.setValue(null);
                 return;
             }
@@ -340,25 +339,25 @@ public class MemberDetailsDialogHandler {
                 "Xác nhận thêm thành viên", 
                 String.format("Bạn có chắc chắn muốn thêm thành viên '%s' vào hộ khẩu này với quan hệ '%s'?", 
 
-                        memberToAdd.getFullName(), 
+                        residentToAdd.getFullName(), 
 
                         cboRelationship.getConverter().toString(selectedRelationship))
             );
             
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                //update local + server member
-                memberToAdd.setHouseholdId(household.getId());
-                memberToAdd.setRelationship(selectedRelationship);
-                memberToAdd.setHouseholdHead(false);
-                memberService.updateMember(memberToAdd);
+                //update local + server resident
+                residentToAdd.setHouseholdId(household.getId());
+                residentToAdd.setRelationship(selectedRelationship);
+                residentToAdd.setHouseholdHead(false);
+                residentService.updateResident(residentToAdd);
                 
                 // Add to local list and refresh UI
-                memberList.add(memberToAdd);
-                lblMemberCount.setText(String.valueOf(memberList.size()));
+                residentList.add(residentToAdd);
+                lblResidentCount.setText(String.valueOf(residentList.size()));
                 
                 //update local + server household
-                household.addMember(memberToAdd);
-                householdController.addMemberToHousehold(household, memberId);
+                household.addResident(residentToAdd);
+                householdController.addResidentToHousehold(household, residentId);
                 
                 //update view household dialog
                 if (onSuccessCallback != null) {
@@ -366,35 +365,36 @@ public class MemberDetailsDialogHandler {
                 }
                 
                 // Clear input fields
-                txtMemberId.clear();
+                txtResidentId.clear();
                 cboRelationship.setValue(null);
                 
                 // Notify listener if set
                 if (changeListener != null) {
-                    changeListener.onMemberAdded(memberToAdd);
+                    changeListener.onResidentAdded(residentToAdd);
                 }
                 
                 showInfoDialog("Thành công", 
                     String.format("Đã thêm thành viên '%s' vào hộ khẩu thành công.", 
-                                 memberToAdd.getFullName()));
+                                 residentToAdd.getFullName()));
             }
             
         } catch (ServiceException e) {
             showWarningDialog("Lỗi", 
-                String.format("Không tìm thấy thành viên với ID '%s'. Vui lòng kiểm tra lại.", memberId));
-            txtMemberId.clear();
+                String.format("Không tìm thấy thành viên với ID '%s'. Vui lòng kiểm tra lại.", residentId));
+            txtResidentId.clear();
             cboRelationship.setValue(null);
         } catch (Exception e) {
             showWarningDialog("Lỗi", "Có lỗi xảy ra khi thêm thành viên: " + e.getMessage());
-            txtMemberId.clear();
+            txtResidentId.clear();
             cboRelationship.setValue(null);
         }
     }
     
     private void setupColumns() {
         // Set up table columns with cell value factories
-        colMemberId.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().getId()));
+        colResidentId.setCellValueFactory(cellData -> 
+        //TODO : sua lai neu sau nay nhap vao cccd
+            new SimpleStringProperty(cellData.getValue().getIdString()));
             
         colFullName.setCellValueFactory(cellData -> 
             new SimpleStringProperty(cellData.getValue().getFullName()));
@@ -420,18 +420,18 @@ public class MemberDetailsDialogHandler {
     
     private void setupColumnStyles() {
         // Center align some columns
-        colMemberId.setStyle("-fx-alignment: CENTER;");
+        colResidentId.setStyle("-fx-alignment: CENTER;");
         colGender.setStyle("-fx-alignment: CENTER;");
         colDateOfBirth.setStyle("-fx-alignment: CENTER;");
         colIsHead.setStyle("-fx-alignment: CENTER;");
         
         // Make table rows selectable with nice styling
-        tblMembers.setRowFactory(tv -> {
+        tblResidents.setRowFactory(tv -> {
             TableRow<Resident> row = new javafx.scene.control.TableRow<Resident>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    Resident selectedMember = row.getItem();
-                    showMemberDetails(selectedMember);
+                    Resident selectedResident = row.getItem();
+                    showResidentDetails(selectedResident);
                 }
             });
             return row;
@@ -448,21 +448,21 @@ public class MemberDetailsDialogHandler {
                 showWarningDialog("Lỗi", "Có lỗi xảy ra khi thay đổi chủ hộ: " + e.getMessage());
             }
         });
-        btnRemoveMember.setOnAction(event -> {
+        btnRemoveResident.setOnAction(event -> {
             try {
-                handleRemoveMember();
+                handleRemoveResident();
             } catch (Exception e) {
                 showWarningDialog("Lỗi", "Có lỗi xảy ra khi xóa thành viên: " + e.getMessage());
             }
         });
-        btnAddMember.setOnAction(event -> handleAddMember());
+        btnAddResident.setOnAction(event -> handleAddResident());
         
-        // Add Enter key support for member ID text field
-        txtMemberId.setOnAction(event -> {
+        // Add Enter key support for resident ID text field
+        txtResidentId.setOnAction(event -> {
 
-            if (!btnAddMember.isDisabled()) {
+            if (!btnAddResident.isDisabled()) {
 
-                handleAddMember();
+                handleAddResident();
 
             }
 
@@ -470,14 +470,14 @@ public class MemberDetailsDialogHandler {
     }
     
     @FXML
-    private void handleMakeOwner() throws ServiceException, HouseholdNotExist, HouseholdAlreadyExistsException, MemberNotFoundException, InvalidHouseholdDataException, SQLException {
-        Resident selectedMember = tblMembers.getSelectionModel().getSelectedItem();
-        if (selectedMember == null) {
+    private void handleMakeOwner() throws ServiceException, HouseholdNotExist, HouseholdAlreadyExistsException, ResidentNotFoundException, InvalidHouseholdDataException, SQLException {
+        Resident selectedResident = tblResidents.getSelectionModel().getSelectedItem();
+        if (selectedResident == null) {
             showWarningDialog("Lỗi", "Vui lòng chọn một thành viên để đặt làm chủ hộ.");
             return;
         }
         
-        if (selectedMember.isHouseholdHead()) {
+        if (selectedResident.isHouseholdHead()) {
             showWarningDialog("Thông báo", "Thành viên này đã là chủ hộ.");
             return;
         }
@@ -486,23 +486,23 @@ public class MemberDetailsDialogHandler {
         Optional<ButtonType> result = showConfirmDialog(
             "Xác nhận thay đổi chủ hộ", 
             String.format("Bạn có chắc chắn muốn đặt '%s' làm chủ hộ mới?\n\nViệc này sẽ thay đổi chủ hộ hiện tại.", 
-                         selectedMember.getFullName())
+                         selectedResident.getFullName())
         );
         
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // Update household head status
-            for (Resident member : memberList) {
-            	if (member.isHouseholdHead()) {
-            		System.out.println("before: hh head = "+member.getFullName());
-            		member.setHouseholdHead(false);
-            		memberService.updateMember(member);
+            for (Resident resident : residentList) {
+            	if (resident.isHouseholdHead()) {
+            		System.out.println("before: hh head = "+resident.getFullName());
+            		resident.setHouseholdHead(false);
+            		residentService.updateResident(resident);
             	}
             }
-            selectedMember.setHouseholdHead(true);
-            memberService.updateMember(selectedMember);
+            selectedResident.setHouseholdHead(true);
+            residentService.updateResident(selectedResident);
             
-            household.setOwnerId(selectedMember.getId());
-            household.setOwnerName(selectedMember.getFullName());
+            household.setOwnerId(selectedResident.getId());
+            household.setOwnerName(selectedResident.getFullName());
             householdController.updateHousehold(household);
             
             // Refresh table and update UI
@@ -516,7 +516,7 @@ public class MemberDetailsDialogHandler {
             
             // Notify listener if set
             if (changeListener != null) {
-                changeListener.onMemberOwnerChanged(selectedMember);
+                changeListener.onResidentOwnerChanged(selectedResident);
             }
             
             showInfoDialog("Thành công", "Đã cập nhật chủ hộ mới thành công.");
@@ -524,16 +524,16 @@ public class MemberDetailsDialogHandler {
     }
     
     @FXML
-    private void handleRemoveMember() throws HouseholdNotExist, ServiceException, SQLException {
-        Resident selectedMember = tblMembers.getSelectionModel().getSelectedItem();
+    private void handleRemoveResident() throws HouseholdNotExist, ServiceException, SQLException {
+        Resident selectedResident = tblResidents.getSelectionModel().getSelectedItem();
         
-        if (selectedMember == null) {
+        if (selectedResident == null) {
             showWarningDialog("Lỗi", "Vui lòng chọn một thành viên để xóa.");
             return;
         }
         
-        // Special case: Last member (who must be household head) - Delete entire household
-        if (memberList.size() == 1 && selectedMember.isHouseholdHead()) {
+        // Special case: Last resident (who must be household head) - Delete entire household
+        if (residentList.size() == 1 && selectedResident.isHouseholdHead()) {
             // Confirm action
             Optional<ButtonType> result = showConfirmDialog(
                 "Xác nhận xóa thành viên cuối cùng, đồng thời xóa hộ khẩu này!", 
@@ -542,20 +542,20 @@ public class MemberDetailsDialogHandler {
             
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 try {
-                    // Remove member from household (set household ID to 0)
-                    selectedMember.setHouseholdId(0);
-                    selectedMember.setHouseholdHead(false);
-                    selectedMember.setRelationship(RelationshipType.UNKNOWN);
-                    memberService.updateMember(selectedMember);
+                    // Remove resident from household (set household ID to 0)
+                    selectedResident.setHouseholdId(0);
+                    selectedResident.setHouseholdHead(false);
+                    selectedResident.setRelationship(RelationshipType.UNKNOWN);
+                    residentService.updateResident(selectedResident);
                     
                     // Delete the household from database (you'll need a HouseholdController for this)
                      householdController.deleteHousehold(household.getId());
                     
-                    // Clear the local member list
-                    memberList.clear();
+                    // Clear the local resident list
+                    residentList.clear();
                     
                     // Update UI
-                    lblMemberCount.setText("0");
+                    lblResidentCount.setText("0");
                     if (txtHouseholdSize != null) {
                     	//TODO 
 //                        txtHouseholdSize.setText("0");
@@ -563,7 +563,7 @@ public class MemberDetailsDialogHandler {
                     
                     // Notify listener if set
                     if (changeListener != null) {
-                        changeListener.onMemberRemoved(selectedMember);
+                        changeListener.onResidentRemoved(selectedResident);
                     }
                     
                  	//update view household dialog
@@ -584,12 +584,12 @@ public class MemberDetailsDialogHandler {
         }
         
         
-        if (selectedMember.isHouseholdHead()) {
+        if (selectedResident.isHouseholdHead()) {
             showWarningDialog("Không thể xóa", "Không thể xóa chủ hộ. Vui lòng chỉ định chủ hộ mới trước khi xóa.");
             return;
         }
         
-        if (memberList.size() <= 1) {
+        if (residentList.size() <= 1) {
             showWarningDialog("Không thể xóa", "Không thể xóa thành viên cuối cùng trong hộ khẩu.");
             return;
         }
@@ -598,31 +598,31 @@ public class MemberDetailsDialogHandler {
         Optional<ButtonType> result = showConfirmDialog(
             "Xác nhận xóa thành viên", 
             String.format("Bạn có chắc chắn muốn xóa thành viên '%s' khỏi hộ khẩu?\n\nHành động này không thể hoàn tác.", 
-                         selectedMember.getFullName())
+                         selectedResident.getFullName())
         );
         
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            // Remove member from list + household
-        	selectedMember.setHouseholdId(0);
-        	selectedMember.setRelationship(RelationshipType.UNKNOWN);
+            // Remove resident from list + household
+        	selectedResident.setHouseholdId(0);
+        	selectedResident.setRelationship(RelationshipType.UNKNOWN);
         	try {
-				memberService.updateMember(selectedMember);
+				residentService.updateResident(selectedResident);
 			} catch (ServiceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         	
-        	household.removeMember(selectedMember.getId());
-        	householdController.removeMember(household, selectedMember.getId()); //rm trong db
+        	household.removeResident(selectedResident.getId());
+        	householdController.removeResident(household, selectedResident.getId()); //rm trong db
         	
-            memberList.remove(selectedMember); //rm trong cache
+            residentList.remove(selectedResident); //rm trong cache
             
             //TODO
 //            txtHouseholdSize.setText(memberList.size()+"");
             
             
-            // Update member count
-            lblMemberCount.setText(String.valueOf(memberList.size()));
+            // Update resident count
+            lblResidentCount.setText(String.valueOf(residentList.size()));
             
             
           //update view household dialog
@@ -633,30 +633,30 @@ public class MemberDetailsDialogHandler {
 			
             // Notify listener if set
             if (changeListener != null) {
-                changeListener.onMemberRemoved(selectedMember);
+                changeListener.onResidentRemoved(selectedResident);
             }
             
             showInfoDialog("Thành công", "Đã xóa thành viên thành công.");
         }
     }
     
-    public void setMembers(List<Resident> members) {
-        memberList.clear();
-        if (members != null) {
-            memberList.addAll(members);
-            tblMembers.setItems(memberList);  // Set the items to the table view
-            lblMemberCount.setText(String.valueOf(members.size()));
+    public void setResidents(List<Resident> residents) {
+        residentList.clear();
+        if (residents != null) {
+            residentList.addAll(residents);
+            tblResidents.setItems(residentList);  // Set the items to the table view
+            lblResidentCount.setText(String.valueOf(residents.size()));
         } else {
-            lblMemberCount.setText("0");
+            lblResidentCount.setText("0");
         }
         
         // Make sure the table is refreshed
-        tblMembers.refresh();
+        tblResidents.refresh();
     }
     
-    // Get the updated member list (useful if parent needs to sync changes)
-	public List<Resident> getMembers() {
-	    return memberList;
+    // Get the updated resident list (useful if parent needs to sync changes)
+	public List<Resident> getResidents() {
+	    return residentList;
 	}
 
 	public void setHouseholdInfo(String ownerName) {
@@ -667,7 +667,7 @@ public class MemberDetailsDialogHandler {
 	//update the household info line in the head of the dialog
     private void updateHouseholdInfo() {
         // Find current household head and update display
-        Resident currentHead = memberList.stream()
+        Resident currentHead = residentList.stream()
                                       .filter(Resident::isHouseholdHead)
                                       .findFirst()
                                       .orElse(null);
@@ -677,11 +677,11 @@ public class MemberDetailsDialogHandler {
         }
     }
     
-    public void setChangeListener(MemberChangeListener listener) {
+    public void setChangeListener(ResidentChangeListener listener) {
         this.changeListener = listener;
     }
     
-    private void showMemberDetails(Resident member) {
+    private void showResidentDetails(Resident resident) {
         String details = String.format(
             "Thông tin chi tiết:\n\n" +
             "ID: %s\n" +
@@ -692,14 +692,14 @@ public class MemberDetailsDialogHandler {
             "Quan hệ với chủ hộ: %s\n" +
             "Nghề nghiệp: %s\n" +
             "Là chủ hộ: %s",
-            member.getId(),
-            member.getFullName(),
-            member.getGender(),
-            member.getDateOfBirth(),
-            member.getIdCard(),
-            member.getRelationship(),
-            member.getOccupation() != null ? member.getOccupation() : "Chưa cập nhật",
-            member.isHouseholdHead() ? "Có" : "Không"
+            resident.getId(),
+            resident.getFullName(),
+            resident.getGender(),
+            resident.getDateOfBirth(),
+            resident.getIdCard(),
+            resident.getRelationship(),
+            resident.getOccupation() != null ? resident.getOccupation() : "Chưa cập nhật",
+            resident.isHouseholdHead() ? "Có" : "Không"
         );
         
         showInfoDialog("Chi tiết thành viên", details);
@@ -741,7 +741,7 @@ public class MemberDetailsDialogHandler {
     }
     
     public void refreshTable() {
-        tblMembers.refresh();
+        tblResidents.refresh();
     }
     
     public void setHousehold(Household household) {
@@ -755,18 +755,18 @@ public class MemberDetailsDialogHandler {
             }
             
             // Load members if available
-            if (household.getMembers() != null) {
-                memberList.clear();
-                memberList.addAll(household.getMembers());
-                tblMembers.setItems(memberList);
+            if (household.getResidents() != null) {
+                residentList.clear();
+                residentList.addAll(household.getResidents());
+                tblResidents.setItems(residentList);
             }
             
-            // Update member count
-            updateMemberCount();
+            // Update resident count
+            updateResidentCount();
             
             // Initialize button states
             btnMakeOwner.setDisable(true);
-            btnRemoveMember.setDisable(true);
+            btnRemoveResident.setDisable(true);
         }
     }
 
@@ -774,8 +774,8 @@ public class MemberDetailsDialogHandler {
 		return household;
 	}
 
-	public Resident getSelectedMember() {
-        return tblMembers.getSelectionModel().getSelectedItem();
+	public Resident getSelectedResident() {
+        return tblResidents.getSelectionModel().getSelectedItem();
     }
     
     public TextField getTxtHouseholdSize() {

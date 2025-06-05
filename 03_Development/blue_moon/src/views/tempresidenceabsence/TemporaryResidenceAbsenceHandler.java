@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import controllers.TemporaryResidenceAbsenceController;
-import controllers.MemberService;
+import controllers.resident.ResidentController;
+import controllers.tempresidencabsence.TemporaryResidenceAbsenceController;
 import exception.ServiceException;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -26,7 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.TemporaryResidenceAbsence;
-import services.MemberServiceImpl;
+import services.resident.ResidentServiceImpl;
 import utils.AlertUtils;
 import utils.Configs;
 import utils.SceneUtils;
@@ -37,7 +37,7 @@ public class TemporaryResidenceAbsenceHandler extends HomePageHandler implements
     
     // Service layer
     private TemporaryResidenceAbsenceController temporaryController = new TemporaryResidenceAbsenceController();
-    private MemberServiceImpl memberService = new MemberServiceImpl();
+    private ResidentServiceImpl memberService = new ResidentServiceImpl();
     
     // Data collections
     private ObservableList<TemporaryResidenceAbsence> requestList;

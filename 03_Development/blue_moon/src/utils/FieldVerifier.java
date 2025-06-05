@@ -2,6 +2,9 @@ package utils;
 
 import java.util.regex.Pattern;
 
+import services.resident.ResidentService;
+import services.resident.ResidentServiceImpl;
+
 public class FieldVerifier {
     
     // Email validation pattern
@@ -82,12 +85,12 @@ public class FieldVerifier {
     /**
      * Validates member count (positive integer, reasonable range)
      */
-    public static boolean isValidMemberCount(String memberCount) {
-        if (!isNotEmpty(memberCount)) {
+    public static boolean isValidResidentCount(String residentCount) {
+        if (!isNotEmpty(residentCount)) {
             return false;
         }
         try {
-            int count = Integer.parseInt(memberCount.trim());
+            int count = Integer.parseInt(residentCount.trim());
             return count > 0 && count <= 20; // Reasonable limit for household size
         } catch (NumberFormatException e) {
             return false;
@@ -132,7 +135,26 @@ public class FieldVerifier {
     /**
      * Get error message for invalid member count
      */
-    public static String getInvalidMemberCountErrorMessage() {
+    public static String getInvalidResidentCountErrorMessage() {
         return "Số thành viên phải là số nguyên dương (1-20)";
+    }
+    
+    public static String getInvalidCitizenIdErrorMessage() {
+        return "CCCD không hợp lệ (phải có 12 chữ số) hoặc đã tồn tại trong hệ thống";
+    }
+    
+    public static boolean isValidCitizenId(String citizenId) {
+        if (citizenId == null || citizenId.trim().isEmpty()) {
+            return false;
+        }
+        
+        // Check format: 12 digits
+        if (!citizenId.matches("\\d{12}")) {
+            return false;
+        }
+        
+        // Check if exists in database
+        ResidentService residentService = new ResidentServiceImpl();
+        return !residentService.citizenIdExists(citizenId); // Return false if already exists
     }
 }

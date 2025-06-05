@@ -1,4 +1,4 @@
-package services;
+package services.tempresidenceabsence;
 
 import dao.tempresidenceabsence.*;
 //import dao.TemporaryResidenceAbsenceDAOImpl;

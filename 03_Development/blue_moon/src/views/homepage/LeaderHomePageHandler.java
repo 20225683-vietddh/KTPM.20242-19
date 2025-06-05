@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import controllers.HouseholdController;
-import controllers.MemberService;
-import dao.household.HouseholdDB;
+import controllers.household.HouseholdController;
+import controllers.resident.ResidentController;
 import exception.ServiceException;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -40,8 +39,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Household;
 import models.Resident;
-import services.HouseholdServiceImpl;
-import services.MemberServiceImpl;
+import services.household.HouseholdServiceImpl;
+import services.resident.ResidentServiceImpl;
 import utils.AlertUtils;
 import utils.Configs;
 import utils.SceneUtils;
@@ -50,7 +49,7 @@ import utils.Utils;
 	public class LeaderHomePageHandler extends HomePageHandler implements Initializable {
 		// Service layer
 	    private HouseholdController householdController = new HouseholdController();
-	    private MemberServiceImpl memberService = new MemberServiceImpl();
+	    private ResidentServiceImpl residentService = new ResidentServiceImpl();
 	    
 	    
 	    // Update your data collections field declarations
@@ -59,10 +58,7 @@ import utils.Utils;
 	    private SortedList<Household> sortedHouseholdList;
 	    
 	    private final String userName;
-	    
-	    
-	    
-	    
+	     
 	    
 	    // Main action buttons
 	    @FXML private Button btnAddHousehold;
@@ -232,10 +228,8 @@ import utils.Utils;
 	                
 	                if (household.getOwnerName().toLowerCase().contains(lowerCaseFilter)) {
 	                    return true; // Match by owner name
-	                } else if (household.getAddress().toLowerCase().contains(lowerCaseFilter)) {
+	                } else if (household.getHouseNumber().toLowerCase().contains(lowerCaseFilter)) {
 	                    return true; // Match by address
-	                } else if (household.getArea().toLowerCase().contains(lowerCaseFilter)) {
-	                    return true; // Match by area
 	                } else if (household.getPhone() != null && 
 	                           household.getPhone().toLowerCase().contains(lowerCaseFilter)) {
 	                    return true; // Match by phone number
@@ -259,7 +253,7 @@ import utils.Utils;
 	    
 	    private void openAddHouseholdDialog() {
 	        try {
-	            SceneUtils.openAddHouseholdDialog(householdController, memberService, btnAddHousehold, this::loadHouseholdData);
+	            SceneUtils.openAddHouseholdDialog(householdController, residentService, btnAddHousehold, this::loadHouseholdData);
 	        } catch (Exception e) {
 	            AlertUtils.showErrorAlert("Lỗi", "Không thể mở form thêm hộ khẩu", e.getMessage());
 	            e.printStackTrace();
@@ -268,7 +262,7 @@ import utils.Utils;
 	    
 	    private void openViewHouseholdDialog( Household household) {
 	        try {
-	            SceneUtils.openViewHouseholdDialog(householdController, memberService , household, btnAddHousehold, this::loadHouseholdData);
+	            SceneUtils.openViewHouseholdDialog(householdController, residentService , household, btnAddHousehold, this::loadHouseholdData);
 	        } catch (Exception e) {
 	            AlertUtils.showErrorAlert("Lỗi", "Không thể mở chi tiết hộ khẩu", e.getMessage());
 	            e.printStackTrace();
@@ -286,7 +280,7 @@ import utils.Utils;
 	        if (result.isPresent() && result.get() == ButtonType.OK) {
 	            try {
 	                // Check if household has members
-	                int memberCount = householdController.getMemberCount(household.getId());
+	                int memberCount = householdController.getResidentCount(household.getId());
 	                if (memberCount > 0) {
 	                    AlertUtils.showWarningAlert(
 	                        "Không thể xóa", 

@@ -7,3 +7,4 @@
 /MemberNotFoundException.class
 /ServiceException.class
 /InvalidDateRangeException.class
+/ResidentNotFoundException.class

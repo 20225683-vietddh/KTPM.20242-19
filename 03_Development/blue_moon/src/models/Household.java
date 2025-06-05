@@ -1,7 +1,6 @@
 package models;
 
 import java.lang.reflect.Array;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,67 +10,67 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import exception.ServiceException;
-import services.MemberServiceImpl;
+import services.resident.ResidentServiceImpl;
 
 public class Household {
-	private final MemberServiceImpl memberService = new MemberServiceImpl();
+	private final ResidentServiceImpl residentService = new ResidentServiceImpl();
 
 	//giong
 	private int id;
 	private String houseNumber;
+	private String street;
 	private String district;
 	private String ward;
-	private String street;
-	
-	
-	private LocalDate creationDate;
-	
-	private int householdSize;
-	private String ownerId;
-	
-	//khac
-//	private String address;
 	private Float area;
-	
-	
-	//them
-	private String phone;
-	private String email;
+	private int householdSize;
+	private int ownerId;
 	private String ownerName;
-	private List<Resident> members;
+	private String phone;
+	private String email;	
+	private LocalDate creationDate;
+	private List<Resident> residents;
 
+	
 	public Household() {
-		this.members = new ArrayList<>();
+		this.residents = new ArrayList<>();
 	}
+	
 
-	// constructor for init data
-	public Household(int id, String address, String area, int householdSize, String ownerId, String ownerName,
-			String phone, String email, Date creationDate, List<Resident> members) {
+	//full construtor
+	public Household(int id, String houseNumber, String district, String ward, String street, Float area,
+			LocalDate creationDate, int householdSize, int ownerId, String phone, String email, String ownerName,
+			List<Resident> residents) {
 		this.id = id;
-		this.address = address;
+		this.houseNumber = houseNumber;
+		this.district = district;
+		this.ward = ward;
+		this.street = street;
 		this.area = area;
+		this.creationDate = creationDate;
 		this.householdSize = householdSize;
 		this.ownerId = ownerId;
+		this.phone = phone;
+		this.email = email;
 		this.ownerName = ownerName;
-		this.phone = phone;
-		this.email = email;
-		this.creationDate = creationDate;
-		this.members = members;
+		this.residents = residents;
 	}
-
-	// constructor for auto gen id
-	public Household(String address, String area, int householdSize, String ownerId, String ownerName, String phone,
-			String email, Date creationDate, List<Resident> members) throws ServiceException {
-		this.address = address;
+	
+	//auto gen id
+	public Household(String houseNumber, String district, String ward, String street, Float area,
+			LocalDate creationDate, int householdSize, int ownerId, String phone, String email, String ownerName,
+			List<Resident> residents) throws ServiceException {
+		this.houseNumber = houseNumber;
+		this.district = district;
+		this.ward = ward;
+		this.street = street;
 		this.area = area;
+		this.creationDate = creationDate;
 		this.householdSize = householdSize;
 		this.ownerId = ownerId;
-		// auto set owner name
-		this.ownerName = ownerName = memberService.getMemberById(ownerId).getFullName();
+		this.ownerName = ownerName = residentService.getResidentById(ownerId).getFullName();
 		this.phone = phone;
 		this.email = email;
-		this.creationDate = creationDate;
-		this.members = members;
+		this.residents = residents;
 	}
 
 	// Getters and Setters
@@ -83,13 +82,51 @@ public class Household {
 		this.id = id;
 	}
 
-	public String getOwnerId() {
-		return ownerId;
+	public ResidentServiceImpl getMemberService() {
+		return residentService;
 	}
 
-	public void setOwnerId(String ownerId) throws ServiceException, SQLException {
+	
+	public String getHouseNumber() {
+		return houseNumber;
+	}
+	
+	public void setHouseNumber(String houseNumber) {
+		this.houseNumber = houseNumber;
+	}
+	
+	public String getDistrict() {
+		return district;
+	}
+	
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+	
+	public String getWard() {
+		return ward;
+	}
+	
+	public void setWard(String ward) {
+		this.ward = ward;
+	}
+	
+	public String getStreet() {
+		return street;
+	}
+	
+	public void setStreet(String street) {
+		this.street = street;
+	}
+	
+	public int getOwnerId() {
+		return ownerId;
+	}
+	
+	public void setOwnerId(int ownerId) {
 		this.ownerId = ownerId;
 	}
+
 
 	public String getOwnerName() {
 		return ownerName;
@@ -99,19 +136,11 @@ public class Household {
 		this.ownerName = ownerName;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getArea() {
+	public Float getArea() {
 		return area;
 	}
 
-	public void setArea(String area) {
+	public void setArea(Float area) {
 		this.area = area;
 	}
 
@@ -139,66 +168,65 @@ public class Household {
 		this.householdSize = householdSize;
 	}
 
-	public Date getCreationDate() {
+	public LocalDate getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(LocalDate creationDate) {
 		this.creationDate = creationDate;
 	}
 
-	public List<Resident> getMembers() {
-		return members;
+	public List<Resident> getResidents() {
+		return residents;
 	}
 	
-	public List<String> getMemberIds(){
-		return members.stream().map(Resident::getId).collect(Collectors.toList());
+	public List<Integer> getResidentIds(){
+		return residents.stream().map(Resident::getId).collect(Collectors.toList());
 	}
 
-	public void setMembers(List<Resident> members) {
-		this.members = members != null ? members : new ArrayList<>();
-		// Update household size based on member count
-		this.householdSize = this.members.size();
+	public void setResidents(List<Resident> residents) {
+		this.residents = residents != null ? residents : new ArrayList<>();
+		// Update household size based on resident count
+		this.householdSize = this.residents.size();
 	}
 	
-	public void setMemberIds(List<String> memberIds) throws ServiceException {
-		members.clear();
-		addMemberIds(memberIds);
+	public void setResidentIds(List<Integer> residentIds) throws ServiceException {
+		residents.clear();
+		addResidentIds(residentIds);
 	}
 
-	// Utility methods for member management
-	public void addMember(Resident member) {
-		if (member != null && !members.contains(member)) {
-			members.add(member);
-			this.householdSize = members.size();
+	public void addResident(Resident resident) {
+		if (resident != null && !residents.contains(resident)) {
+			residents.add(resident);
+			this.householdSize = residents.size();
 		}
 	}
 	
-	public void addMemberId(String memberId) throws ServiceException {
-		Resident m = memberService.getMemberById(memberId);
-		members.add(m);
+	public void addResidentId(int residentId) throws ServiceException {
+		Resident r= residentService.getResidentById(residentId);
+		addResident(r);
 	}
 	
-	public void addMemberIds(List<String> memberIds) throws ServiceException {
-		for (String m: memberIds) {
-			addMemberId(m);
+	public void addResidentIds(List<Integer> residentIds) throws ServiceException {
+		for (int residentId: residentIds) {
+			addResidentId(residentId);
 		}
 	}
 
-	public void removeMember(String memberId) {
-		members.removeIf(member -> member.getId().equals(memberId));
-		this.householdSize = members.size();
+	public void removeResident(int residentId) {
+		residents.removeIf(resident -> resident.getId() == residentId);
+		this.householdSize = residents.size();
 	}
 
-	public boolean hasMember(String memberId) {
-		return members.stream().map(Resident::getId).collect(Collectors.toList()).contains(memberId);
+	public boolean hasResident(int residentId) {
+		return residents.stream().map(Resident::getId).collect(Collectors.toList()).contains(residentId);
 	}
 
 	@Override
 	public String toString() {
 		return "Household{" +
 				"id=" + id +
-				", address='" + address + '\'' +
+				", houseNumber='" + houseNumber + '\'' +
 				", area='" + area + '\'' +
 				", householdSize=" + householdSize +
 				", ownerId='" + ownerId + '\'' +
@@ -223,4 +251,6 @@ public class Household {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+	
+	
 }
