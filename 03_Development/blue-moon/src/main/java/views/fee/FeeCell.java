@@ -7,11 +7,14 @@ import javafx.scene.control.Button;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import models.Fee;
+import views.ScreenNavigator;
 import views.messages.*;
 import services.FeeService;
 import exception.InvalidInputException;
 import javafx.scene.Parent;
 import javafx.scene.Node;
+import javafx.stage.Modality;
+import javafx.scene.effect.GaussianBlur;
 
 public class FeeCell extends HBox {
     private final Stage stage;
@@ -91,7 +94,6 @@ public class FeeCell extends HBox {
         
         hbButton.getChildren().addAll(btnUpdate, btnDelete);
         
-        // Tạo một Region để đẩy các nút sang bên phải
         javafx.scene.layout.Region spacer = new javafx.scene.layout.Region();
         spacer.setPrefWidth(USE_COMPUTED_SIZE);
         javafx.scene.layout.HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
@@ -104,6 +106,9 @@ public class FeeCell extends HBox {
     private void handleUpdate(Fee fee) {
         try {
             Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.initOwner(this.getScene().getWindow());
+            
             UpdateFeeFormHandler updateFeeHandler = new UpdateFeeFormHandler(
                 popupStage, 
                 utils.Configs.UPDATE_FEE_FORM_PATH, 
@@ -111,9 +116,18 @@ public class FeeCell extends HBox {
                 "Cập nhật khoản thu", 
                 fee.getId()
             );
+            
+            Parent parentRoot = this.getScene().getRoot();
+            GaussianBlur blur = new GaussianBlur(10);
+            parentRoot.setEffect(blur);
+            
             updateFeeHandler.show();
             
-            popupStage.setOnHiding(e -> refreshFeeList());
+            popupStage.setOnHiding(e -> {
+                ScreenNavigator.goBack(); 
+                parentRoot.setEffect(null); 
+                refreshFeeList();
+            });
         } catch (Exception e) {
             ErrorDialog.showError("Lỗi biểu mẫu", "Không thể mở biểu mẫu cập nhật khoản thu!");
             e.printStackTrace();

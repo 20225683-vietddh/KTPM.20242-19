@@ -11,6 +11,9 @@ import views.BaseScreenWithLogoutAndGoBackHandler;
 import views.messages.ErrorDialog;
 import models.Fee;
 import services.FeeService;
+import views.ScreenNavigator;
+import javafx.scene.Parent;
+import javafx.scene.effect.GaussianBlur;
 
 public class FeeListPageHandler extends BaseScreenWithLogoutAndGoBackHandler {
     @FXML private Button btnAddFee;
@@ -28,8 +31,6 @@ public class FeeListPageHandler extends BaseScreenWithLogoutAndGoBackHandler {
         if (lblUserName != null) {
             this.lblUserName.setText(userName);
         }
-        
-        // Lưu trữ tham chiếu đến FeeListPageHandler trong userData của Scene
         if (this.scene != null) {
             this.scene.setUserData(this);
         }
@@ -112,6 +113,10 @@ public class FeeListPageHandler extends BaseScreenWithLogoutAndGoBackHandler {
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(this.stage);
             
+            Parent parentRoot = this.scene.getRoot();
+            GaussianBlur blur = new GaussianBlur(10);
+            parentRoot.setEffect(blur);
+            
             AddFeeFormHandler addFeeHandler = new AddFeeFormHandler(
                 popupStage, 
                 utils.Configs.ADD_FEE_FORM_PATH, 
@@ -121,7 +126,11 @@ public class FeeListPageHandler extends BaseScreenWithLogoutAndGoBackHandler {
             
             addFeeHandler.show();
             
-            popupStage.setOnHiding(e -> loadFeeList());
+            popupStage.setOnHiding(e -> {
+                ScreenNavigator.goBack(); 
+                parentRoot.setEffect(null); 
+                loadFeeList();
+            });
         } catch (Exception e) {
             e.printStackTrace();
             ErrorDialog.showError("Lỗi biểu mẫu", "Không thể mở biểu mẫu thêm khoản thu!");
