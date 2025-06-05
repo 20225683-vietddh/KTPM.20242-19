@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
+import java.io.File;
 
 public class ReceiptGenerator {
     public void generateReceipt(String filePath,
@@ -14,7 +15,12 @@ public class ReceiptGenerator {
                                 Map<String, Integer> feeItems,
                                 int totalAmount,
                                 String accountantName) throws IOException {
-
+    	
+    	File outputFile = new File(filePath);
+        File parentDir = outputFile.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs();
+        }
         XWPFDocument doc = new XWPFDocument();
 
         // === HEADER ===

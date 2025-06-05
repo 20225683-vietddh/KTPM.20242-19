@@ -3,3 +3,4 @@ blue-moon/target/
 .idea/
 lib/
 blue-moon/src/main/resources/config/config.properties
+blue-moon/output/
