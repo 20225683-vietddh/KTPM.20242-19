@@ -39,23 +39,31 @@ public class HouseholdCell extends HBox {
 	    name.setStyle("-fx-font-size: 16px; -fx-text-fill: gray;");
 	    
 	    Label householdName = new Label(household.getHouseNumber());
-	    householdName.setPrefWidth(620);
-	    householdName.setMaxWidth(620);
+	    householdName.setPrefWidth(420);
+	    householdName.setMaxWidth(420);
 	    householdName.setStyle("-fx-font-size: 16px; -fx-text-fill: black;");
 	    
+	    Button btnCompulsory = new Button("Các khoản thu bắt buộc");
+	    btnCompulsory.setStyle("-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-text-fill: white; -fx-font-size: 16px; -fx-cursor: hand;");
+	    btnCompulsory.setPrefWidth(250);
+	    btnCompulsory.setPrefHeight(60);
+	    btnCompulsory.setOnAction(e -> handleCompulsoryChargeFee());
 	    
-	    Button btnView = new Button("Cập nhật tình hình thu phí");
-	    btnView.setStyle("-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-text-fill: white; -fx-font-size: 16px; -fx-cursor: hand;");
-	    btnView.setPrefWidth(300);
-	    btnView.setPrefHeight(60);
-	    btnView.setOnAction(e -> handleUpdateChargeFee());
+	    Button btnOptional = new Button("Các khoản thu tự nguyện");
+	    btnOptional.setStyle("-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-text-fill: white; -fx-font-size: 16px; -fx-cursor: hand;");
+	    btnOptional.setPrefWidth(250);
+	    btnOptional.setPrefHeight(60);
+	    btnOptional.setOnAction(e -> handleCompulsoryChargeFee());
 	    
-	    this.getChildren().addAll(name, householdName, btnView);
+	    HBox hbButton = new HBox(10);
+	    hbButton.getChildren().addAll(btnCompulsory, btnOptional);
+	    
+	    this.getChildren().addAll(name, householdName, hbButton);
 	}
 	
-	private void handleUpdateChargeFee() {
+	private void handleCompulsoryChargeFee() {
 		try {
-			new UpdateChargeFeeHandler(this.stage, campaignFee, household, service);
+			new CompulsoryChargeFeeHandler(this.stage, campaignFee, household, service);
 		} catch (Exception e) {
 			ErrorDialog.showError("Lỗi hệ thống", "Không thể mở form!");
 			e.printStackTrace();

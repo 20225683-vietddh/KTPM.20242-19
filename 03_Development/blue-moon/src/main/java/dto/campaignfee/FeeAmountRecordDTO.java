@@ -10,6 +10,7 @@ public class FeeAmountRecordDTO {
 	private int paidAmount;
 	private LocalDate paidDate;
 	private int additionalAmount;
+	private int areas;
 	
 	public FeeAmountRecordDTO() {}
 
@@ -71,5 +72,13 @@ public class FeeAmountRecordDTO {
 	
 	public boolean isFullyPaid() {
 		return expectedAmount <= paidAmount;
+	}
+	
+	public int getAreas() {
+		return this.areas;
+	}
+	
+	public void setAreas(int areas) {
+		this.areas = areas;
 	}
 }

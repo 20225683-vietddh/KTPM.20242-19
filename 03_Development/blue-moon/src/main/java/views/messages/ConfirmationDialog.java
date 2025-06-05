@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public class ConfirmationDialog {
 	public static String getOption(String message) {
-		ButtonType yesButton = new ButtonType("Yes", ButtonData.YES);
-        ButtonType noButton = new ButtonType("No", ButtonData.NO);
+		ButtonType yesButton = new ButtonType("Lưu", ButtonData.YES);
+        ButtonType noButton = new ButtonType("Đóng", ButtonData.NO);
         
 		Alert alert = new Alert(AlertType.CONFIRMATION, message, yesButton, noButton);
 		alert.setTitle("Confirmation");

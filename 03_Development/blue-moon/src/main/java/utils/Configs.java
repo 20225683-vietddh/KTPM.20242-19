@@ -13,7 +13,7 @@ public class Configs {
 	public static final String NEW_CAMPAIGN_FORM = "/views/campaignfee/NewCampaignFeeForm.fxml";
 	public static final String UPDATE_CAMPAIGN_FORM = "/views/campaignfee/UpdateCampaignFeeForm.fxml";
 	public static final String CHARGE_FEE_SCREEN = "/views/chargefee/ChargeFeeScreen.fxml";
-	public static final String UPDATE_AMOUNT_BOX = "/views/chargefee/UpdateChargeFeeScreen.fxml";
+	public static final String COMPULSORY_CHARGE_FEE_FORM = "/views/chargefee/CompulsoryChargeFeeForm.fxml";
 	public static final String TRACK_CAMPAIGN_FEE_SCREEN = "/views/trackcampaignfee/TrackCampaignFeeScreen.fxml";
 	public static final String[] DAY = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", 
 			                            "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", 

@@ -32,8 +32,8 @@ public class ChargeFeeDAOPostgreSQL implements ChargeFeeDAO {
 	
 	@Override
 	public FeeAmountRecordDTO getPaymentRecord(int campaignFeeId, int householdId, int feeId) throws SQLException {
-		String sql = "SELECT expected_amount, paid_amount, paid_date FROM fee_payment_records "
-				+ "WHERE campaign_fee_id = ? AND household_id = ? AND fee_id = ?";
+		String sql = "SELECT expected_amount, paid_amount, paid_date, areas FROM fee_payment_records fpr, households h "
+				+ "WHERE campaign_fee_id = ? AND h.household_id = ? AND fee_id = ? AND fpr.household_id = h.household_id";
 		
 		FeeAmountRecordDTO dto = new FeeAmountRecordDTO();
 
@@ -56,6 +56,9 @@ public class ChargeFeeDAOPostgreSQL implements ChargeFeeDAO {
 
 					LocalDate paidDate = rs.getObject("paid_date", LocalDate.class);
 					dto.setPaidDate(paidDate != null ? paidDate : null);
+					
+					int areas = rs.getInt("areas");
+					dto.setAreas(areas);
 				}
 			}
 		}
@@ -80,15 +83,13 @@ public class ChargeFeeDAOPostgreSQL implements ChargeFeeDAO {
 	}
 
 	@Override
-	public void updateRecord(int campaignFeeId, int householdId, int feeId, int expectedAmount,int paidAmount, LocalDate paidDate) throws SQLException {
-		String sql = "UPDATE fee_payment_records SET expected_amount = ?, paid_amount = ?, paid_date = ? WHERE campaign_fee_id = ? AND household_id = ? AND fee_id = ?";
+	public void updateRecord(int campaignFeeId, int householdId, int feeId, int expectedAmount) throws SQLException {
+		String sql = "UPDATE fee_payment_records SET expected_amount = ? WHERE campaign_fee_id = ? AND household_id = ? AND fee_id = ?";
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			stmt.setInt(1, expectedAmount);
-			stmt.setInt(2, paidAmount);
-			stmt.setObject(3, paidDate);
-			stmt.setInt(4, campaignFeeId);
-			stmt.setInt(5, householdId);
-			stmt.setInt(6, feeId);
+			stmt.setInt(2, campaignFeeId);
+			stmt.setInt(3, householdId);
+			stmt.setInt(4, feeId);
 			stmt.executeUpdate();
 		}
 	}

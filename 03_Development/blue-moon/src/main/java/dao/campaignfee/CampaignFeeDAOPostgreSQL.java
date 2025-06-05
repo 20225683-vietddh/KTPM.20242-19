@@ -68,37 +68,75 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 		return new ArrayList<>(campaignMap.values());
 	}
 	
-	@Override 
+	@Override
 	public void addNewCampaignFee(CampaignFeeDTO dto) throws SQLException {
-		String campaignFeeSQL = "INSERT INTO campaign_fees (name, created_date, start_date, due_date, status, description) VALUES (?, ?, ?, ?, ?, ?)";
-		LocalDate startDate = utils.Utils.parseDateSafely(dto.getStartDay(), dto.getStartMonth(), dto.getStartYear());
-		LocalDate dueDate = utils.Utils.parseDateSafely(dto.getDueDay(), dto.getDueMonth(), dto.getDueYear());
-        		
-		PreparedStatement stmt = conn.prepareStatement(campaignFeeSQL, Statement.RETURN_GENERATED_KEYS);
-		stmt.setString(1, dto.getName());
-		stmt.setObject(2, LocalDate.now());
-		stmt.setObject(3, startDate);
-		stmt.setObject(4, dueDate);
-		stmt.setString(5, "Mới tạo");
-		stmt.setString(6, dto.getDescription());
-		stmt.executeUpdate();
-		
-		ResultSet rs = stmt.getGeneratedKeys();
-        if (rs.next()) {
-            int campaignFeeId = rs.getInt(1); 
+	    String campaignFeeSQL = "INSERT INTO campaign_fees (name, created_date, start_date, due_date, status, description) VALUES (?, ?, ?, ?, ?, ?)";
+	    String itemSQL = "INSERT INTO campaign_fee_items (fee_id, campaign_fee_id) VALUES (?, ?)";
+	    String selectHouseholdsSQL = "SELECT household_id FROM households";
+	    String insertPaymentRecordSQL = "INSERT INTO fee_payment_records (campaign_fee_id, household_id, fee_id) VALUES (?, ?, ?)";
+	    LocalDate startDate = utils.Utils.parseDateSafely(dto.getStartDay(), dto.getStartMonth(), dto.getStartYear());
+	    LocalDate dueDate = utils.Utils.parseDateSafely(dto.getDueDay(), dto.getDueMonth(), dto.getDueYear());
 
-            String itemSQL = "INSERT INTO campaign_fee_items (fee_id, campaign_fee_id) VALUES (?, ?)";
-            try (PreparedStatement itemStmt = conn.prepareStatement(itemSQL)) {
-                for (int feeId : dto.getFeeIds()) {
-                    itemStmt.setLong(1, feeId);          
-                    itemStmt.setLong(2, campaignFeeId); 
-                    itemStmt.addBatch();
-                }
-                itemStmt.executeBatch();
-            }
-        } else {
-            throw new SQLException("Không thể thêm được thông tin đợt thu phí mới vào CSDL.");
-        }
+	    try {
+	        conn.setAutoCommit(false); 
+
+	        // Bước 1: Insert vào campaign_fees
+	        PreparedStatement stmt = conn.prepareStatement(campaignFeeSQL, Statement.RETURN_GENERATED_KEYS);
+	        stmt.setString(1, dto.getName());
+	        stmt.setObject(2, LocalDate.now());
+	        stmt.setObject(3, startDate);
+	        stmt.setObject(4, dueDate);
+	        stmt.setString(5, "Mới tạo");
+	        stmt.setString(6, dto.getDescription());
+	        stmt.executeUpdate();
+
+	        ResultSet rs = stmt.getGeneratedKeys();
+	        if (!rs.next()) {
+	            conn.rollback();
+	            throw new SQLException("Không thể thêm được thông tin đợt thu phí mới vào CSDL.");
+	        }
+	        int campaignFeeId = rs.getInt(1); 
+	        rs.close();
+	        stmt.close();
+
+	        // Bước 2: Insert vào campaign_fee_items
+	        try (PreparedStatement itemStmt = conn.prepareStatement(itemSQL)) {
+	            for (int feeId : dto.getFeeIds()) {
+	                itemStmt.setInt(1, feeId);
+	                itemStmt.setInt(2, campaignFeeId);
+	                itemStmt.addBatch();
+	            }
+	            itemStmt.executeBatch();
+	        }
+
+	        // Bước 3: Lấy danh sách household_id
+	        List<Integer> householdIds = new ArrayList<>();
+	        try (PreparedStatement householdStmt = conn.prepareStatement(selectHouseholdsSQL);
+	             ResultSet householdRs = householdStmt.executeQuery()) {
+	            while (householdRs.next()) {
+	                householdIds.add(householdRs.getInt("household_id"));
+	            }
+	        }
+
+	        // Bước 4: Insert vào fee_payment_records
+	        try (PreparedStatement paymentStmt = conn.prepareStatement(insertPaymentRecordSQL)) {
+	            for (int householdId : householdIds) {
+	                for (int feeId : dto.getFeeIds()) {
+	                    paymentStmt.setInt(1, campaignFeeId);
+	                    paymentStmt.setInt(2, householdId);
+	                    paymentStmt.setInt(3, feeId);
+	                    paymentStmt.addBatch();
+	                }
+	            }
+	            paymentStmt.executeBatch();
+	        }
+	        conn.commit(); 
+	    } catch (SQLException e) {
+	        if (conn != null) conn.rollback(); 
+	        throw e;
+	    } finally {
+	        if (conn != null) conn.setAutoCommit(true); 
+	    }
 	}
 	
 	@Override

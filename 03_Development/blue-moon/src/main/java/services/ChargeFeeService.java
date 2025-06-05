@@ -22,8 +22,8 @@ public class ChargeFeeService {
 		dao.insertRecord(campaignFeeId, householdId, feeId, expectedAmount, paidAmount, paidDate);
 	}
 	
-	public void updateRecord(int campaignFeeId, int householdId, int feeId, int expectedAmount, int paidAmount, LocalDate paidDate) throws SQLException {
-		dao.updateRecord(campaignFeeId, householdId, feeId, expectedAmount, paidAmount, paidDate);
+	public void updateRecord(int campaignFeeId, int householdId, int feeId, int expectedAmount) throws SQLException {
+		dao.updateRecord(campaignFeeId, householdId, feeId, expectedAmount);
 	}
 	
 	public FeeAmountRecordDTO getPaymentRecord(int campaignFeeId, int householdId, int feeId) throws SQLException {

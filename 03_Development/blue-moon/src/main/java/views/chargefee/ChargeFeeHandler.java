@@ -11,15 +11,9 @@ import models.Household;
 import services.ChargeFeeService;
 
 public class ChargeFeeHandler extends BaseScreenWithLogoutAndGoBackHandler {
-	@FXML
-	private Label lblUserName;
-	
-	@FXML
-    private Label lblCampaignFeeName;
-	
-	@FXML
-	private VBox vbHouseholdsList;
-
+	@FXML private Label lblUserName;
+	@FXML private Label lblCampaignFeeName;
+	@FXML private VBox vbHouseholdsList;
 	private CampaignFee campaignFee;
 	private final ChargeFeeService service = new ChargeFeeService();
 	

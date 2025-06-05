@@ -17,21 +17,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class TrackCampaignFeeHandler extends BaseScreenWithLogoutAndGoBackHandler {
-	@FXML
-    private Label lblCampaignFeeName;
-
-    @FXML
-    private Label lblUserName;
-    
-    @FXML
-    private Label lblExpectedAmount;
-
-    @FXML
-    private Label lblPaidAmount;
-    
-    @FXML
-    private VBox vbFeesList;
-
+	@FXML private Label lblCampaignFeeName;
+    @FXML private Label lblUserName;
+    @FXML private Label lblExpectedAmount;
+    @FXML private Label lblPaidAmount;
+    @FXML private VBox vbFeesList;
     private CampaignFee campaignFee;
     private final TrackCampaignFeeService service = new TrackCampaignFeeService();
 	
