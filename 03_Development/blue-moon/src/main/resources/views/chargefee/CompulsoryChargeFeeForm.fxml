@@ -130,7 +130,7 @@
                               <Insets left="275.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="btnClose" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-cursor: hand;" text="Hủy" textFill="WHITE">
+                        <Button fx:id="btnClose" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-cursor: hand;" text="Đóng" textFill="WHITE">
                            <font>
                               <Font size="18.0" />
                            </font>

@@ -10,7 +10,6 @@ import services.ChargeFeeService;
 import javafx.scene.Parent;
 import javafx.scene.effect.GaussianBlur;
 import javafx.stage.Stage;
-import javafx.scene.Node;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,10 +19,13 @@ import javafx.scene.control.TextField;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import java.util.List;
+import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Map;
+import java.util.HashMap;
+import utils.ReceiptGenerator;
 
 public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
 	@FXML private Button btnClose;
@@ -81,9 +83,15 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
 			e.printStackTrace();
 		}
 		
-		lblTotalExpectedAmount.setText(utils.Utils.formatCurrency(service.countTotalExpectedAmount(campaignFee.getId(), household.getHouseholdId())) + " đồng.");
-		lblTotalPaidAmount.setText(utils.Utils.formatCurrency(service.countTotalPaidAmount(campaignFee.getId(), household.getHouseholdId())) + " đồng.");
+		int totalExpectedAmount = service.countTotalExpectedAmount(campaignFee.getId(), household.getHouseholdId());
+		int totalPaidAmount = service.countTotalPaidAmount(campaignFee.getId(), household.getHouseholdId());
+		lblTotalExpectedAmount.setText(utils.Utils.formatCurrency(totalExpectedAmount) + " đồng.");
+		lblTotalPaidAmount.setText(utils.Utils.formatCurrency(totalPaidAmount) + " đồng.");
 		btnClose.setOnAction(e -> handleClose());
+		btnChargeFee.setOnAction(e -> handleChargeFee(totalExpectedAmount));
+		if (totalExpectedAmount == totalPaidAmount) {
+			btnChargeFee.setDisable(true);
+		}
 	}
 	
 	private void handleClose() {
@@ -100,6 +108,15 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
 			}
 		}
 	    return compulsoryFees;
+	}
+	
+	private List<Integer> getCompulsoryFeeIds() {
+		List<Fee> compulsoryFees = getCompulsoryFees();
+		List<Integer> compulsoryFeeIds = new ArrayList<>();
+		for (Fee fee : compulsoryFees) {
+			compulsoryFeeIds.add(fee.getId());
+		}
+		return compulsoryFeeIds;
 	}
 	
 	private void setupCompulsoryFeeRow(String feeName, int feeId, int areas, int expectedAmount) {
@@ -187,5 +204,51 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
             	e.printStackTrace();
             }
 		}
+	}
+	
+	private void handleChargeFee(int totalExpectedAmount) {
+		try {
+			String option = ConfirmationDialog.getOption("Bạn chắc chắn hộ dân đã nộp đủ toàn bộ số tiền?");
+			switch (option) {
+			case "YES":
+				service.updatePaidAmount(campaignFee.getId(), household.getHouseholdId(), getCompulsoryFeeIds());
+				InformationDialog.showNotification("Xác nhận nộp tiền thành công", "Biên lai đã được xuất dưới dạng file .docx.");
+				Map<String, Integer> feeWithExpectedAmounts = this.getFeeNameWithExpectedAmount();
+				ReceiptGenerator generator = new ReceiptGenerator();
+				generator.generateReceipt("output/bien_lai_cac_khoan_bat_buoc_ho_dan_" + household.getHouseholdId() + "_dot_thu_" + campaignFee.getId() + ".docx",
+                        household.getHouseNumber(),
+                        campaignFee.getName(),
+                        feeWithExpectedAmounts,
+                        totalExpectedAmount,
+                        "Kế toán"
+                        );
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ErrorDialog.showError("Lỗi hệ thống", "Không thể cập nhật số tiền đã được thu trong CSDL!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			ErrorDialog.showError("Lỗi hệ thống", "Không thể tải báo cáo!");
+		} finally {
+			handleClose();
+		}
+	}
+	
+	private Map<String, Integer> getFeeNameWithExpectedAmount() {
+		List<Fee> compulsoryFees = getCompulsoryFees();
+		Map<String, Integer> feeNameWithExpectedAmount = new HashMap<>();
+		for (Fee fee : compulsoryFees) {
+			try {
+				boolean isExisted = service.isRecordExisted(campaignFee.getId(), household.getHouseholdId(), fee.getId());
+				if (isExisted) {
+					FeeAmountRecordDTO dto = service.getPaymentRecord(campaignFee.getId(), household.getHouseholdId(), fee.getId());
+					feeNameWithExpectedAmount.put(dto.getFeeName(), dto.getExpectedAmount());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				ErrorDialog.showError("Lỗi hệ thống", "Không thể truy cập vào CSDL!");
+			}
+		}
+		return feeNameWithExpectedAmount;
 	}
 }

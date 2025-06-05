@@ -9,14 +9,15 @@ import java.util.Optional;
 
 public class ConfirmationDialog {
 	public static String getOption(String message) {
-		ButtonType yesButton = new ButtonType("Lưu", ButtonData.YES);
-        ButtonType noButton = new ButtonType("Đóng", ButtonData.NO);
+		ButtonType yesButton = new ButtonType("YES", ButtonData.YES);
+        ButtonType noButton = new ButtonType("CLOSED", ButtonData.NO);
         
 		Alert alert = new Alert(AlertType.CONFIRMATION, message, yesButton, noButton);
 		alert.setTitle("Confirmation");
 		alert.setHeaderText("Confirmation Required");
 
         DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setPrefWidth(500);
 
         dialogPane.setStyle(
 			"-fx-background-color: white; " + "-fx-padding: 15px; " + "-fx-font-family: 'System';"

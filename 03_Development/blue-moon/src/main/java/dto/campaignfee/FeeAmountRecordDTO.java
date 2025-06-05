@@ -11,7 +11,34 @@ public class FeeAmountRecordDTO {
 	private LocalDate paidDate;
 	private int additionalAmount;
 	private int areas;
+	private String feeName;
+	private String campaignFeeName;
+	private String houseNumber;
 	
+	public String getFeeName() {
+		return feeName;
+	}
+
+	public void setFeeName(String feeName) {
+		this.feeName = feeName;
+	}
+
+	public String getCampaignFeeName() {
+		return campaignFeeName;
+	}
+
+	public void setCampaignFeeName(String campaignFeeName) {
+		this.campaignFeeName = campaignFeeName;
+	}
+
+	public String getHouseNumber() {
+		return houseNumber;
+	}
+
+	public void setHouseNumber(String houseNumber) {
+		this.houseNumber = houseNumber;
+	}
+
 	public FeeAmountRecordDTO() {}
 
 	public int getHouseholdId() {

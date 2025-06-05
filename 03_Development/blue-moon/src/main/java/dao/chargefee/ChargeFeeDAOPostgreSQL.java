@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 import java.time.LocalDate;
 import dao.PostgreSQLConnection;
 import models.Household;
@@ -32,8 +33,8 @@ public class ChargeFeeDAOPostgreSQL implements ChargeFeeDAO {
 	
 	@Override
 	public FeeAmountRecordDTO getPaymentRecord(int campaignFeeId, int householdId, int feeId) throws SQLException {
-		String sql = "SELECT expected_amount, paid_amount, paid_date, areas FROM fee_payment_records fpr, households h "
-				+ "WHERE campaign_fee_id = ? AND h.household_id = ? AND fee_id = ? AND fpr.household_id = h.household_id";
+		String sql = "SELECT expected_amount, paid_amount, paid_date, areas, f.name FROM fee_payment_records fpr, households h, fees f "
+				+ "WHERE campaign_fee_id = ? AND h.household_id = ? AND fpr.fee_id = ? AND fpr.household_id = h.household_id AND f.fee_id = fpr.fee_id";
 		
 		FeeAmountRecordDTO dto = new FeeAmountRecordDTO();
 
@@ -59,6 +60,9 @@ public class ChargeFeeDAOPostgreSQL implements ChargeFeeDAO {
 					
 					int areas = rs.getInt("areas");
 					dto.setAreas(areas);
+					
+					String feeName = rs.getString("name");
+					dto.setFeeName(feeName);
 				}
 			}
 		}
@@ -92,6 +96,31 @@ public class ChargeFeeDAOPostgreSQL implements ChargeFeeDAO {
 			stmt.setInt(4, feeId);
 			stmt.executeUpdate();
 		}
+	}
+	
+	public void updatePaidAmount(int campaignFeeId, int householdId, List<Integer> feeIds) throws SQLException {
+	    if (feeIds == null || feeIds.isEmpty()) return;
+	    String sql = """
+	        UPDATE fee_payment_records
+	        SET paid_amount = expected_amount,
+	            paid_date = CURRENT_DATE
+	        WHERE campaign_fee_id = ?
+	          AND household_id = ?
+	          AND fee_id IN (%s)
+	    """;
+
+	    String placeholders = feeIds.stream().map(f -> "?").collect(Collectors.joining(","));
+	    String finalSql = String.format(sql, placeholders);
+
+	    try (PreparedStatement stmt = conn.prepareStatement(finalSql)) {
+            int index = 1;
+	        stmt.setInt(index++, campaignFeeId);
+	        stmt.setInt(index++, householdId);
+	        for (Integer feeId : feeIds) {
+	            stmt.setInt(index++, feeId);
+	        }
+	        stmt.executeUpdate();
+	    }
 	}
 	
 	@Override

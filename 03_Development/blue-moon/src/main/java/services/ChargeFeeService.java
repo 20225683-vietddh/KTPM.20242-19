@@ -41,4 +41,8 @@ public class ChargeFeeService {
 	public List<Household> getAllHouseholds() {
 		return dao.getHouseholds();
 	}
+	
+	public void updatePaidAmount(int campaignFeeId, int householdId, List<Integer> feeIds) throws SQLException {
+		dao.updatePaidAmount(campaignFeeId, householdId, feeIds);
+	}
 }

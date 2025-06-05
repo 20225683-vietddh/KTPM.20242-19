@@ -14,4 +14,5 @@ public interface ChargeFeeDAO {
 	public List<Household> getHouseholds();
 	public int countTotalExpectedAmount(int campaignFeeId, int householdId);
 	public int countTotalPaidAmount(int campaignFeeId, int householdId);
+	public void updatePaidAmount(int campaignFeeId, int householdId, List<Integer> feeIds) throws SQLException;
 }
