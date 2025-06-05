@@ -264,16 +264,16 @@
                         
                         <!-- Household Table -->
                         <TableView fx:id="tblHouseholds" prefHeight="600.0" prefWidth="1066.0" style="-fx-cursor: hand;">
-                          <columns>
-						        <TableColumn fx:id="colId" prefWidth="50.0" text="ID" />
-						        <TableColumn fx:id="colOwnerName" prefWidth="200.0" text="Chủ hộ" />
-						        <TableColumn fx:id="colAddress" prefWidth="250.0" text="Địa chỉ" />
-						        <TableColumn fx:id="colActions" prefWidth="150.0" text="Thao tác" />
-						    </columns>
-                           <VBox.margin>
-                              <Insets left="20.0" right="20.0" top="20.0" />
-                           </VBox.margin>
-                        </TableView>
+						  <columns>
+						    <TableColumn fx:id="colId" prefWidth="80.0" text="ID" />
+						    <TableColumn fx:id="colOwnerName" prefWidth="300.0" text="Chủ hộ" />
+						    <TableColumn fx:id="colRoomNumber" prefWidth="200.0" text="Số phòng" />
+						    <TableColumn fx:id="colActions" prefWidth="250.0" text="Thao tác" />
+						  </columns>
+						  <VBox.margin>
+						    <Insets left="20.0" right="20.0" top="20.0" />
+						  </VBox.margin>
+						</TableView>
                      </children>
                   </VBox>
                </children>

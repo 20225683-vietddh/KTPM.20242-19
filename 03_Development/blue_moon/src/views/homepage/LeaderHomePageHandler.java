@@ -41,6 +41,7 @@ import models.Household;
 import models.Resident;
 import services.household.HouseholdServiceImpl;
 import services.resident.ResidentServiceImpl;
+import services.room.RoomServiceImpl;
 import utils.AlertUtils;
 import utils.Configs;
 import utils.SceneUtils;
@@ -50,6 +51,7 @@ import utils.Utils;
 		// Service layer
 	    private HouseholdController householdController = new HouseholdController();
 	    private ResidentServiceImpl residentService = new ResidentServiceImpl();
+	    private RoomServiceImpl roomService =  new RoomServiceImpl();
 	    
 	    
 	    // Update your data collections field declarations
@@ -71,7 +73,7 @@ import utils.Utils;
 	    @FXML private TableView<Household> tblHouseholds;
 	    @FXML private TableColumn<Household, Integer> colId;
 	    @FXML private TableColumn<Household, String> colOwnerName;
-	    @FXML private TableColumn<Household, String> colAddress;
+	    @FXML private TableColumn<Household, String> colRoomNumber;
 	    @FXML private TableColumn<Household, Void> colActions;
 	    
 	    protected FXMLLoader loader;
@@ -128,12 +130,12 @@ import utils.Utils;
 	            // Set up basic columns with property values
 	            colId.setCellValueFactory(new PropertyValueFactory<>("id"));
 	            colOwnerName.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
-	            colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+	            colRoomNumber.setCellValueFactory(new PropertyValueFactory<>("houseNumber"));
 	            
 	            // Sử dụng tỷ lệ phần trăm
 	            colId.prefWidthProperty().bind(tblHouseholds.widthProperty().multiply(0.1)); // 10%
 	            colOwnerName.prefWidthProperty().bind(tblHouseholds.widthProperty().multiply(0.35)); // 35%
-	            colAddress.prefWidthProperty().bind(tblHouseholds.widthProperty().multiply(0.35)); // 35%
+	            colRoomNumber.prefWidthProperty().bind(tblHouseholds.widthProperty().multiply(0.35)); // 35%
 	            colActions.prefWidthProperty().bind(tblHouseholds.widthProperty().multiply(0.2)); // 20%
 	            
 	            // Set up action column with View/Edit/Delete buttons
@@ -253,7 +255,11 @@ import utils.Utils;
 	    
 	    private void openAddHouseholdDialog() {
 	        try {
-	            SceneUtils.openAddHouseholdDialog(householdController, residentService, btnAddHousehold, this::loadHouseholdData);
+	            SceneUtils.openAddHouseholdDialog(householdController, 
+	            		residentService, 
+	            		roomService,
+	            		btnAddHousehold, 
+	            		this::loadHouseholdData);
 	        } catch (Exception e) {
 	            AlertUtils.showErrorAlert("Lỗi", "Không thể mở form thêm hộ khẩu", e.getMessage());
 	            e.printStackTrace();

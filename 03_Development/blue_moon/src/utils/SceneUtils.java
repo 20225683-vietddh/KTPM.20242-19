@@ -11,6 +11,8 @@ import javafx.stage.StageStyle;
 import models.Household;
 import services.resident.ResidentService;
 import services.resident.ResidentServiceImpl;
+import services.room.RoomService;
+import services.room.RoomServiceImpl;
 import views.household.AddHouseholdDialogHandler;
 import views.household.ViewHouseholdDialogHandler;
 import utils.Configs;
@@ -118,6 +120,7 @@ public class SceneUtils {
      */
     public static void openAddHouseholdDialog(HouseholdController householdController, 
     		ResidentService memberService, 
+    		RoomService roomService,
     		Node sourceNode, 
     		Runnable onSuccess) throws IOException {
         FXMLLoader loader = new FXMLLoader(SceneUtils.class.getResource(Configs.ADD_HOUSEHOLD_DIALOG_PATH));
@@ -127,6 +130,7 @@ public class SceneUtils {
         AddHouseholdDialogHandler controller = loader.getController();
         controller.setHouseholdController(householdController);
         controller.setResidentService(memberService);
+        controller.setRoomService(roomService);
         
         if (controller instanceof HouseholdDialogHandler) {
             ((HouseholdDialogHandler) controller).setOnSuccessCallback(onSuccess);

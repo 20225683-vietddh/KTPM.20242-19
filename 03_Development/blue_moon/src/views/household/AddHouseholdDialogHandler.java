@@ -47,7 +47,7 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
     
     private HouseholdController householdController;
     private ResidentService residentService;
-    private RoomServiceImpl roomService;
+    private RoomService roomService;
     
     // Lists to store dynamic resident fields and their error labels
     private List<TextField> residentCitizenIdFields = new ArrayList<>();
@@ -109,7 +109,7 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
         return roomService;
     }
 
-    public void setRoomService(RoomServiceImpl roomService) {
+    public void setRoomService(RoomService roomService) {
         this.roomService = roomService;
     }
     
@@ -452,7 +452,7 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
         }
         
         // Get residents by citizen IDs and set their relationships
-        List<Resident> residents = residentService.getResidentsByCitizenIds(residentCitizenIds);
+        List<Resident> residents = residentService.getResidentByCitizenIds(residentCitizenIds);
         for (int i = 0; i < residents.size() && i < relationships.size(); i++) {
             Resident resident = residents.get(i);
             RelationshipType relationship;

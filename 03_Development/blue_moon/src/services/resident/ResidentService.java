@@ -15,6 +15,8 @@ public interface ResidentService {
 	
 	Resident getResidentByCitizenId(String citizenId) throws ServiceException; //
 
+	List<Resident> getResidentByCitizenIds(List<String> citizenIds) throws ServiceException;
+	
 	List<Resident> getResidentsByHouseholdId(int householdId) throws ServiceException;
 	
 	List<Resident> getResidentsByIds(List<Integer> residentIds) throws ServiceException;

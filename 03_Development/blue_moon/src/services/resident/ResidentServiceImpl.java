@@ -24,6 +24,32 @@ public class ResidentServiceImpl  implements ResidentService {
 	}
 
     @Override
+	public List<Resident> getResidentByCitizenIds(List<String> citizenIds) throws ServiceException {
+        if (citizenIds == null || citizenIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        
+        List<Resident> residents = new ArrayList<>();
+        List<String> notFoundIds = new ArrayList<>();
+        
+        for (String citizenId : citizenIds) {
+            try {
+                Resident resident = getResidentByCitizenId(citizenId);
+                residents.add(resident);
+            } catch (ServiceException e) {
+                notFoundIds.add(citizenId);
+            }
+        }
+        
+        if (!notFoundIds.isEmpty()) {
+            throw new ServiceException("Không tìm thấy cư dân với CCCD: " + String.join(", ", notFoundIds));
+        }
+        
+        return residents;
+	}
+
+
+	@Override
 	public List<Resident> getResidentsByHouseholdId(int householdId) throws ServiceException {
     	return residentDAO.findByHouseholdId(householdId);
 	}
