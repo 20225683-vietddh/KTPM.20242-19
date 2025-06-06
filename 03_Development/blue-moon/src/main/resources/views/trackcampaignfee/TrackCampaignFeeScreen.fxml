@@ -120,7 +120,7 @@
                         <Line endX="1006.0" startX="-100.0" />
                         <HBox prefWidth="200.0">
                            <VBox.margin>
-                              <Insets bottom="30.0" top="30.0" />
+                              <Insets bottom="20.0" top="20.0" />
                            </VBox.margin>
                            <children>
                               <Label fx:id="lblCampaignFeeName" alignment="CENTER" prefWidth="1106.0">
@@ -135,7 +135,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <ScrollPane prefHeight="420.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: black; -fx-border-radius: 10;">
+                  <ScrollPane prefHeight="440.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: black; -fx-border-radius: 10;">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="1080.0" style="-fx-background-color: white;">
                            <children>

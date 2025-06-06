@@ -26,6 +26,8 @@ import java.util.Optional;
 import java.util.Map;
 import java.util.HashMap;
 import utils.ReceiptGenerator;
+import java.awt.Desktop;
+import java.io.File;
 
 public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
 	@FXML private Button btnClose;
@@ -64,7 +66,7 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
         int totalOutstandingAmount = totalExpectedAmount - totalPaidAmount;
 		loadForm();
 		btnClose.setOnAction(e -> handleClose());
-		btnChargeFee.setOnAction(e -> handleChargeFee(totalOutstandingAmount));
+		btnChargeFee.setOnAction(e -> handleChargeFee(totalExpectedAmount, totalOutstandingAmount));
 	}
 	
 	private void loadForm() {
@@ -95,6 +97,7 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
 	        if (totalOutstandingAmount > 0) {
 	        	lblOutstandingAmount.setText(utils.Utils.formatCurrency(totalOutstandingAmount) + " đồng.");
 	        	lblOverpaidAmount.setText("0 đồng.");
+	        	btnChargeFee.setDisable(false);
 	        } else {
 	        	btnChargeFee.setDisable(true);
 	        	lblOutstandingAmount.setText("0 đồng");
@@ -218,29 +221,31 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
 		}
 	}
 	
-	private void handleChargeFee(int totalExpectedAmount) {
+	private void handleChargeFee(int totalExpectedAmount, int totalOutstandingAmount) {
 		try {
-			String option = ConfirmationDialog.getOption("Bạn có chắc chắn hộ dân đã nộp đủ toàn bộ số tiền còn thiếu " + utils.Utils.formatCurrency(totalExpectedAmount) + " đồng không?");
+			String option = ConfirmationDialog.getOption("Bạn có chắc chắn hộ dân đã nộp đủ toàn bộ số tiền còn thiếu " + utils.Utils.formatCurrency(totalOutstandingAmount) + " đồng không?");
 			switch (option) {
 			case "YES":
 				service.updatePaidAmount(campaignFee.getId(), household.getHouseholdId(), getCompulsoryFeeIds());
-				InformationDialog.showNotification("Thành công", "Xác nhận thu tiền thành công. Biên lai đã được xuất dưới dạng file .docx.");
 				Map<String, Integer> feeWithExpectedAmounts = this.getFeeNameWithExpectedAmount();
 				ReceiptGenerator generator = new ReceiptGenerator();
-				generator.generateReceipt("output/bien_lai_cac_khoan_bat_buoc_ho_dan_" + household.getHouseholdId() + "_dot_thu_" + campaignFee.getId() + ".docx",
+				String filePath = "output/bien_lai_cac_khoan_bat_buoc_ho_dan_" + household.getHouseholdId() + "_dot_thu_" + campaignFee.getId() + ".docx";
+				generator.generateReceipt(filePath,
                         household.getHouseNumber(),
                         campaignFee.getName(),
                         feeWithExpectedAmounts,
                         totalExpectedAmount,
-                        "Kế toán"
+                        "Kế toán chung cư Blue Moon"
                         );
+				InformationDialog.showNotification("Thành công", "Xác nhận thu tiền thành công. Biên lai đã được xuất dưới dạng file .docx.");
+				Desktop.getDesktop().open(new File(filePath));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ErrorDialog.showError("Lỗi hệ thống", "Không thể cập nhật số tiền đã được thu trong CSDL!");
 		} catch (IOException e) {
 			e.printStackTrace();
-			ErrorDialog.showError("Lỗi hệ thống", "Không thể tải báo cáo!");
+			ErrorDialog.showError("Lỗi hệ thống", "Không thể tải biên lai nộp tiền!");
 		} finally {
 			handleClose();
 		}
