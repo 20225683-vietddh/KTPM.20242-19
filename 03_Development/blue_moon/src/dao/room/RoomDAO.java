@@ -7,9 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.DAO;
+import exception.ServiceException;
 import models.Room;
 import utils.DatabaseConnection;
+import utils.Utils;
 
 public class RoomDAO {
 	private final Connection conn;
@@ -25,7 +26,8 @@ public class RoomDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                rooms.add(extractRoomFromResultSet(rs));
+            	Room room = Utils.mapResultSetToRoom(rs);
+                rooms.add(room);
             }
         } catch (SQLException e) {
             System.err.println("Error in findAll(): " + e.getMessage());
@@ -42,13 +44,30 @@ public class RoomDAO {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return extractRoomFromResultSet(rs);
+                return Utils.mapResultSetToRoom(rs);
             } else {
                 throw new ServiceException("Room with ID " + id + " not found.");
             }
         } catch (SQLException e) {
             System.err.println("Database error in findById(): " + e.getMessage());
             throw new ServiceException("Database error when finding room: " + id);
+        }
+    }
+    
+    public Room findByHouseholdId(int hhid) throws ServiceException {
+        String sql = "SELECT * FROM room WHERE household_id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, hhid);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return Utils.mapResultSetToRoom(rs);
+            } else {
+                throw new ServiceException("Room with Household ID " + hhid + " not found.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error in findByHouseholdId(): " + e.getMessage());
+            throw new ServiceException("Database error when finding room: " + hhid);
         }
     }
 
@@ -59,7 +78,7 @@ public class RoomDAO {
             stmt.setString(1, roomNumber);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return extractRoomFromResultSet(rs);
+                return Utils.mapResultSetToRoom(rs);
             } else {
                 throw new ServiceException("Room with number " + roomNumber + " not found.");
             }
@@ -103,17 +122,33 @@ public class RoomDAO {
         }
     }
 
-    private Room extractRoomFromResultSet(ResultSet rs) throws SQLException {
-        Room room = new Room();
-        room.setId(rs.getInt("id"));
-        room.setRoomNumber(rs.getString("room_number"));
-        room.setOccupied(rs.getBoolean("is_occupied"));
-        
-        int householdId = rs.getInt("household_id");
-        if (!rs.wasNull()) {
-            room.setHouseholdId(householdId);
+    public Float getAreaByRoomNumber(String roomNumber) throws ServiceException {
+        Room room = findByRoomNumber(roomNumber);
+        return room.getArea();
+    }
+
+    public void add(Room room) throws ServiceException {
+        String sql = "INSERT INTO room (room_number, area, is_occupied, household_id) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            Utils.setRoomData(stmt, room);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error in add(): " + e.getMessage());
+            throw new ServiceException("Error adding room: " + e.getMessage());
         }
-        
-        return room;
+    }
+
+    public void update(Room room) throws ServiceException {
+        String sql = "UPDATE room SET room_number = ?, area = ?, is_occupied = ?, household_id = ? WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            Utils.setRoomData(stmt, room);
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new ServiceException("Room with ID " + room.getId() + " not found.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error in update(): " + e.getMessage());
+            throw new ServiceException("Error updating room: " + e.getMessage());
+        }
     }
 } 

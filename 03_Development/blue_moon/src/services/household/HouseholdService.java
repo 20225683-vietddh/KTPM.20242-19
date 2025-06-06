@@ -15,28 +15,34 @@ public interface HouseholdService {
 	
     
     
-    List<Household> getAllHouseholds() throws ServiceException;
+    List<Household> getAll() throws ServiceException;
     
     Household getHouseholdById(int householdId) throws HouseholdNotExist, ServiceException;
   
     List<Resident> getResidents(int householdId) throws HouseholdNotExist, ServiceException;
     
-    List<Integer> getResidentIds(int householdId) throws HouseholdNotExist;
+    List<Integer> getResidentIds(int householdId) throws HouseholdNotExist, ServiceException;
     
    
-    int getResidentCount(int id) throws HouseholdNotExist, ServiceException;
+	int getResidentCount(int id) throws HouseholdNotExist, ServiceException;
 
-	void addHousehold(Household household) throws HouseholdAlreadyExistsException,ResidentNotFoundException,InvalidHouseholdDataException, HouseholdNotExist, SQLException;
+	void addHousehold(Household household) throws HouseholdAlreadyExistsException,ResidentNotFoundException,InvalidHouseholdDataException, HouseholdNotExist, SQLException, ServiceException;
    
-    void addResidentToHousehold(Household h, int ResidentId) throws HouseholdNotExist, ServiceException, SQLException;
+    void addResidentToHousehold(Household h, String ResidentCitizenId) throws HouseholdNotExist, ServiceException, SQLException;
 
-    void addResidentsToHousehold(Household h, List<Integer> residentIds) throws HouseholdNotExist, ServiceException, SQLException;
+    void addResidentsToHousehold(Household h, List<String> residentCitizenIds) throws HouseholdNotExist, ServiceException, SQLException;
     
 	void updateHousehold(Household household) throws HouseholdNotExist,HouseholdAlreadyExistsException,ResidentNotFoundException,
-    	InvalidHouseholdDataException, SQLException;
+    	InvalidHouseholdDataException, SQLException, ServiceException;
     
   
     boolean deleteHousehold(int id) throws HouseholdNotExist, SQLException;
     
-    void removeResident(Household h, int ResidentId) throws HouseholdNotExist, ServiceException, SQLException;
+    void removeResident(Household h, String ResidentCitizenId) throws HouseholdNotExist, ServiceException, SQLException;
+    
+    boolean phoneExists(String phone) throws ServiceException;
+    
+    boolean emailExists(String email) throws ServiceException;
+    
+    boolean roomExists(String roomNumber) throws ServiceException;
 }

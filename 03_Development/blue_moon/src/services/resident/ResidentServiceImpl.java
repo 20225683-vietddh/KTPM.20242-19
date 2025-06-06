@@ -11,10 +11,10 @@ import models.Resident;
 public class ResidentServiceImpl  implements ResidentService {
 
 	private final ResidentDAO residentDAO = new ResidentDAO();
-
+	
 	@Override
-	public Resident getResidentById(int residentId) throws ServiceException {
-		return residentDAO.findById(residentId) ;
+	public Resident getResidentById(int rId) throws ServiceException {
+		return residentDAO.findById(rId);
 	}
 
 
@@ -53,17 +53,17 @@ public class ResidentServiceImpl  implements ResidentService {
 	public List<Resident> getResidentsByHouseholdId(int householdId) throws ServiceException {
     	return residentDAO.findByHouseholdId(householdId);
 	}
-
-
-	@Override
-	public List<Resident> getResidentsByIds(List<Integer> residentIds) throws ServiceException {
-		List<Resident> residents = new ArrayList<>();
-    	for (int residentId : residentIds) {
-    		Resident r = residentDAO.findById(residentId);
-    		residents.add(r);
-    	}
-    	return residents;
-	}
+//
+//
+//	@Override
+//	public List<Resident> getResidentsByResidentsCitizenIds(List<String> residentCitizenIds) throws ServiceException {
+//		List<Resident> residents = new ArrayList<>();
+//    	for (String residentId : residentCitizenIds) {
+//    		Resident r = residentDAO.findByCitizenId(residentId);
+//    		residents.add(r);
+//    	}
+//    	return residents;
+//	}
 
 
 	@Override
@@ -101,8 +101,8 @@ public class ResidentServiceImpl  implements ResidentService {
 	}
 
     @Override
-	public boolean deleteResident(int residentId) throws ServiceException, SQLException {
-    	residentDAO.delete(residentId);
+	public boolean deleteResident(String residentCitizenId) throws ServiceException, SQLException {
+    	residentDAO.delete(residentCitizenId);
     	return true;
 	}
 
@@ -113,12 +113,13 @@ public class ResidentServiceImpl  implements ResidentService {
     	
     }
 
-	public void setHouseholdOwnerByResidentId(int ownerId) throws ServiceException, SQLException {
-		residentDAO.setHouseholdOwnerByResidentId(ownerId);
+	public void setHouseholdOwnerByResidentCitizenId(String ownerCitizenId) throws ServiceException, SQLException {
+		residentDAO.setHouseholdOwnerByResidentCitizenId(ownerCitizenId);
 	}
 
-
-
+    public List<Resident> getAllResidents() throws ServiceException {
+        return residentDAO.findAll();
+    }
 
 
 }

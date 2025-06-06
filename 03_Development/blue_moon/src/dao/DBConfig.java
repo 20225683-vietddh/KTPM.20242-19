@@ -15,20 +15,20 @@ public class DBConfig {
                 props.load(input);
                 return props;
             } else {
-                System.err.println("Không tìm thấy file config.properties trong classpath");
+                System.err.println("khong tim thay file config.properties trong classpath");
                 
-                // Thử đọc từ đường dẫn tương đối
+                // Thá»­ Ä‘á»�c tá»« Ä‘Æ°á»�ng dáº«n tÆ°Æ¡ng Ä‘á»‘i
                 try (FileInputStream fileInput = new FileInputStream("src/config.properties")) {
                     props.load(fileInput);
                     return props;
                 } catch (IOException e) {
-                    System.err.println("Không tìm thấy file config.properties trong thư mục src: " + e.getMessage());
+                    System.err.println("khong tim thay file config.properties trong thu muc src: " + e.getMessage());
                 }
             }
         } catch (IOException e) {
-            System.err.println("Lỗi khi đọc file cấu hình: " + e.getMessage());
+            System.err.println("loi khi tai file cau hinh: " + e.getMessage());
         }
         
-        return null; // Trả về null để biết không tìm thấy file cấu hình
+        return null;
     }
 }

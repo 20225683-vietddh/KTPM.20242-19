@@ -2,6 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
@@ -56,7 +58,7 @@
                         <Insets bottom="20.0" left="30.0" right="30.0" top="30.0" />
                      </padding>
                      <children>
-                        <!-- Household ID (Always Read-only) -->
+                        <!-- ID -->
                         <VBox spacing="5.0">
                            <children>
                               <Label text="ID nhân khẩu:" textFill="#43a5dc">
@@ -72,7 +74,7 @@
                            </children>
                         </VBox>
                         
-                        <!-- Household Number -->
+                        <!-- Full Name -->
                         <VBox spacing="5.0">
                            <children>
                               <Label text="Họ và tên: " textFill="#43a5dc">
@@ -80,7 +82,7 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="tfFullName" editable="false" prefHeight="35.0" promptText="Nhập số hộ khẩu" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                              <TextField fx:id="tfFullName" editable="false" prefHeight="35.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -88,7 +90,7 @@
                            </children>
                         </VBox>
                         
-                        <!-- Owner Name -->
+                        <!-- Date of Birth -->
                         <VBox spacing="5.0">
                            <children>
                               <Label text="Ngày tháng năm sinh:" textFill="#43a5dc">
@@ -96,15 +98,11 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="tfDateOfBirth" editable="false" prefHeight="35.0" promptText="Nhập tên chủ hộ" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextField>
+                              <DatePicker fx:id="dpDateOfBirth" editable="false" prefHeight="35.0" prefWidth="440.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;" />
                            </children>
                         </VBox>
                         
-                        <!-- Address -->
+                        <!-- Gender -->
                         <VBox spacing="5.0">
                            <children>
                               <Label text="Giới tính:" textFill="#43a5dc">
@@ -112,15 +110,11 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="tfGender" editable="false" prefHeight="35.0" promptText="Nhập địa chỉ" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextField>
+                              <ComboBox fx:id="cbGender" editable="false" prefHeight="35.0" prefWidth="440.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;" />
                            </children>
                         </VBox>
                         
-                        <!-- Area -->
+                        <!-- Ethnicity -->
                         <VBox spacing="5.0">
                            <children>
                               <Label text="Dân tộc:" textFill="#43a5dc">
@@ -128,15 +122,11 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="tfEthnicity" editable="false" prefHeight="35.0" promptText="Nhập khu vực" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextField>
+                              <ComboBox fx:id="cbEthnicity" editable="false" prefHeight="35.0" prefWidth="440.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;" />
                            </children>
                         </VBox>
                         
-                        <!-- Phone -->
+                        <!-- Religion -->
                         <VBox spacing="5.0">
                            <children>
                               <Label text="Tôn giáo:" textFill="#43a5dc">
@@ -144,7 +134,7 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="tfReligion" editable="false" prefHeight="35.0" promptText="Nhập số điện thoại" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                              <TextField fx:id="tfReligion" editable="false" prefHeight="35.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -152,7 +142,7 @@
                            </children>
                         </VBox>
                         
-                        <!-- Email -->
+                        <!-- Citizen ID -->
                         <VBox spacing="5.0">
                            <children>
                               <Label text="Số CCCD:" textFill="#43a5dc">
@@ -160,7 +150,7 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="tfCitizenId" editable="false" prefHeight="35.0" promptText="Nhập địa chỉ email" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                              <TextField fx:id="tfCitizenId" editable="false" prefHeight="35.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -168,7 +158,7 @@
                            </children>
                         </VBox>
                         
-                        <!-- Household Size (Always Read-only, calculated from members) -->
+                        <!-- Date of Issue -->
                         <VBox spacing="5.0">
                            <children>
                               <Label text="Ngày cấp CCCD:" textFill="#43a5dc">
@@ -176,28 +166,24 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="tfDateOfIssue" editable="false" prefHeight="35.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextField>
+                              <DatePicker fx:id="dpDateOfIssue" editable="false" prefHeight="35.0" prefWidth="440.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;" />
                            </children>
                         </VBox>
-                        <VBox layoutX="40.0" layoutY="567.0" spacing="5.0">
+                        
+                        <!-- Place of Issue -->
+                        <VBox spacing="5.0">
                            <children>
                               <Label text="Nơi cấp CCCD:" textFill="#43a5dc">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="tfPlaceOfIssue" editable="false" prefHeight="35.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextField>
+                              <ComboBox fx:id="cbPlaceOfIssue" editable="false" prefHeight="35.0" prefWidth="440.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;" />
                            </children>
                         </VBox>
-                        <VBox layoutX="40.0" layoutY="642.0" spacing="5.0">
+                        
+                        <!-- Occupation -->
+                        <VBox spacing="5.0">
                            <children>
                               <Label text="Nghề nghiệp: " textFill="#43a5dc">
                                  <font>
@@ -211,7 +197,9 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="40.0" layoutY="717.0" spacing="5.0">
+                        
+                        <!-- Added Date -->
+                        <VBox spacing="5.0">
                            <children>
                               <Label text="Ngày thêm vào hệ thống:" textFill="#43a5dc">
                                  <font>
@@ -225,52 +213,36 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="40.0" layoutY="792.0" spacing="5.0">
+                        
+                        <!-- Relationship with Head -->
+                        <VBox spacing="5.0">
                            <children>
                               <Label text="Quan hệ với chủ hộ:" textFill="#43a5dc">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="tfRelationship_with_head" editable="false" prefHeight="35.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                              <TextField fx:id="tfRelationshipWithHead" editable="false" prefHeight="35.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="40.0" layoutY="868.0" spacing="5.0">
-                           <children>
-                              <Label text="Ghi chú:" textFill="#43a5dc">
-                                 <font>
-                                    <Font name="System Bold" size="14.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="tfNote" editable="false" prefHeight="35.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextField>
-                           </children>
-                        </VBox>
+                        
+                        <!-- Close Button -->
+                        <Button fx:id="btnClose" mnemonicParsing="false" prefHeight="40.0" prefWidth="440.0" style="-fx-background-color: #43A5DC; -fx-background-radius: 20;" text="Đóng" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </Button>
                      </children>
                   </VBox>
                </content>
             </ScrollPane>
-            
-            <!-- Button Section -->
-            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="500.0" spacing="20.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #d0d0d0; -fx-border-width: 1 0 0 0;">
-               <children>
-                  <Button fx:id="btnClose" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;" text="Đóng">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Button>
-               </children>
-               <padding>
-                  <Insets bottom="10.0" top="10.0" />
-               </padding>
-            </HBox>
          </children>
       </VBox>
    </children>

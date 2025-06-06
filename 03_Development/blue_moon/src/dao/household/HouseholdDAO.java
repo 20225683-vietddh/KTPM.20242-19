@@ -20,83 +20,6 @@ import utils.DatabaseConnection;
 import utils.Utils;
 
 public class HouseholdDAO {
-//    private Connection connection;
-//    
-//    public HouseholdDAO() {
-//        this.connection = DatabaseConnection.getConnection();
-//    }
-//    
-//    public List<Household> findAll() {
-//    	return HouseholdDB.HOUSEHOLD_SAMPLE;
-//    }
-//    
-//    public Household findById(int id) throws HouseholdNotExist {
-//        for (Household household :  HouseholdDB.HOUSEHOLD_SAMPLE) {
-//        	if (household.getId() == id) {
-//        		 return household;
-//        	}
-//        }
-//        
-//        throw new HouseholdNotExist("Cannot find household from id"+id);
-//       
-//    }
-//    
-//    public Household findByHouseholdNumber(String householdNumber) {
-//    	for (Household household :  HouseholdDB.HOUSEHOLD_SAMPLE) {
-//        	if (household.getHouseholdNumber().equals(householdNumber)) {
-//        		 return household;
-//        	}
-//        }
-//    	
-//    	return null;
-//	}
-//
-//	public void add(Household saveHousehold) {
-//		//try catch 
-//    	HouseholdDB.HOUSEHOLD_SAMPLE.add(saveHousehold);
-//        return ;
-//    }
-//
-//	public void update(Household updatedHousehold) throws HouseholdNotExist {
-//		System.out.println(updatedHousehold.getEmail());
-//		Household household = findByHouseholdNumber(updatedHousehold.getHouseholdNumber());
-//		System.out.println(household.getEmail());
-//		HouseholdDB.HOUSEHOLD_SAMPLE.remove(household);
-//		HouseholdDB.HOUSEHOLD_SAMPLE.add(updatedHousehold);
-//
-//	}
-//    
-//    public void delete(int id) throws HouseholdNotExist {
-//    	Household household = findById(id);
-//    		HouseholdDB.HOUSEHOLD_SAMPLE.remove(household);
-//    }
-//
-//    public void addResidentToHousehold(Household h, String memberId) throws HouseholdNotExist {
-//        if (!h.getResidentIds().contains(memberId)) {
-//            h.getResidentIds().add(memberId);
-//            update(h);
-//        } else {
-//            System.out.println("Resident already exists in household.");
-//        }
-//    }
-//
-//    public void removeResident(Household h, String memberId) throws HouseholdNotExist {
-//        if (h.getResidentIds().contains(memberId)) {
-//            h.getResidentIds().remove(memberId);
-//            update(h);
-//        } else {
-//            System.out.println("Resident not found in household.");
-//        }
-//    }
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	private final Connection conn;
 
     public HouseholdDAO() {
@@ -104,31 +27,18 @@ public class HouseholdDAO {
     }
 
     public List<Household> findAll() throws ServiceException {
-        ResidentServiceImpl memberService = new ResidentServiceImpl();  
-        
         List<Household> households = new ArrayList<>();
-        String sql = "SELECT * FROM households";
+        String sql = "SELECT * FROM households ORDER BY id";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Household h = Utils.mapResultSetToHousehold(rs);
-                
-                // Get residents for this household
-                try {
-                    List<Resident> residents = memberService.getResidentsByHouseholdId(h.getId());
-                    h.setResidents(residents);
-                } catch (ServiceException e) {
-                    System.err.println("No residents for household ID " + h.getId());
-                    h.setResidents(new ArrayList<>());
-                }
-                
-                households.add(h);
+                Household household = Utils.mapResultSetToHousehold(rs);
+                households.add(household);
             }
         } catch (SQLException e) {
             System.err.println("Error in findAll(): " + e.getMessage());
-            e.printStackTrace();
-            throw new ServiceException("Database error when finding all households: " + e.getMessage());
+            throw new ServiceException("Error getting all households: " + e.getMessage());
         }
 
         return households;
@@ -154,65 +64,55 @@ public class HouseholdDAO {
 
       
     public int add(Household household) throws SQLException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        
-        try {
-            conn = DatabaseConnection.getConnection();
-            conn.setAutoCommit(false); // Start transaction
-            
-            // Insert with auto-generated ID from sequence
-            String sql = "INSERT INTO households (email, phone, address, owner_name, area, household_size, owner_id, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
-            stmt = conn.prepareStatement(sql);
-            
-            Utils.setHouseholdData(stmt, household);
-            
-            // Convert String to Date for database
-            if (household.getCreationDate() != null) {
-                stmt.setDate(8, Date.valueOf(household.getCreationDate()));
-            } else {
-                stmt.setDate(8, new java.sql.Date(System.currentTimeMillis()));
-            }
-            
-            rs = stmt.executeQuery();
-            
+        // First, reset the sequence if needed
+        try (Statement stmt = conn.createStatement()) {
+            // Get current max id
+            ResultSet rs = stmt.executeQuery("SELECT MAX(id) FROM households");
             if (rs.next()) {
-                int generatedId = rs.getInt("id");
-                household.setId(generatedId);
-                conn.commit();
-                return generatedId;
-            }
-            
-            throw new SQLException("Failed to get generated ID for household");
-            
-        } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ex) {
-                    throw new SQLException("Error rolling back transaction", ex);
+                int maxId = rs.getInt(1);
+                // Reset sequence to start from max + 1
+                if (maxId > 0) {
+                    stmt.execute("ALTER SEQUENCE households_id_seq RESTART WITH " + (maxId + 1));
                 }
             }
-            throw new SQLException("Error adding household: " + e.getMessage(), e);
-        } finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignored */ }
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) { /* ignored */ }
-            if (conn != null) try { conn.setAutoCommit(true); } catch (SQLException e) { /* ignored */ }
+        } catch (SQLException e) {
+            System.err.println("Warning: Could not reset sequence: " + e.getMessage());
+            // Continue anyway as this is not critical
+        }
+        
+        String sql = "INSERT INTO households (house_number, street, ward, district, household_size, owner_id, phone, email, creation_date) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            Utils.setHouseholdData(stmt, household);
+            stmt.executeUpdate();
+            
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                throw new SQLException("Creating household failed, no ID obtained.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error in add(): " + e.getMessage());
+            throw e;
         }
     }
+    
 
     public void update(Household household) throws SQLException {
-        String sql = "UPDATE households SET email = ?, phone = ?, address = ?, owner_name = ?, area = ?, household_size = ?, owner_id = ? WHERE id = ?";
+        String sql = "UPDATE households SET house_number = ?, street = ?, ward = ?, district = ?, " +
+                    "household_size = ?, owner_id = ?, phone = ?, email = ?, creation_date = ? " +
+                    "WHERE id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-        	Utils.setHouseholdData(stmt, household);
+            Utils.setHouseholdData(stmt, household);
+            stmt.setInt(10, household.getId());  // Set ID for WHERE clause
             
-            int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected == 0) {
-                throw new SQLException("No household updated with ID: " + household.getId());
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating household failed, no rows affected.");
             }
-            System.out.println("Updated " + rowsAffected + " household(s)");
         } catch (SQLException e) {
             System.err.println("Error in update(): " + e.getMessage());
             throw e;
@@ -289,7 +189,54 @@ public class HouseholdDAO {
 		update(household);
 	}
 	
+	public boolean phoneExists(String phone) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM households WHERE phone = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, phone);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking phone existence: " + e.getMessage());
+            throw e;
+        }
+        
+        return false;
+    }
 	
-
+	public boolean emailExists(String email) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM households WHERE email = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking email existence: " + e.getMessage());
+            throw e;
+        }
+        
+        return false;
+    }
 	
+	public boolean roomExists(String roomNumber) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM households WHERE house_number = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, roomNumber);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking room existence: " + e.getMessage());
+            throw e;
+        }
+        
+        return false;
+    }
 }

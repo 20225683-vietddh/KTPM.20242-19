@@ -7,19 +7,19 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.layout.HBox;
 import java.util.Optional;
-import controllers.resident.ManageResidentController;
+import controllers.resident.ResidentController;
 import models.Resident;
 import views.messages.ErrorDialog;
 import javafx.stage.Stage;
 
 public class ResidentCellFactory extends TableCell<Resident, Void> {
-    private final ManageResidentController controller;
+    private final ResidentController controller;
     private final Runnable refreshCallback;
 
-    public ResidentCellFactory(ManageResidentController controller, ResidentListHandler parentHandler) {
+    public ResidentCellFactory(ResidentController controller, ResidentListHandler parentHandler) {
         this.controller = controller;
-        this.refreshCallback = parentHandler::refreshTable; // GÃ¡n callback
-        System.out.println("Khá»Ÿi táº¡o ResidentCellFactory, refreshCallback: " + (refreshCallback != null ? "not null" : "null"));
+        this.refreshCallback = parentHandler::refreshTable;
+        System.out.println("Khoi tao ResidentCellFactory, refreshCallback: " + (refreshCallback != null ? "not null" : "null"));
     }
 
     @Override
@@ -29,8 +29,8 @@ public class ResidentCellFactory extends TableCell<Resident, Void> {
             setGraphic(null);
         } else {
             Button btnView = new Button("Xem");
-            Button btnEdit = new Button("Sá»­a");
-            Button btnDelete = new Button("XÃ³a");
+            Button btnEdit = new Button("Sua");
+            Button btnDelete = new Button("Xoa");
 
             btnView.setOnAction(e -> handleViewResident(getTableView().getItems().get(getIndex())));
             btnEdit.setOnAction(e -> handleEditResident(getTableView().getItems().get(getIndex())));
@@ -43,61 +43,61 @@ public class ResidentCellFactory extends TableCell<Resident, Void> {
 
     private void handleViewResident(Resident resident) {
         try {
-            ResidentViewFormHandler formHandler = new ResidentViewFormHandler(new Stage(), resident); // Truyá»�n Stage
+            ResidentViewFormHandler formHandler = new ResidentViewFormHandler(new Stage(), resident);
             formHandler.show();
         } catch (Exception e) {
-            ErrorDialog.showError("Lá»—i hiá»ƒn thá»‹ thÃ´ng tin", "KhÃ´ng thá»ƒ má»Ÿ form xem nhÃ¢n kháº©u: " + e.getMessage());
+            ErrorDialog.showError("Loi hien thi thong tin", "Khong the mo form xem nhan khau: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void handleEditResident(Resident resident) {
         try {
-        	System.out.println("Má»Ÿ ResidentFormHandler cho resident ID: " + resident.getId() + 
+            System.out.println("Mo ResidentFormHandler cho resident ID: " + resident.getId() + 
                     ", refreshCallback: " + (refreshCallback != null ? "not null" : "null"));
- if (refreshCallback == null) {
-     System.err.println("refreshCallback lÃ  null trong handleEditResident, khÃ´ng thá»ƒ lÃ m má»›i TableView");
- }
-            ResidentFormHandler formHandler = new ResidentFormHandler(resident, refreshCallback); // Truyá»�n callback
+            if (refreshCallback == null) {
+                System.err.println("refreshCallback la null trong handleEditResident, khong the lam moi TableView");
+            }
+            ResidentFormHandler formHandler = new ResidentFormHandler(resident, refreshCallback);
             formHandler.show();
         } catch (Exception e) {
-            ErrorDialog.showError("Lá»—i má»Ÿ form", "KhÃ´ng thá»ƒ sá»­a nhÃ¢n kháº©u: " + e.getMessage());
+            ErrorDialog.showError("Loi mo form", "Khong the sua nhan khau: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void handleDeleteResident(Resident resident) {
         try {
-            // Táº¡o confirmation dialog
+            // Tao confirmation dialog
             Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmAlert.setTitle("XÃ¡c nháº­n xÃ³a");
-            confirmAlert.setHeaderText("Báº¡n cÃ³ cháº¯c cháº¯n xÃ³a nhÃ¢n kháº©u nÃ y khÃ´ng?");
-            confirmAlert.setContentText("Há»� tÃªn: " + resident.getFullName() + "\nID: " + resident.getId());
+            confirmAlert.setTitle("Xac nhan xoa");
+            confirmAlert.setHeaderText("Ban co chac chan xoa nhan khau nay khong?");
+            confirmAlert.setContentText("Ho ten: " + resident.getFullName() + "\nID: " + resident.getId());
 
-            // TÃ¹y chá»‰nh cÃ¡c nÃºt
+            // Tuy chinh cac nut
             ButtonType buttonYes = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-            ButtonType buttonNo = new ButtonType("Há»§y", ButtonBar.ButtonData.CANCEL_CLOSE);
+            ButtonType buttonNo = new ButtonType("Huy", ButtonBar.ButtonData.CANCEL_CLOSE);
             confirmAlert.getButtonTypes().setAll(buttonYes, buttonNo);
 
-            // Hiá»ƒn thá»‹ dialog vÃ  chá»� user response
+            // Hien thi dialog va cho user response
             Optional<ButtonType> result = confirmAlert.showAndWait();
 
-            // Chá»‰ xÃ³a khi user chá»�n "OK"
+            // Chi xoa khi user chon "OK"
             if (result.isPresent() && result.get() == buttonYes) {
-                controller.handleDeleteResident(resident.getId());
+                controller.deleteResident(resident.getCitizenId());
                 if (refreshCallback != null) {
-                    refreshCallback.run(); // LÃ m má»›i TableView
+                    refreshCallback.run(); // Lam moi TableView
                 }
 
-                // Hiá»ƒn thá»‹ thÃ´ng bÃ¡o thÃ nh cÃ´ng
+                // Hien thi thong bao thanh cong
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("ThÃ nh cÃ´ng");
+                successAlert.setTitle("Thanh cong");
                 successAlert.setHeaderText(null);
-                successAlert.setContentText("Ä�Ã£ xÃ³a nhÃ¢n kháº©u thÃ nh cÃ´ng!");
+                successAlert.setContentText("Da xoa nhan khau thanh cong!");
                 successAlert.showAndWait();
             }
         } catch (Exception e) {
-            ErrorDialog.showError("Lá»—i xÃ³a nhÃ¢n kháº©u", "KhÃ´ng thá»ƒ xÃ³a nhÃ¢n kháº©u: " + e.getMessage());
+            ErrorDialog.showError("Loi xoa nhan khau", "Khong the xoa nhan khau: " + e.getMessage());
             e.printStackTrace();
         }
     }

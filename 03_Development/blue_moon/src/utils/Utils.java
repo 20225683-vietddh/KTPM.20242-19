@@ -7,12 +7,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.math.BigDecimal;
 
 import javafx.scene.image.ImageView;
 import javafx.animation.RotateTransition;
 import javafx.util.Duration;
 import models.Household;
 import models.Resident;
+import models.Room;
 import services.household.HouseholdService;
 import services.household.HouseholdServiceImpl;
 import services.resident.ResidentService;
@@ -97,7 +99,7 @@ public class Utils {
 	
 	public static void printAllHousehold() throws ServiceException {
 		System.out.println("-------------------------------------------");
-		List<Household> households = householdService.getAllHouseholds();
+		List<Household> households = householdService.getAll();
 		for (Household h : households) System.out.println(h.toString());
 	}
 	
@@ -114,17 +116,8 @@ public class Utils {
 	    household.setStreet(rs.getString("street"));
 	    household.setDistrict(rs.getString("district"));
 	    household.setWard(rs.getString("ward"));
-	    
-	    float area = rs.getFloat("area");
-	    if (rs.wasNull()) {
-	        household.setArea(null);
-	    } else {
-	        household.setArea(area);
-	    }
-
 	    household.setHouseholdSize(rs.getInt("household_size"));
 	    household.setOwnerId(rs.getInt("owner_id"));
-	    household.setOwnerName(rs.getString("owner_name"));
 	    household.setPhone(rs.getString("phone"));
 	    household.setEmail(rs.getString("email"));
 	    
@@ -139,21 +132,24 @@ public class Utils {
 	}
 
 	public static void setHouseholdData(PreparedStatement stmt, Household household) throws SQLException {
+	    // Set house address info
 	    stmt.setString(1, household.getHouseNumber());
 	    stmt.setString(2, household.getStreet());
-	    stmt.setString(3, household.getDistrict());
-	    stmt.setString(4, household.getWard());
-	    if (household.getArea() != null) {
-	        stmt.setFloat(5, household.getArea());
+	    stmt.setString(3, household.getWard());
+	    stmt.setString(4, household.getDistrict());
+	    
+	    // Set household info
+	    stmt.setInt(5, household.getHouseholdSize());
+	    stmt.setInt(6, household.getOwnerId());
+	    stmt.setString(7, household.getPhone());
+	    stmt.setString(8, household.getEmail());
+	    
+	    // Set creation date
+	    if (household.getCreationDate() != null) {
+	        stmt.setDate(9, Date.valueOf(household.getCreationDate()));
 	    } else {
-	        stmt.setNull(5, Types.FLOAT);
+	        stmt.setDate(9, new java.sql.Date(System.currentTimeMillis()));
 	    }
-	    stmt.setInt(6, household.getHouseholdSize());
-	    stmt.setInt(7, household.getOwnerId());
-	    stmt.setString(8, household.getOwnerName());
-	    stmt.setString(9, household.getPhone());
-	    stmt.setString(10, household.getEmail());
-	    stmt.setDate(11, Date.valueOf(household.getCreationDate()));
 	}
 	
 	public static Resident mapResultSetToResident(ResultSet rs) throws SQLException {
@@ -163,12 +159,6 @@ public class Utils {
             rs.getDate("date_of_birth").toLocalDate(),
             Gender.valueOf(rs.getString("gender").toUpperCase()),
             rs.getString("ethnicity"),
-            
-            
-            
-            
-            
-            
             
             rs.getString("religion"),
             rs.getString("citizen_id"),
@@ -183,20 +173,76 @@ public class Utils {
     }
 
     public static void setResidentData(PreparedStatement stmt, Resident resident) throws SQLException {
-    stmt.setString(2, resident.getFullName());
-    stmt.setDate(3, Date.valueOf(resident.getDateOfBirth()));
-    stmt.setString(4, resident.getGender().toString());
-    stmt.setString(5, resident.getEthnicity());
-    stmt.setString(6, resident.getReligion());
-    stmt.setString(7, resident.getCitizenId());
-    stmt.setDate(8, Date.valueOf(resident.getDateOfIssue()));
-    stmt.setString(9, resident.getPlaceOfIssue());
-    stmt.setString(10, resident.getRelationship().toString());
-    stmt.setString(11, resident.getOccupation());
-    stmt.setDate(12, Date.valueOf(resident.getAddedDate()));
-    stmt.setInt(13, resident.getHouseholdId());
-    stmt.setBoolean(14, resident.isHouseholdHead());
-}
+        int paramIndex = 1;
+        
+        // Common fields for both INSERT and UPDATE
+        stmt.setString(paramIndex++, resident.getFullName());
+        stmt.setDate(paramIndex++, Date.valueOf(resident.getDateOfBirth()));
+        stmt.setString(paramIndex++, resident.getGender().toString());
+        stmt.setString(paramIndex++, resident.getEthnicity());
+        stmt.setString(paramIndex++, resident.getReligion());
+        stmt.setString(paramIndex++, resident.getCitizenId());
+        stmt.setDate(paramIndex++, Date.valueOf(resident.getDateOfIssue()));
+        stmt.setString(paramIndex++, resident.getPlaceOfIssue());
+        stmt.setString(paramIndex++, resident.getRelationship().toString());
+        stmt.setString(paramIndex++, resident.getOccupation());
+        stmt.setDate(paramIndex++, Date.valueOf(resident.getAddedDate()));
+        stmt.setInt(paramIndex++, resident.getHouseholdId());
+        stmt.setBoolean(paramIndex++, resident.isHouseholdHead());
+        
+        // For UPDATE: Set ID last (for WHERE clause)
+        if (stmt.toString().toUpperCase().contains("UPDATE")) {
+            stmt.setInt(paramIndex, resident.getId());
+        }
+    }
+    
+
+    public static Room mapResultSetToRoom(ResultSet rs) throws SQLException {
+        Room room = new Room();
+        room.setId(rs.getInt("id"));
+        room.setRoomNumber(rs.getString("room_number"));
+        room.setOccupied(rs.getBoolean("is_occupied"));
+        
+        int householdId = rs.getInt("household_id");
+        if (!rs.wasNull()) {
+            room.setHouseholdId(householdId);
+        }
+        
+        // Get area (can be null)
+        BigDecimal area = rs.getBigDecimal("area");
+        if (area != null) {
+            room.setArea(area.floatValue());
+        }
+        
+        return room;
+    }
+    
+    public static void setRoomData(PreparedStatement stmt, Room room) throws SQLException {
+        int paramIndex = 1;
+        
+        stmt.setString(paramIndex++, room.getRoomNumber());
+        
+        // Set area (can be null)
+        if (room.getArea() != null) {
+            stmt.setFloat(paramIndex++, room.getArea());
+        } else {
+            stmt.setNull(paramIndex++, Types.FLOAT);
+        }
+        
+        stmt.setBoolean(paramIndex++, room.isOccupied());
+        
+        // Set household_id (can be null)
+        if (room.getHouseholdId() != null) {
+            stmt.setInt(paramIndex++, room.getHouseholdId());
+        } else {
+            stmt.setNull(paramIndex++, Types.INTEGER);
+        }
+        
+        // For UPDATE: Set ID last (for WHERE clause)
+        if (stmt.toString().toUpperCase().contains("UPDATE")) {
+            stmt.setInt(paramIndex, room.getId());
+        }
+    }
 	
 	
 }

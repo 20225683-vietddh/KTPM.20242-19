@@ -2,8 +2,8 @@ package utils.enums;
 
 public enum Role {
 	ADMIN("Administrator"),
-    ACCOUNTANT("Kế toán"),
-    LEADER("Tổ trưởng/Tổ phó");
+    ACCOUNTANT("Ke toan"),
+    LEADER("To truong/To pho");
 	
 	private String displayName;
 	

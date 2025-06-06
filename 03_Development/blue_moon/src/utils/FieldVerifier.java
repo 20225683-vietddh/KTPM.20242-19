@@ -4,157 +4,173 @@ import java.util.regex.Pattern;
 
 import services.resident.ResidentService;
 import services.resident.ResidentServiceImpl;
+import exception.ServiceException;
+import models.Resident;
 
 public class FieldVerifier {
     
-    // Email validation pattern
+    // Regular expression patterns
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
         "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$"
     );
-    
-    // Phone number pattern (9-10 digits, no spaces)
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{9,10}$");
+    private static final Pattern CITIZEN_ID_PATTERN = Pattern.compile("^\\d{12}$");
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-ZÀ-ỹ\\s]+$");
     
-    // ID pattern (assuming alphanumeric)
-    private static final Pattern ID_PATTERN = Pattern.compile("^[a-zA-Z0-9]+$");
-    
-    /**
-     * Validates if a string is not null and not empty after trimming
-     */
-    public static boolean isNotEmpty(String value) {
-        return value != null && !value.trim().isEmpty();
-    }
-    
-    /**
-     * Validates email format
-     */
-    public static boolean isValidEmail(String email) {
-        if (!isNotEmpty(email)) {
-            return false;
+    public static class ValidationResult {
+        private final boolean isValid;
+        private final String message;
+
+        public ValidationResult(boolean isValid, String message) {
+            this.isValid = isValid;
+            this.message = message;
         }
-        return EMAIL_PATTERN.matcher(email.trim()).matches();
-    }
-    
-    /**
-     * Validates phone number (9-10 digits, no spaces)
-     */
-    public static boolean isValidPhoneNumber(String phone) {
-        if (!isNotEmpty(phone)) {
-            return false;
+
+        public boolean isValid() {
+            return isValid;
         }
-        // Remove all spaces and check if it matches the pattern
-        String cleanPhone = phone.replaceAll("\\s+", "");
-        return PHONE_PATTERN.matcher(cleanPhone).matches();
-    }
-    
-    /**
-     * Validates ID format (alphanumeric)
-     */
-    public static boolean isValidId(String id) {
-        if (!isNotEmpty(id)) {
-            return false;
+
+        public String getMessage() {
+            return message;
         }
-        return ID_PATTERN.matcher(id.trim()).matches();
-    }
-    
-    /**
-     * Validates name (not empty, contains only letters and spaces)
-     */
-    public static boolean isValidName(String name) {
-        if (!isNotEmpty(name)) {
-            return false;
+        
+        // Helper method to create success result
+        public static ValidationResult success() {
+            return new ValidationResult(true, null);
         }
-        // Allow letters, spaces, and Vietnamese characters
-        return name.trim().matches("^[a-zA-ZÀ-ỹ\\s]+$");
-    }
-    
-    /**
-     * Validates address (not empty)
-     */
-    public static boolean isValidAddress(String address) {
-        return isNotEmpty(address);
-    }
-    
-    /**
-     * Validates area (not empty)
-     */
-    public static boolean isValidArea(String area) {
-        return isNotEmpty(area);
-    }
-    
-    /**
-     * Validates member count (positive integer, reasonable range)
-     */
-    public static boolean isValidResidentCount(String residentCount) {
-        if (!isNotEmpty(residentCount)) {
-            return false;
+        
+        // Helper method to create error result
+        public static ValidationResult error(String message) {
+            return new ValidationResult(false, message);
         }
+    }
+
+    /**
+     * Kiểm tra một trường có bị trống không
+     */
+    public static ValidationResult verifyNotEmpty(String value, String fieldName) {
+        if (value == null || value.trim().isEmpty()) {
+            return ValidationResult.error(fieldName + " không được để trống!");
+        }
+        return ValidationResult.success();
+    }
+
+    /**
+     * Kiểm tra email có hợp lệ không
+     */
+    public static ValidationResult verifyEmail(String email, String fieldName) {
+        // Kiểm tra trống
+        ValidationResult emptyCheck = verifyNotEmpty(email, fieldName);
+        if (!emptyCheck.isValid()) {
+            return emptyCheck;
+        }
+
+        // Kiểm tra định dạng
+        if (!EMAIL_PATTERN.matcher(email.trim()).matches()) {
+            return ValidationResult.error("Email không đúng định dạng!");
+        }
+
+        return ValidationResult.success();
+    }
+
+    /**
+     * Kiểm tra số điện thoại có hợp lệ không
+     */
+    public static ValidationResult verifyPhoneNumber(String phone, String fieldName) {
+        // Kiểm tra trống
+        ValidationResult emptyCheck = verifyNotEmpty(phone, fieldName);
+        if (!emptyCheck.isValid()) {
+            return emptyCheck;
+        }
+
+        // Xóa khoảng trắng và kiểm tra định dạng
+        String cleanPhone = phone.trim().replaceAll("\\s+", "");
+        if (!PHONE_PATTERN.matcher(cleanPhone).matches()) {
+            return ValidationResult.error("Số điện thoại phải có 9-10 chữ số!");
+        }
+
+        return ValidationResult.success();
+    }
+
+    /**
+     * Kiểm tra tên có hợp lệ không
+     */
+    public static ValidationResult verifyName(String name, String fieldName) {
+        // Kiểm tra trống
+        ValidationResult emptyCheck = verifyNotEmpty(name, fieldName);
+        if (!emptyCheck.isValid()) {
+            return emptyCheck;
+        }
+
+        // Kiểm tra định dạng
+        if (!NAME_PATTERN.matcher(name.trim()).matches()) {
+            return ValidationResult.error("Tên chỉ được chứa chữ cái và khoảng trắng!");
+        }
+
+        return ValidationResult.success();
+    }
+
+    /**
+     * Kiểm tra số có hợp lệ không
+     */
+    public static ValidationResult verifyNumber(String value, String fieldName) {
+        // Kiểm tra trống
+        ValidationResult emptyCheck = verifyNotEmpty(value, fieldName);
+        if (!emptyCheck.isValid()) {
+            return emptyCheck;
+        }
+
         try {
-            int count = Integer.parseInt(residentCount.trim());
-            return count > 0 && count <= 20; // Reasonable limit for household size
+            Double.parseDouble(value.trim());
+            return ValidationResult.success();
         } catch (NumberFormatException e) {
-            return false;
+            return ValidationResult.error(fieldName + " phải là số hợp lệ!");
         }
     }
-    
+
     /**
-     * Get error message for email validation
+     * Kiểm tra số nguyên dương có hợp lệ không và nằm trong khoảng cho phép
      */
-    public static String getEmailErrorMessage() {
-        return "Email không đúng định dạng";
-    }
-    
-    /**
-     * Get error message for phone validation
-     */
-    public static String getPhoneErrorMessage() {
-        return "Số điện thoại phải có 9-10 chữ số, không có khoảng trắng";
-    }
-    
-    /**
-     * Get error message for empty field
-     */
-    public static String getEmptyFieldErrorMessage() {
-        return "Trường này không được để trống";
-    }
-    
-    /**
-     * Get error message for invalid ID
-     */
-    public static String getInvalidIdErrorMessage() {
-        return "ID không hợp lệ (chỉ chứa chữ và số)";
-    }
-    
-    /**
-     * Get error message for invalid name
-     */
-    public static String getInvalidNameErrorMessage() {
-        return "Tên không hợp lệ (chỉ chứa chữ cái và khoảng trắng)";
-    }
-    
-    /**
-     * Get error message for invalid member count
-     */
-    public static String getInvalidResidentCountErrorMessage() {
-        return "Số thành viên phải là số nguyên dương (1-20)";
-    }
-    
-    public static String getInvalidCitizenIdErrorMessage() {
-        return "CCCD không hợp lệ (phải có 12 chữ số) hoặc đã tồn tại trong hệ thống";
-    }
-    
-    public static boolean isValidCitizenId(String citizenId) {
-        if (citizenId == null || citizenId.trim().isEmpty()) {
-            return false;
+    public static ValidationResult verifyPositiveInteger(String value, String fieldName, int minValue, int maxValue) {
+        // Kiểm tra trống
+        ValidationResult emptyCheck = verifyNotEmpty(value, fieldName);
+        if (!emptyCheck.isValid()) {
+            return emptyCheck;
         }
-        
-        // Check format: 12 digits
-        if (!citizenId.matches("\\d{12}")) {
-            return false;
+
+        try {
+            int number = Integer.parseInt(value.trim());
+            if (number < minValue || number > maxValue) {
+                return ValidationResult.error(fieldName + " phải nằm trong khoảng " + minValue + " đến " + maxValue + "!");
+            }
+            return ValidationResult.success();
+        } catch (NumberFormatException e) {
+            return ValidationResult.error(fieldName + " phải là số nguyên!");
         }
-        
-        // Check if exists in database
-        ResidentService residentService = new ResidentServiceImpl();
-        return !residentService.citizenIdExists(citizenId); // Return false if already exists
     }
+
+    /**
+     * Kiểm tra số thành viên trong hộ khẩu có hợp lệ không
+     */
+    public static ValidationResult verifyResidentCount(String value) {
+        return verifyPositiveInteger(value, "Số thành viên", 1, 20);
+    }
+
+    /**
+     * Kiểm tra CCCD có hợp lệ không
+     */
+    public static ValidationResult verifyCitizenId(String citizenId) {
+        // Kiểm tra trống
+        ValidationResult emptyCheck = verifyNotEmpty(citizenId, "CCCD");
+        if (!emptyCheck.isValid()) {
+            return emptyCheck;
+        }
+
+        // Kiểm tra định dạng
+        if (!CITIZEN_ID_PATTERN.matcher(citizenId.trim()).matches()) {
+            return ValidationResult.error("CCCD phải có đúng 12 chữ số!");
+        }
+            return ValidationResult.success();
+    }
+
 }

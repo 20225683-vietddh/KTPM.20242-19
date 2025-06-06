@@ -129,7 +129,16 @@ import utils.Utils;
 	            
 	            // Set up basic columns with property values
 	            colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-	            colOwnerName.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
+	            colOwnerName.setCellValueFactory(cellData -> {
+	                Household household = cellData.getValue();
+	                try {
+	                    Resident owner = residentService.getResidentById(household.getOwnerId());
+	                    return new ReadOnlyStringWrapper(owner.getFullName());
+	                } catch (ServiceException e) {
+	                    System.err.println("Error getting owner name: " + e.getMessage());
+	                    return new ReadOnlyStringWrapper("Unknown");
+	                }
+	            });
 	            colRoomNumber.setCellValueFactory(new PropertyValueFactory<>("houseNumber"));
 	            
 	            // Sử dụng tỷ lệ phần trăm
@@ -154,14 +163,14 @@ import utils.Utils;
 	                    return new TableCell<Household, Void>() {
 	                        
 	                        private final Button btnView = new Button("Xem");
-	                        private final Button btnDelete = new Button("Xóa");
+	                        private final Button btnDelete = new Button("Xoa");
 	                        
 	                        {
 	                            // Configure view button
 	                            btnView.setStyle("-fx-background-color: #43A5DC; -fx-text-fill: white;");
 	                            btnView.setOnAction((ActionEvent event) -> {
 	                                Household household = getTableView().getItems().get(getIndex());
-	                                openViewHouseholdDialog( household);
+	                                openViewHouseholdDialog(household);
 	                            });
 	                            
 	                            
@@ -193,6 +202,7 @@ import utils.Utils;
 	    
 	    private void loadHouseholdData() {
 	        try {
+	        	txtSearch.setText("");
 	            // Get all households from the controller
 	            householdList = FXCollections.observableArrayList(householdController.getAllHouseholds());
 	            

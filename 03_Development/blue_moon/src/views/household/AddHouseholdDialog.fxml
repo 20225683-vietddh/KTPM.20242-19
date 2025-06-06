@@ -27,7 +27,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </ImageView>
-                  <Label text="Thêm hộ khẩu mới" textFill="WHITE">
+                  <Label text="Them ho khau moi" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
@@ -48,12 +48,12 @@
                         
                         <VBox spacing="5.0">
                            <children>
-                              <Label text="CCCD Chủ hộ: *" textFill="#43a5dc">
+                              <Label text="CCCD Chu ho: *" textFill="#43a5dc">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtOwnerCitizenId" prefHeight="35.0" promptText="Nhập CCCD chủ hộ" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                              <TextField fx:id="txtOwnerCitizenId" prefHeight="35.0" promptText="Nhap CCCD chu ho" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -68,12 +68,12 @@
                         
                         <VBox spacing="5.0">
                            <children>
-                              <Label text="Phòng: *" textFill="#43a5dc">
+                              <Label text="Phong: *" textFill="#43a5dc">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="cmbRoom" prefHeight="35.0" prefWidth="200.0" promptText="Chọn phòng" style="-fx-background-radius: 5; -fx-border-color: #d0d0d0; -fx-border-radius: 5;">
+                              <ComboBox fx:id="cmbRoom" prefHeight="35.0" prefWidth="200.0" promptText="Chon phong" style="-fx-background-radius: 5; -fx-border-color: #d0d0d0; -fx-border-radius: 5;">
                               </ComboBox>
                               <Label fx:id="lblRoomError" textFill="#dc3545" visible="false">
                                  <font>
@@ -85,12 +85,12 @@
                         
                         <VBox spacing="5.0">
                            <children>
-                              <Label text="Số điện thoại:" textFill="#43a5dc">
+                              <Label text="So dien thoai:" textFill="#43a5dc">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtPhone" prefHeight="35.0" promptText="Nhập số điện thoại (tùy chọn)" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                              <TextField fx:id="txtPhone" prefHeight="35.0" promptText="Nhap so dien thoai (tuy chon)" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -110,7 +110,7 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtEmail" prefHeight="35.0" promptText="Nhập email (tùy chọn)" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                              <TextField fx:id="txtEmail" prefHeight="35.0" promptText="Nhap email (tuy chon)" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -125,19 +125,19 @@
                         
                         <VBox spacing="5.0">
                            <children>
-                              <Label text="Số thành viên: *" textFill="#43a5dc">
+                              <Label text="So thanh vien: *" textFill="#43a5dc">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
                               <HBox spacing="10.0">
                                  <children>
-                                    <TextField fx:id="txtResidentCount" prefHeight="35.0" prefWidth="150.0" promptText="Nhập số thành viên" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                    <TextField fx:id="txtResidentCount" prefHeight="35.0" prefWidth="150.0" promptText="Nhap so thanh vien" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </TextField>
-                                    <Button fx:id="btnGenerateFields" mnemonicParsing="false" onAction="#handleGenerateResidentFields" prefHeight="35.0" style="-fx-background-color: #43a5dc; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Tạo trường nhập">
+                                    <Button fx:id="btnGenerateFields" mnemonicParsing="false" onAction="#handleGenerateResidentFields" prefHeight="35.0" style="-fx-background-color: #43a5dc; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Tao truong nhap">
                                        <font>
                                           <Font name="System Bold" size="12.0" />
                                        </font>
@@ -162,12 +162,12 @@
             
             <HBox alignment="CENTER" prefHeight="60.0" prefWidth="500.0" spacing="20.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #e9ecef; -fx-border-width: 1 0 0 0;">
                <children>
-                  <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#handleCancel" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Hủy">
+                  <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#handleCancel" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Huy">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#handleAdd" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Thêm">
+                  <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#handleAdd" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Them">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

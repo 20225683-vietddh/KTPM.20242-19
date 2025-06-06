@@ -208,20 +208,6 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="40.0" layoutY="868.0" spacing="5.0">
-                           <children>
-                              <Label text="Ghi chú:" textFill="#43a5dc">
-                                 <font>
-                                    <Font name="System Bold" size="14.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="tfNote" editable="false" prefHeight="35.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextField>
-                           </children>
-                        </VBox>
                      </children>
                   </VBox>
                </content>

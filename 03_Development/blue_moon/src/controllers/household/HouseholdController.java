@@ -31,7 +31,7 @@ public class HouseholdController {
     }
     
     public List<Household> getAllHouseholds() throws ServiceException {
-        return householdService.getAllHouseholds();
+        return householdService.getAll();
     }
     
     public void addHousehold(Household household) throws HouseholdNotExist, HouseholdAlreadyExistsException, ResidentNotFoundException, InvalidHouseholdDataException, SQLException, ServiceException {
@@ -73,11 +73,11 @@ public class HouseholdController {
 
     
 
-	public void addResidentToHousehold(Household h, int residentId) throws HouseholdNotExist, ServiceException, SQLException {
-		householdService.addResidentToHousehold(h,residentId);
+	public void addResidentToHousehold(Household h, String residentCitizenId) throws HouseholdNotExist, ServiceException, SQLException {
+		householdService.addResidentToHousehold(h,residentCitizenId);
 	}
 	
-	public void addResidentsToHousehold(Household h, List<Integer> ids) throws HouseholdNotExist, ServiceException, SQLException {
+	public void addResidentsToHousehold(Household h, List<String> ids) throws HouseholdNotExist, ServiceException, SQLException {
 		householdService.addResidentsToHousehold(h,ids);
 	}
 
@@ -97,11 +97,11 @@ public class HouseholdController {
 		}
 	}
 	
-	public List<Integer> getResidentIds(int householdId) throws HouseholdNotExist{
+	public List<Integer> getResidentIds(int householdId) throws HouseholdNotExist, ServiceException{
 		return householdService.getResidentIds(householdId);
 	}
 	
-	public void removeResident(Household h, int memberId) throws HouseholdNotExist, ServiceException, SQLException {
-		householdService.removeResident(h,memberId);
+	public void removeResident(Household h, String citizenId) throws HouseholdNotExist, ServiceException, SQLException {
+		householdService.removeResident(h,citizenId);
 	}
 }

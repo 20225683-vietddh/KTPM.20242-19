@@ -8,7 +8,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Resident;
 import utils.Configs;
-import controllers.resident.ManageResidentController;
+import controllers.resident.ResidentController;
 import exception.InvalidInputException;
 import views.messages.ErrorDialog;
 import java.io.IOException;
@@ -28,13 +28,12 @@ public class NewResidentFormHandler {
     @FXML private TextField tfOccupation;
     @FXML private TextField tfRelationshipWithHead;
     @FXML private TextField tfHouseHoldId;
-    @FXML private TextField tfNote;
     @FXML private Button btnSave;
     @FXML private Button btnClose;
     @FXML private Label lblError;
     
 
-    private final ManageResidentController controller;
+    private final ResidentController controller;
     private final TableView<Resident> residentTable;
     private final Runnable refreshCallback;
     private final Stage stage;
@@ -43,26 +42,21 @@ public class NewResidentFormHandler {
         this.residentTable = tableView;
         this.refreshCallback = onSaveCallback;
         this.stage = new Stage();
-        try {
-            this.controller = new ManageResidentController();
-        } catch (SQLException e) {
-            ErrorDialog.showError("Lá»—i káº¿t ná»‘i", "KhÃ´ng thá»ƒ khá»Ÿi táº¡o database: " + e.getMessage());
-            throw e;
-        }
+        this.controller = new ResidentController();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource(Configs.NEW_RESIDENT_FORM));
         if (loader.getLocation() == null) {
-            throw new IOException("KhÃ´ng tÃ¬m tháº¥y file FXML: /views/resident/NewResidentForm.fxml");
+            throw new IOException("Khong tim thay file FXML: /views/resident/NewResidentForm.fxml");
         }
         loader.setController(this);
         try {
             Scene scene = new Scene(loader.load(), 400, 650);
             stage.setScene(scene);
-            stage.setTitle("ThÃªm nhÃ¢n kháº©u má»›i");
+            stage.setTitle("Them nhan khau moi");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
         } catch (IOException e) {
-            System.err.println("Lá»—i táº£i FXML: " + e.getMessage());
+            System.err.println("Loi tai FXML: " + e.getMessage());
             throw e;
         }
     }
@@ -79,84 +73,89 @@ public class NewResidentFormHandler {
         cbEthnicity.getItems().addAll(Configs.ETHNICITY);
         cbPlaceOfIssue.getItems().addAll(Configs.PLACEOFISSUE);
         
-     // Ä�áº£m báº£o cÃ¡c TextField cÃ³ thá»ƒ chá»‰nh sá»­a (trá»« tfId)
+     // Đảm bảo các TextField có thể chỉnh sửa (trừ tfId)
         if (tfFullName != null) tfFullName.setEditable(true);
         if (tfReligion != null) tfReligion.setEditable(true);
         if (tfCitizenId != null) tfCitizenId.setEditable(true);
         if (tfOccupation != null) tfOccupation.setEditable(true);
-        //if (tfRelationshipWithHead != null) tfRelationshipWithHead.setEditable(true);
-       // if (tfHouseHoldId != null) tfHouseHoldId.setEditable(true);
-        if (tfNote != null) tfNote.setEditable(true);
+        if (tfRelationshipWithHead != null) tfRelationshipWithHead.setEditable(true);
     }
     private void handleSave() {
         try {
-            System.out.println("Báº¯t Ä‘áº§u lÆ°u nhÃ¢n kháº©u má»›i");
+            System.out.println("Bat dau luu nhan khau moi");
             if (lblError != null) {
                 lblError.setText("");
             } else {
-                System.err.println("lblError khÃ´ng Ä‘Æ°á»£c khá»Ÿi táº¡o");
+                System.err.println("lblError khong duoc khoi tao");
             }
 
             Resident resident = new Resident();
 
             String fullName = tfFullName.getText().trim();
             if (fullName.isEmpty()) {
-                throw new InvalidInputException("Há»� vÃ  tÃªn khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng.");
+                throw new InvalidInputException("Ho va ten khong duoc de trong.");
             }
             resident.setFullName(fullName);  
             
-            LocalDate dob = dpDateOfBirth.getValue();
-            if (dob != null) resident.setDateOfBirth(dob);
+            if (dpDateOfBirth.getValue() == null) {
+                throw new InvalidInputException("Ngay sinh phai duoc chon.");
+            }
+            resident.setDateOfBirth(dpDateOfBirth.getValue());
             
             String gender = cbGender.getSelectionModel().getSelectedItem();
-            if (gender == null) throw new InvalidInputException("Giá»›i tÃ­nh pháº£i Ä‘Æ°á»£c chá»�n.");
+            if (gender == null) throw new InvalidInputException("Gioi tinh phai duoc chon.");
             resident.setGender(gender);
 
-            resident.setEthnicity(cbEthnicity.getSelectionModel().getSelectedItem());
+            String ethnicity = cbEthnicity.getSelectionModel().getSelectedItem();
+            if (ethnicity == null) throw new InvalidInputException("Dan toc phai duoc chon.");
+            resident.setEthnicity(ethnicity);
             
             resident.setReligion(tfReligion.getText().trim());
 
             String citizenId = tfCitizenId.getText().trim();
             if (citizenId.isEmpty()) {
-                throw new InvalidInputException("CÄƒn cÆ°á»›c cÃ´ng dÃ¢n khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng.");
+                throw new InvalidInputException("Can cuoc cong dan khong duoc de trong.");
             }
             if (!citizenId.matches("\\d{12}")) {
-                throw new InvalidInputException("CÄƒn cÆ°á»›c cÃ´ng dÃ¢n pháº£i lÃ  12 chá»¯ sá»‘.");
+                throw new InvalidInputException("Can cuoc cong dan phai la 12 chu so.");
             }
             resident.setCitizenId(citizenId);
 
-            LocalDate doi = dpDateOfIssue.getValue();
-            if (doi != null) resident.setDateOfIssue(doi);
+            if (dpDateOfIssue.getValue() == null) {
+                throw new InvalidInputException("Ngay cap CCCD phai duoc chon.");
+            }
+            resident.setDateOfIssue(dpDateOfIssue.getValue());
             
-            resident.setPlaceOfIssue(cbPlaceOfIssue.getSelectionModel().getSelectedItem());
+            String placeOfIssue = cbPlaceOfIssue.getSelectionModel().getSelectedItem();
+            if (placeOfIssue == null) throw new InvalidInputException("Noi cap CCCD phai duoc chon.");
+            resident.setPlaceOfIssue(placeOfIssue);
 
             resident.setOccupation(tfOccupation.getText().trim());
             
             resident.setAddedDate(LocalDate.now());
 
-            resident.setNotes(tfNote.getText().trim());
             
            // resident.setisHouseholdHead(false); 
 
 
-            System.out.println("Gá»�i addResident");
-            controller.handleAddResident(resident); // Giáº£ Ä‘á»‹nh phÆ°Æ¡ng thá»©c thÃªm má»›i
-            System.out.println("ThÃªm nhÃ¢n kháº©u thÃ nh cÃ´ng");
+            System.out.println("Gọi addResident");
+            controller.addResident(resident);
+            System.out.println("Thêm nhân khẩu thành công");
 
-            // Cáº­p nháº­t TableView
+            // Cập nhật TableView
             if (residentTable != null) {
                 residentTable.getItems().add(new Resident(resident));
                 residentTable.refresh();
-                System.out.println("Ä�Ã£ thÃªm resident má»›i vÃ o TableView");
+                System.out.println("Đã thêm resident mới vào TableView");
             } else {
-                System.err.println("residentTable khÃ´ng Ä‘Æ°á»£c khá»Ÿi táº¡o");
+                System.err.println("residentTable không được khởi tạo");
             }
 
             if (refreshCallback != null) {
-                System.out.println("Gá»�i refreshCallback");
+                System.out.println("Gọi refreshCallback");
                 refreshCallback.run();
             } else {
-                System.err.println("refreshCallback khÃ´ng Ä‘Æ°á»£c khá»Ÿi táº¡o trong handleSave");
+                System.err.println("refreshCallback không được khởi tạo trong handleSave");
             }
 
             stage.close();
@@ -164,24 +163,24 @@ public class NewResidentFormHandler {
             if (lblError != null) {
                 lblError.setText(e.getMessage());
             }
-            System.err.println("Lá»—i nháº­p liá»‡u: " + e.getMessage());
+            System.err.println("Lỗi nhập liệu: " + e.getMessage());
         } catch (SQLException e) {
             if (lblError != null) {
-                lblError.setText("Lá»—i cÆ¡ sá»Ÿ dá»¯ liá»‡u: " + e.getMessage());
+                lblError.setText("Lỗi cơ sở dữ liệu: " + e.getMessage());
             }
-            System.err.println("Lá»—i SQL: " + e.getMessage());
+            System.err.println("Lỗi SQL: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
             if (lblError != null) {
-                lblError.setText("Lá»—i khÃ´ng xÃ¡c Ä‘á»‹nh: " + e.getMessage());
+                lblError.setText("Lỗi không xác định: " + e.getMessage());
             }
-            System.err.println("Lá»—i khÃ´ng xÃ¡c Ä‘á»‹nh trong handleSave: " + e.getMessage());
+            System.err.println("Lỗi không xác định trong handleSave: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void handleClose() {
-        System.out.println("Ä�Ã³ng form thÃªm nhÃ¢n kháº©u");
+        System.out.println("Đóng form thêm nhân khẩu");
         stage.close();
     }
 }

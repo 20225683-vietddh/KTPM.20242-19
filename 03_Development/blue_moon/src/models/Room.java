@@ -5,15 +5,17 @@ public class Room {
     private String roomNumber;
     private boolean isOccupied;
     private Integer householdId;  // Can be null if room is not occupied
+    private Float area;  // Can be null
 
     public Room() {
     }
 
-    public Room(int id, String roomNumber, boolean isOccupied, Integer householdId) {
+    public Room(int id, String roomNumber, boolean isOccupied, Integer householdId, Float area) {
         this.id = id;
         this.roomNumber = roomNumber;
         this.isOccupied = isOccupied;
         this.householdId = householdId;
+        this.area = area;
     }
 
     // Getters and Setters
@@ -49,6 +51,14 @@ public class Room {
         this.householdId = householdId;
     }
 
+    public Float getArea() {
+        return area;
+    }
+
+    public void setArea(Float area) {
+        this.area = area;
+    }
+
     @Override
     public String toString() {
         return "Room{" +
@@ -56,6 +66,7 @@ public class Room {
                 ", roomNumber='" + roomNumber + '\'' +
                 ", isOccupied=" + isOccupied +
                 ", householdId=" + householdId +
+                ", area=" + area +
                 '}';
     }
 } 

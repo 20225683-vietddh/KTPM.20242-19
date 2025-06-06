@@ -31,6 +31,7 @@ import exception.HouseholdNotExist;
 import exception.InvalidHouseholdDataException;
 import exception.ResidentNotFoundException;
 import exception.ServiceException;
+import utils.FieldVerifier;
 
 public class ResidentDetailsDialogHandler {
 	private HouseholdController householdController;
@@ -58,7 +59,7 @@ public class ResidentDetailsDialogHandler {
     @FXML private Button btnMakeOwner;
     @FXML private Button btnRemoveResident;
     @FXML private Button btnAddResident;
-    @FXML private TextField txtResidentId;
+    @FXML private TextField txtResidentCitizenId;
     @FXML private ComboBox<RelationshipType> cboRelationship;
     
     
@@ -119,163 +120,143 @@ public class ResidentDetailsDialogHandler {
     
 
     private void setupRelationshipComboBox() {
-
         // Clear existing items first
-
         cboRelationship.getItems().clear();
-
         
-
         // Add all relationship types to combo box
-
         ObservableList<RelationshipType> relationships = FXCollections.observableArrayList();
-
         
-
-        // Add all enum values except UNKNOWN (or include it if needed)
-
+        // Add all enum values except UNKNOWN
         for (RelationshipType type : RelationshipType.values()) {
-
-            if (type != RelationshipType.UNKNOWN) { // Skip UNKNOWN if you don't want it as an option
-
+            if (type != RelationshipType.UNKNOWN) {
                 relationships.add(type);
-
             }
-
         }
-
         
-
         cboRelationship.setItems(relationships);
-
         
-
-        // Set custom string converter if needed to display Vietnamese text
-
+        // Set custom string converter with non-accented Vietnamese text
         cboRelationship.setConverter(new javafx.util.StringConverter<RelationshipType>() {
-
             @Override
-
             public String toString(RelationshipType relationshipType) {
-
                 if (relationshipType == null) return "";
-
                 
-
-                // Convert enum to Vietnamese display text
-
+                // Convert enum to non-accented Vietnamese display text
                 switch (relationshipType) {
-
                     case FATHER: return "Cha";
-
-                    case MOTHER: return "Mẹ";
-
+                    case MOTHER: return "Me";
                     case SON: return "Con trai";
-
-                    case DAUGHTER: return "Con gái";
-
-                    case HUSBAND: return "Chồng";
-
-                    case WIFE: return "Vợ";
-
+                    case DAUGHTER: return "Con gai";
+                    case HUSBAND: return "Chong";
+                    case WIFE: return "Vo";
                     case BROTHER: return "Anh/Em trai";
-
-                    case SISTER: return "Chị/Em gái";
-
-                    case GRANDFATHER: return "Ông";
-
-                    case GRANDMOTHER: return "Bà";
-
-                    case GRANDSON: return "Cháu trai";
-
-                    case GRANDDAUGHTER: return "Cháu gái";
-
-                    case UNCLE: return "Chú/Bác";
-
-                    case AUNT: return "Cô/Dì";
-
-                    case NEPHEW: return "Cháu trai (anh chị em)";
-
-                    case NIECE: return "Cháu gái (anh chị em)";
-
-                    case COUSIN: return "Anh/Chị/Em họ";
-
-                    case FATHER_IN_LAW: return "Bố chồng/vợ";
-
-                    case MOTHER_IN_LAW: return "Mẹ chồng/vợ";
-
-                    case SON_IN_LAW: return "Con rể";
-
-                    case DAUGHTER_IN_LAW: return "Con dâu";
-
-                    case BROTHER_IN_LAW: return "Anh/Em rể";
-
-                    case SISTER_IN_LAW: return "Chị/Em dâu";
-
-                    case OTHER: return "Khác";
-
+                    case SISTER: return "Chi/Em gai";
+                    case GRAND_FATHER: return "Ong";
+                    case GRAND_MOTHER: return "Ba";
+                    case GRAND_SON: return "Chau trai";
+                    case GRAND_DAUGHTER: return "Chau gai";
+                    case UNCLE: return "Chu/Bac";
+                    case AUNT: return "Co/Di";
+                    case NEPHEW: return "Chau trai (anh chi em)";
+                    case NIECE: return "Chau gai (anh chi em)";
+                    case COUSIN: return "Anh/Chi/Em ho";
+                    case FATHER_IN_LAW: return "Bo chong/vo";
+                    case MOTHER_IN_LAW: return "Me chong/vo";
+                    case SON_IN_LAW: return "Con re";
+                    case DAUGHTER_IN_LAW: return "Con dau";
+                    case BROTHER_IN_LAW: return "Anh/Em re";
+                    case SISTER_IN_LAW: return "Chi/Em dau";
+                    case OTHER: return "Khac";
                     default: return relationshipType.toString();
-
                 }
-
             }
-
-
 
             @Override
-
             public RelationshipType fromString(String string) {
-
-                // This method is used when converting back from string to enum
-
-                // Usually not needed for ComboBox, but implement if necessary
-
-                return null;
-
+                if (string == null || string.isEmpty()) {
+                    return null;
+                }
+                // Convert non-accented Vietnamese text back to enum
+                string = string.toLowerCase().trim();
+                switch (string) {
+                    case "cha": return RelationshipType.FATHER;
+                    case "me": return RelationshipType.MOTHER;
+                    case "con trai": return RelationshipType.SON;
+                    case "con gai": return RelationshipType.DAUGHTER;
+                    case "chong": return RelationshipType.HUSBAND;
+                    case "vo": return RelationshipType.WIFE;
+                    case "anh/em trai": return RelationshipType.BROTHER;
+                    case "chi/em gai": return RelationshipType.SISTER;
+                    case "ong": return RelationshipType.GRAND_FATHER;
+                    case "ba": return RelationshipType.GRAND_MOTHER;
+                    case "chau trai": return RelationshipType.GRAND_SON;
+                    case "chau gai": return RelationshipType.GRAND_DAUGHTER;
+                    case "chu/bac": return RelationshipType.UNCLE;
+                    case "co/di": return RelationshipType.AUNT;
+                    case "chau trai (anh chi em)": return RelationshipType.NEPHEW;
+                    case "chau gai (anh chi em)": return RelationshipType.NIECE;
+                    case "anh/chi/em ho": return RelationshipType.COUSIN;
+                    case "bo chong/vo": return RelationshipType.FATHER_IN_LAW;
+                    case "me chong/vo": return RelationshipType.MOTHER_IN_LAW;
+                    case "con re": return RelationshipType.SON_IN_LAW;
+                    case "con dau": return RelationshipType.DAUGHTER_IN_LAW;
+                    case "anh/em re": return RelationshipType.BROTHER_IN_LAW;
+                    case "chi/em dau": return RelationshipType.SISTER_IN_LAW;
+                    case "khac": return RelationshipType.OTHER;
+                    default: return RelationshipType.UNKNOWN;
+                }
             }
-
         });
-
-        
-
-        // Set prompt text
-
-        cboRelationship.setPromptText("Chọn mối quan hệ với chủ hộ");
-
     }
 
     
 
     private void setupAddResidentValidation() {
-
         // Initially disable add button
-        
-        // Disable add button if relationship not selected
         btnAddResident.setDisable(true);
-        // Add listeners for validation
 
-		Runnable validateAddButton = () -> {
+        Runnable validateAddButton = () -> {
+            String citizenId = txtResidentCitizenId.getText();
+            boolean isValidResidentId = false;
+            boolean isValidRelationship = cboRelationship.getValue() != null;
 
-			boolean isValidResidentId = txtResidentId.getText() != null && !txtResidentId.getText().trim().isEmpty();
+            if (citizenId != null && !citizenId.trim().isEmpty()) {
+                // Sử dụng FieldVerifier để kiểm tra CCCD
+                FieldVerifier.ValidationResult result = 
+                    FieldVerifier.verifyCitizenId(citizenId, residentService, household.getId());
+                
+                isValidResidentId = result.isValid();
+                
+                // Hiển thị thông báo lỗi nếu có
+                if (!result.isValid() && !citizenId.trim().isEmpty()) {
+                    showWarningDialog("Cảnh báo", result.getMessage());
+                }
+            }
 
-			boolean isValidRelationship = cboRelationship.getValue() != null;
+            btnAddResident.setDisable(!(isValidResidentId && isValidRelationship));
+        };
 
-			btnAddResident.setDisable(!(isValidResidentId && isValidRelationship));
+        // Thêm listener cho textfield CCCD
+        txtResidentCitizenId.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && !newVal.trim().isEmpty()) {
+                // Chỉ validate khi người dùng đã nhập xong (độ dài = 12)
+                if (newVal.trim().length() == 12) {
+                    validateAddButton.run();
+                } else {
+                    btnAddResident.setDisable(true);
+                }
+            } else {
+                btnAddResident.setDisable(true);
+            }
+        });
 
-		};
-
-		txtResidentId.textProperty().addListener((obs, oldVal, newVal) -> {
-			validateAddButton.run();
-
-		});
-
-		// Listen to changes in relationship combo box
-
-		cboRelationship.valueProperty().addListener((obs, oldVal, newVal) -> {
-
-			validateAddButton.run();
-		});
-	}
+        // Thêm listener cho combobox quan hệ
+        cboRelationship.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (txtResidentCitizenId.getText() != null && txtResidentCitizenId.getText().trim().length() == 12) {
+                validateAddButton.run();
+            }
+        });
+    }
 
     private void updateResidentCount() {
         if (lblResidentCount != null) {
@@ -285,59 +266,57 @@ public class ResidentDetailsDialogHandler {
     
     @FXML
     private void handleAddResident() {
-        String textId = txtResidentId.getText().trim();
+        String txtCitizenId = txtResidentCitizenId.getText().trim();
         RelationshipType selectedRelationship = cboRelationship.getValue();
         
         // Validate input
-        if (textId.isEmpty()) {
-            showWarningDialog("Lỗi", "Vui lòng nhập ID thành viên.");
+        if (txtCitizenId.isEmpty()) {
+            showWarningDialog("Canh bao", "Vui long nhap CCCD thanh vien.");
             return;
         }
         
         if (selectedRelationship == null) {
-            showWarningDialog("Lỗi", "Vui lòng chọn quan hệ với chủ hộ.");
+            showWarningDialog("Canh bao", "Vui long chon quan he voi chu ho.");
             return;
         }
-        int residentId  = Integer.parseInt(textId);
-        
         try {
-            Resident residentToAdd = residentService.getResidentById(residentId);
+            Resident residentToAdd = residentService.getResidentByCitizenId(txtCitizenId);
             
             // Check if resident already belongs to this household
             if (residentToAdd.getHouseholdId() == household.getId()) {
-                showWarningDialog("Lỗi", "Thành viên này đã thuộc hộ khẩu hiện tại.");
-                txtResidentId.clear();
+                showWarningDialog("Canh bao", "Thanh vien nay da thuoc ho khau hien tai.");
+                txtResidentCitizenId.clear();
                 cboRelationship.setValue(null);
                 return;
             }
             
             // Check if resident belongs to another household
             if (residentToAdd.getHouseholdId() != 0) {
-                showWarningDialog("Lỗi", 
-                    String.format("Thành viên '%s' đã thuộc hộ khẩu khác (ID: %d). " +
-                                "Không thể thêm vào hộ khẩu này.", 
+                showWarningDialog("Canh bao", 
+                    String.format("Thanh vien '%s' da thuoc ho khau khac (ID: %d). " +
+                                "Khong the them vao ho khau nay.", 
                                 residentToAdd.getFullName(), 
                                 residentToAdd.getHouseholdId()));
-                txtResidentId.clear();
+                txtResidentCitizenId.clear();
                 cboRelationship.setValue(null);
                 return;
             }
             
             // Check for duplicate in current resident list (additional safety check)
             boolean isDuplicate = residentList.stream()
-                    .anyMatch(resident -> resident.getId() == residentId);
+                    .anyMatch(resident -> resident.getCitizenId().equals(txtCitizenId));
             
             if (isDuplicate) {
-                showWarningDialog("Lỗi", "Thành viên này đã có trong danh sách.");
-                txtResidentId.clear();
+                showWarningDialog("Canh bao", "Thanh vien nay da co trong danh sach.");
+                txtResidentCitizenId.clear();
                 cboRelationship.setValue(null);
                 return;
             }
             
             // Confirm action
             Optional<ButtonType> result = showConfirmDialog(
-                "Xác nhận thêm thành viên", 
-                String.format("Bạn có chắc chắn muốn thêm thành viên '%s' vào hộ khẩu này với quan hệ '%s'?", 
+                "Xac nhan them thanh vien", 
+                String.format("Ban co chac chan muon them thanh vien '%s' vao ho khau nay voi quan he '%s'?", 
 
                         residentToAdd.getFullName(), 
 
@@ -357,7 +336,7 @@ public class ResidentDetailsDialogHandler {
                 
                 //update local + server household
                 household.addResident(residentToAdd);
-                householdController.addResidentToHousehold(household, residentId);
+                householdController.addResidentToHousehold(household, txtCitizenId);
                 
                 //update view household dialog
                 if (onSuccessCallback != null) {
@@ -365,7 +344,7 @@ public class ResidentDetailsDialogHandler {
                 }
                 
                 // Clear input fields
-                txtResidentId.clear();
+                txtResidentCitizenId.clear();
                 cboRelationship.setValue(null);
                 
                 // Notify listener if set
@@ -373,69 +352,73 @@ public class ResidentDetailsDialogHandler {
                     changeListener.onResidentAdded(residentToAdd);
                 }
                 
-                showInfoDialog("Thành công", 
-                    String.format("Đã thêm thành viên '%s' vào hộ khẩu thành công.", 
+                showInfoDialog("Thong bao", 
+                    String.format("Da them thanh vien '%s' vao ho khau thanh cong.", 
                                  residentToAdd.getFullName()));
             }
             
         } catch (ServiceException e) {
-            showWarningDialog("Lỗi", 
-                String.format("Không tìm thấy thành viên với ID '%s'. Vui lòng kiểm tra lại.", residentId));
-            txtResidentId.clear();
+            showWarningDialog("Loi", 
+                String.format("Khong tim thay thanh vien voi ID '%s'. Vui long kiem tra lai.", txtCitizenId));
+            txtResidentCitizenId.clear();
             cboRelationship.setValue(null);
         } catch (Exception e) {
-            showWarningDialog("Lỗi", "Có lỗi xảy ra khi thêm thành viên: " + e.getMessage());
-            txtResidentId.clear();
+            showWarningDialog("Loi", "Co loi xay ra khi them thanh vien: " + e.getMessage());
+            txtResidentCitizenId.clear();
             cboRelationship.setValue(null);
         }
     }
     
     private void setupColumns() {
-        // Set up table columns with cell value factories
-        colResidentId.setCellValueFactory(cellData -> 
-        //TODO : sua lai neu sau nay nhap vao cccd
-            new SimpleStringProperty(cellData.getValue().getIdString()));
-            
-        colFullName.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().getFullName()));
-            
-        colGender.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().getGenderString()));
-            
-        colDateOfBirth.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().getDateOfBirth().toString()));
-            
-        colIdCard.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().getIdCard()));
-            
-        colRelationship.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().getRelationshipString()));
-            
-        colIsHead.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().isHouseholdHead() ? "Có" : "Không"));
-        
-        // Set column styles and alignment
-        setupColumnStyles();
-    }
-    
-    private void setupColumnStyles() {
-        // Center align some columns
-        colResidentId.setStyle("-fx-alignment: CENTER;");
-        colGender.setStyle("-fx-alignment: CENTER;");
-        colDateOfBirth.setStyle("-fx-alignment: CENTER;");
-        colIsHead.setStyle("-fx-alignment: CENTER;");
-        
-        // Make table rows selectable with nice styling
+        // Set up table columns first
+        colResidentId.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(data.getValue().getId())));
+        colFullName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFullName()));
+        colGender.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getGender().toString()));
+        colDateOfBirth.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateOfBirth().toString()));
+        colIdCard.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCitizenId()));
+        colRelationship.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRelationship().toString()));
+        colIsHead.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCitizenId().equals(household.getOwnerCitizenId())  ? "Chủ hộ" : ""));
+
+        // Add double click handler to copy citizen ID
         tblResidents.setRowFactory(tv -> {
-            TableRow<Resident> row = new javafx.scene.control.TableRow<Resident>();
+            TableRow<Resident> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    Resident selectedResident = row.getItem();
-                    showResidentDetails(selectedResident);
+                    Resident resident = row.getItem();
+                    String citizenId = resident.getCitizenId();
+                    javafx.scene.input.Clipboard clipboard = javafx.scene.input.Clipboard.getSystemClipboard();
+                    javafx.scene.input.ClipboardContent content = new javafx.scene.input.ClipboardContent();
+                    content.putString(citizenId);
+                    clipboard.setContent(content);
+                    
+                    // Show notification
+                    showInfoDialog("Thông báo", 
+                        String.format("Đã sao chép CCCD: %s của %s vào clipboard", 
+                            citizenId, resident.getFullName()));
                 }
             });
             return row;
         });
+    }
+    
+    private void setupColumnStyles() {
+        // Set column widths
+        colResidentId.setPrefWidth(50);
+        colFullName.setPrefWidth(150);
+        colGender.setPrefWidth(80);
+        colDateOfBirth.setPrefWidth(100);
+        colIdCard.setPrefWidth(120);
+        colRelationship.setPrefWidth(100);
+        colIsHead.setPrefWidth(80);
+
+        // Set column styles
+        String columnStyle = "-fx-alignment: CENTER;";
+        colResidentId.setStyle(columnStyle);
+        colGender.setStyle(columnStyle);
+        colDateOfBirth.setStyle(columnStyle);
+        colIdCard.setStyle(columnStyle);
+        colRelationship.setStyle(columnStyle);
+        colIsHead.setStyle(columnStyle);
     }
     
     private void setupButtonHandlers() {
@@ -445,20 +428,20 @@ public class ResidentDetailsDialogHandler {
             try {
                 handleMakeOwner();
             } catch (Exception e) {
-                showWarningDialog("Lỗi", "Có lỗi xảy ra khi thay đổi chủ hộ: " + e.getMessage());
+                showWarningDialog("Loi", "Co loi xay ra khi thay doi chu ho: " + e.getMessage());
             }
         });
         btnRemoveResident.setOnAction(event -> {
             try {
                 handleRemoveResident();
             } catch (Exception e) {
-                showWarningDialog("Lỗi", "Có lỗi xảy ra khi xóa thành viên: " + e.getMessage());
+                showWarningDialog("Loi", "Co loi xay ra khi xoa thanh vien: " + e.getMessage());
             }
         });
         btnAddResident.setOnAction(event -> handleAddResident());
         
         // Add Enter key support for resident ID text field
-        txtResidentId.setOnAction(event -> {
+        txtResidentCitizenId.setOnAction(event -> {
 
             if (!btnAddResident.isDisabled()) {
 
@@ -473,19 +456,19 @@ public class ResidentDetailsDialogHandler {
     private void handleMakeOwner() throws ServiceException, HouseholdNotExist, HouseholdAlreadyExistsException, ResidentNotFoundException, InvalidHouseholdDataException, SQLException {
         Resident selectedResident = tblResidents.getSelectionModel().getSelectedItem();
         if (selectedResident == null) {
-            showWarningDialog("Lỗi", "Vui lòng chọn một thành viên để đặt làm chủ hộ.");
+            showWarningDialog("Loi", "Vui long chon mot thanh vien de dat lam chu ho.");
             return;
         }
         
         if (selectedResident.isHouseholdHead()) {
-            showWarningDialog("Thông báo", "Thành viên này đã là chủ hộ.");
+            showWarningDialog("Thong bao", "Thanh vien nay da lam chu ho.");
             return;
         }
         
         // Confirm action
         Optional<ButtonType> result = showConfirmDialog(
-            "Xác nhận thay đổi chủ hộ", 
-            String.format("Bạn có chắc chắn muốn đặt '%s' làm chủ hộ mới?\n\nViệc này sẽ thay đổi chủ hộ hiện tại.", 
+            "Xac nhan thay doi chu ho", 
+            String.format("Ban co chac chan muon dat '%s' lam chu ho moi?\n\nHanh dong nay se thay doi chu ho hien tai.", 
                          selectedResident.getFullName())
         );
         
@@ -501,7 +484,7 @@ public class ResidentDetailsDialogHandler {
             selectedResident.setHouseholdHead(true);
             residentService.updateResident(selectedResident);
             
-            household.setOwnerId(selectedResident.getId());
+            household.setOwnerCitizenId(selectedResident.getCitizenId());
             household.setOwnerName(selectedResident.getFullName());
             householdController.updateHousehold(household);
             
@@ -519,7 +502,7 @@ public class ResidentDetailsDialogHandler {
                 changeListener.onResidentOwnerChanged(selectedResident);
             }
             
-            showInfoDialog("Thành công", "Đã cập nhật chủ hộ mới thành công.");
+            showInfoDialog("Thong bao", "Da cap nhat chu ho moi thanh cong.");
         }
     }
     
@@ -528,7 +511,7 @@ public class ResidentDetailsDialogHandler {
         Resident selectedResident = tblResidents.getSelectionModel().getSelectedItem();
         
         if (selectedResident == null) {
-            showWarningDialog("Lỗi", "Vui lòng chọn một thành viên để xóa.");
+            showWarningDialog("Loi", "Vui long chon mot thanh vien de xoa.");
             return;
         }
         
@@ -536,8 +519,8 @@ public class ResidentDetailsDialogHandler {
         if (residentList.size() == 1 && selectedResident.isHouseholdHead()) {
             // Confirm action
             Optional<ButtonType> result = showConfirmDialog(
-                "Xác nhận xóa thành viên cuối cùng, đồng thời xóa hộ khẩu này!", 
-                String.format("Bạn có chắc chắn muốn xóa hộ khẩu?\n\nHành động này không thể hoàn tác.")
+                "Xac nhan xoa thanh vien cuoi cung, dong thoi xoa ho khau nay!", 
+                String.format("Ban co chac chan muon xoa ho khau?\n\nHanh dong nay khong the hoan tac.")
             );
             
             if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -571,13 +554,13 @@ public class ResidentDetailsDialogHandler {
         				onSuccessCallback.run();
         			}
                     
-                    showInfoDialog("Thành công", "Đã xóa hộ khẩu thành công.");
+                    showInfoDialog("Thong bao", "Da xoa ho khau thanh cong.");
                     
                     // Close the dialog since household no longer exists
                     handleClose();
                     
                 } catch (Exception e) {
-                    showWarningDialog("Lỗi", "Có lỗi xảy ra khi xóa hộ khẩu: " + e.getMessage());
+                    showWarningDialog("Loi", "Co loi xay ra khi xoa ho khau: " + e.getMessage());
                 }
             }
             return; // Exit method after handling this case
@@ -585,19 +568,19 @@ public class ResidentDetailsDialogHandler {
         
         
         if (selectedResident.isHouseholdHead()) {
-            showWarningDialog("Không thể xóa", "Không thể xóa chủ hộ. Vui lòng chỉ định chủ hộ mới trước khi xóa.");
+            showWarningDialog("Khong the xoa", "Khong the xoa chu ho. Vui long chon chu ho moi truoc khi xoa.");
             return;
         }
         
         if (residentList.size() <= 1) {
-            showWarningDialog("Không thể xóa", "Không thể xóa thành viên cuối cùng trong hộ khẩu.");
+            showWarningDialog("Khong the xoa", "Khong the xoa thanh vien cuoi cung trong ho khau.");
             return;
         }
         
         // Confirm action
         Optional<ButtonType> result = showConfirmDialog(
-            "Xác nhận xóa thành viên", 
-            String.format("Bạn có chắc chắn muốn xóa thành viên '%s' khỏi hộ khẩu?\n\nHành động này không thể hoàn tác.", 
+            "Xac nhan xoa thanh vien", 
+            String.format("Ban co chac chan muon xoa thanh vien '%s' khoi ho khau?\n\nHanh dong nay khong the hoan tac.", 
                          selectedResident.getFullName())
         );
         
@@ -612,8 +595,8 @@ public class ResidentDetailsDialogHandler {
 				e.printStackTrace();
 			}
         	
-        	household.removeResident(selectedResident.getId());
-        	householdController.removeResident(household, selectedResident.getId()); //rm trong db
+        	household.removeResident(selectedResident.getCitizenId());
+        	householdController.removeResident(household, selectedResident.getCitizenId()); //rm trong db
         	
             residentList.remove(selectedResident); //rm trong cache
             
@@ -636,7 +619,7 @@ public class ResidentDetailsDialogHandler {
                 changeListener.onResidentRemoved(selectedResident);
             }
             
-            showInfoDialog("Thành công", "Đã xóa thành viên thành công.");
+            showInfoDialog("Thong bao", "Da xoa thanh vien thanh cong.");
         }
     }
     
@@ -660,7 +643,7 @@ public class ResidentDetailsDialogHandler {
 	}
 
 	public void setHouseholdInfo(String ownerName) {
-        String info = String.format("Chủ hộ: %s", ownerName != null ? ownerName : "N/A");
+        String info = String.format("Chu ho: %s", ownerName != null ? ownerName : "N/A");
         lblHouseholdInfo.setText(info);
     }
     
@@ -683,26 +666,26 @@ public class ResidentDetailsDialogHandler {
     
     private void showResidentDetails(Resident resident) {
         String details = String.format(
-            "Thông tin chi tiết:\n\n" +
+            "Thong tin chi tiet:\n\n" +
             "ID: %s\n" +
-            "Họ tên: %s\n" +
-            "Giới tính: %s\n" +
-            "Ngày sinh: %s\n" +
+            "Ho ten: %s\n" +
+            "Gioi tinh: %s\n" +
+            "Ngay sinh: %s\n" +
             "CCCD/CMND: %s\n" +
-            "Quan hệ với chủ hộ: %s\n" +
-            "Nghề nghiệp: %s\n" +
-            "Là chủ hộ: %s",
+            "Quan he voi chu ho: %s\n" +
+            "Nghe nghiep: %s\n" +
+            "La chu ho: %s",
             resident.getId(),
             resident.getFullName(),
             resident.getGender(),
             resident.getDateOfBirth(),
             resident.getIdCard(),
             resident.getRelationship(),
-            resident.getOccupation() != null ? resident.getOccupation() : "Chưa cập nhật",
-            resident.isHouseholdHead() ? "Có" : "Không"
+            resident.getOccupation() != null ? resident.getOccupation() : "Chua cap nhat",
+            resident.isHouseholdHead() ? "Co" : "Khong"
         );
         
-        showInfoDialog("Chi tiết thành viên", details);
+        showInfoDialog("Chi tiet thanh vien", details);
     }
     
     @FXML

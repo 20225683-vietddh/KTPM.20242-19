@@ -135,29 +135,12 @@ public class ResidentDAO {
 	    }
 	}
 
-	public boolean residentExists(int residentId) {
-        String sql = "SELECT COUNT(*) FROM residents WHERE id = ?";
-        
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, residentId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (SQLException e) {
-            System.err.println("Error checking resident existence: " + e.getMessage());
-            e.printStackTrace();
-        }
-        
-        return false;
-    }
-
-    public void add(Resident resident) throws ServiceException, SQLException {
+	public void add(Resident resident) throws ServiceException, SQLException {
         if (residentExists(resident.getId())) {
-            throw new ServiceException("Resident with ID " + resident.getId() + " already exists.");
+            throw new ServiceException("Resident with CCCD " + resident.getCitizenId() + " already exists.");
         }
         
-        String sql = "INSERT INTO residents (id, household_id, full_name, gender, date_of_birth, id_card, relationship, occupation, is_household_head) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO residents (id, full_name, date_of_birth, gender, ethnicity, religion, citizen_id, date_of_issue, place_of_issue, relationship, occupation, added_date, household_id, is_household_head) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
         	Utils.setResidentData(stmt, resident);
@@ -169,14 +152,15 @@ public class ResidentDAO {
         }
     }
 
+    //TODO : 
     public void update(Resident resident) throws ServiceException, SQLException {
         if (resident == null 
-//        		|| resident.getId() == null
+        		|| resident.getCitizenId() == null
         		) {
-            throw new IllegalArgumentException("Resident or Resident ID must not be null.");
+            throw new IllegalArgumentException("Resident or Resident CCCD must not be null.");
         }
         
-        String sql = "UPDATE residents SET household_id = ?, full_name = ?, gender = ?, date_of_birth = ?, id_card = ?, relationship = ?, occupation = ?, is_household_head = ? WHERE id = ?";
+        String sql = "UPDATE residents SET full_name = ?, date_of_birth = ?, gender = ?, ethnicity = ?, religion = ?, citizen_id = ?, date_of_issue = ?, place_of_issue = ?, relationship = ?, occupation = ?, added_date = ?, household_id = ?, is_household_head = ? WHERE id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             
@@ -199,14 +183,14 @@ public class ResidentDAO {
         }
     }
 
-    public void delete(int residentId) throws ServiceException, SQLException {
-        String sql = "DELETE FROM residents WHERE id = ?";
+    public void delete(String residentCitizenId) throws ServiceException, SQLException {
+        String sql = "DELETE FROM residents WHERE citizen_id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, residentId);
+            stmt.setString(1, residentCitizenId);
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
-                throw new ServiceException("No resident deleted with id: " + residentId);
+                throw new ServiceException("No resident deleted with CCCD: " + residentCitizenId);
             }
         } catch (SQLException e) {
             System.err.println("Error in delete(): " + e.getMessage());
@@ -214,9 +198,9 @@ public class ResidentDAO {
         }
     }
 
-    public void setHouseholdOwnerByResidentId(int ownerId) throws ServiceException, SQLException {
+    public void setHouseholdOwnerByResidentCitizenId(String ownerCitizenId) throws ServiceException, SQLException {
         // First, get the resident to find their household
-        Resident owner = findById(ownerId);
+        Resident owner = findByCitizenId(ownerCitizenId);
         
         // Reset all residents in this household to not be household head
         String resetSql = "UPDATE residents SET is_household_head = false WHERE household_id = ?";
@@ -226,17 +210,34 @@ public class ResidentDAO {
         }
         
         // Set the specified resident as household head
-        String setSql = "UPDATE residents SET is_household_head = true WHERE id = ?";
+        String setSql = "UPDATE residents SET is_household_head = true WHERE citizen_id = ?";
         try (PreparedStatement setStmt = conn.prepareStatement(setSql)) {
-            setStmt.setInt(1, ownerId);
+            setStmt.setString(1, ownerCitizenId);
             int rowsAffected = setStmt.executeUpdate();
             if (rowsAffected == 0) {
-                throw new ServiceException("Failed to set household head for resident: " + ownerId);
+                throw new ServiceException("Failed to set household head for resident: " + ownerCitizenId);
             }
         }
     }
     
-    public boolean citizenIdExists(String citizenId) {
+    public boolean residentExists(int residentId) {
+	    String sql = "SELECT COUNT(*) FROM residents WHERE id = ?";
+	    
+	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, residentId);
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            return rs.getInt(1) > 0;
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error checking resident existence: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	    
+	    return false;
+	}
+
+	public boolean citizenIdExists(String citizenId) {
         String sql = "SELECT COUNT(*) FROM residents WHERE citizen_id = ?";
         
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {

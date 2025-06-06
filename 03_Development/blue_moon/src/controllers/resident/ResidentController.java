@@ -8,88 +8,92 @@ import models.Resident;
 import services.resident.ResidentServiceImpl;
 
 public class ResidentController {
-	private ResidentServiceImpl residentService = new ResidentServiceImpl();
+	private ResidentServiceImpl residentService;
 
-    public ResidentController() {
+    public ResidentController() throws SQLException {
+        this.residentService = new ResidentServiceImpl();
     }
 
+    public List<Resident> getAllResidents() throws ServiceException {
+        return residentService.getAllResidents();
+    }
 
-    public ResidentServiceImpl getMemberService() {
+    public ResidentServiceImpl getResidentService() {
 		return residentService;
 	}
     
-	public void setMemberService(ResidentServiceImpl memberService) {
-		this.residentService = memberService;
+	public void setResidentService(ResidentServiceImpl residentService) {
+		this.residentService = residentService;
 	}
 
-	// Lấy member theo ID
-    public Resident getMemberById(int memberId) {
+	// Lay resident theo ID
+    public Resident getResidentByCitizenId(String residentCitizenId) {
         try {
-            return residentService.getResidentById(memberId);
+            return residentService.getResidentByCitizenId(residentCitizenId);
         } catch (ServiceException e) {
-            showErrorMessage("Failed to get member by ID: " + e.getMessage());
+            showErrorMessage("Failed to get resident by ID: " + e.getMessage());
             return null;
         }
     }
 
-    // Lấy danh sách member của 1 hộ gia đình
-    public List<Resident> getMembersByHouseholdId(int householdId) {
+    // Lay danh sach resident cua 1 ho gia dinh
+    public List<Resident> getResidentsByHouseholdId(int householdId) {
         try {
             return residentService.getResidentsByHouseholdId(householdId);
         } catch (ServiceException e) {
-            showErrorMessage("Failed to get members by household ID: " + e.getMessage());
+            showErrorMessage("Failed to get residents by household ID: " + e.getMessage());
             return null;
         }
     }
 
-    // Kiểm tra tồn tại
-    public boolean memberExists(int memberId) {
-        return residentService.residentExists(memberId);
+    // Kiem tra ton tai
+    public boolean residentExists(String residentCitizenId) {
+        return residentService.residentExists(residentCitizenId);
     }
 
-    // Thêm member
-    public boolean addMember(Resident member) throws SQLException {
+    // Them resident
+    public boolean addResident(Resident resident) throws SQLException {
         try {
-            boolean result = residentService.addResident(member);
+            boolean result = residentService.addResident(resident);
             if (result) {
-                System.out.println("Member added successfully.");
+                System.out.println("Resident added successfully.");
             }
             return result;
         } catch (ServiceException e) {
-            showErrorMessage("Failed to add member: " + e.getMessage());
+            showErrorMessage("Failed to add resident: " + e.getMessage());
             return false;
         }
     }
 
-    // Cập nhật member
-    public boolean updateMember(Resident member) throws SQLException {
+    // Cap nhat resident
+    public boolean updateResident(Resident resident) throws SQLException {
         try {
-            boolean result = residentService.updateResident(member);
+            boolean result = residentService.updateResident(resident);
             if (result) {
-                System.out.println("Member updated successfully.");
+                System.out.println("Resident updated successfully.");
             }
             return result;
         } catch (ServiceException e) {
-            showErrorMessage("Failed to update member: " + e.getMessage());
+            showErrorMessage("Failed to update resident: " + e.getMessage());
             return false;
         }
     }
 
-    // Xoá member
-    public boolean deleteMember(int memberId) throws SQLException {
+    // Xoa resident
+    public boolean deleteResident(String residentCitizenId) throws SQLException {
         try {
-            boolean result = residentService.deleteResident(memberId);
+            boolean result = residentService.deleteResident(residentCitizenId);
             if (result) {
-                System.out.println("Member deleted successfully.");
+                System.out.println("Resident deleted successfully.");
             }
             return result;
         } catch (ServiceException e) {
-            showErrorMessage("Failed to delete member: " + e.getMessage());
+            showErrorMessage("Failed to delete resident: " + e.getMessage());
             return false;
         }
     }
 
-    // Lấy chủ hộ
+    // Lay chu ho
     public Resident getHouseholdHead(int householdId) {
         try {
             return residentService.getHouseholdHead(householdId);
@@ -99,9 +103,9 @@ public class ResidentController {
         }
     }
 
-    // In lỗi
+    // In loi
     public void showErrorMessage(String message) {
-        // Thay thế bằng UI dialog nếu có
+        // Thay the bang UI dialog neu co
         System.err.println("Error: " + message);
     }
 }

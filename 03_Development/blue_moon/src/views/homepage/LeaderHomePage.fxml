@@ -34,14 +34,14 @@
                               <Insets left="68.0" top="16.0" />
                            </VBox.margin>
                         </ImageView>
-                        <Label fx:id="lblUserName" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="300.0" text="Tên người dùng" >
+                        <Label fx:id="lblUserName" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="300.0" text="Ten nguoi dung" >
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
                         <VBox prefWidth="100.0" style="-fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left;" text="Trang chủ">
+                              <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left;" text="Trang chu">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -59,7 +59,7 @@
                                     <Insets right="98.0" />
                                  </padding>
                               </Button>
-                              <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-content-display: left;" text="Danh sách hộ khẩu">
+                              <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-content-display: left;" text="Danh sach ho khau">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -77,7 +77,7 @@
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button layoutX="11.0" layoutY="64.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Danh sách nhân khẩu">
+                              <Button layoutX="11.0" layoutY="64.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Danh sach nhan khau">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -95,7 +95,7 @@
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Tạm trú, tạm vắng">
+                              <Button layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Tam tru, tam vang">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -113,7 +113,7 @@
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button layoutX="11.0" layoutY="165.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Thống kê nhân khẩu">
+                              <Button layoutX="11.0" layoutY="165.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Thong ke nhan khau">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -139,7 +139,7 @@
                               <Insets bottom="3.0" />
                            </padding>
                         </VBox>
-                        <Button fx:id="btnGoBack" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Quay lại">
+                        <Button fx:id="btnGoBack" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Quay lai">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -166,7 +166,7 @@
                               <Insets bottom="16.0" left="70.0" right="70.0" top="30.0" />
                            </VBox.margin>
                         </ImageView>
-                        <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Đăng xuất">
+                        <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Dang xuat">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -196,7 +196,7 @@
                                     <Image url="@../../assets/images/home-page.png" />
                                  </image>
                               </ImageView>
-                              <Label prefHeight="40.0" text="Hộ khẩu">
+                              <Label prefHeight="40.0" text="Ho khau">
                                  <font>
                                     <Font name="System Bold" size="22.0" />
                                  </font>
@@ -222,14 +222,14 @@
                         <!-- Title and Search Bar -->
                         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1106.0">
                            <children>
-                              <Label text="Danh sách hộ khẩu" textFill="#43a5dc">
+                              <Label text="Danh sach ho khau" textFill="#43a5dc">
                                  <font>
                                     <Font name="System Bold" size="24.0" />
                                  </font>
                               </Label>
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <TextField fx:id="txtSearch" prefHeight="40.0" prefWidth="250.0" promptText="Tìm kiếm hộ khẩu...">
+                                    <TextField fx:id="txtSearch" prefHeight="40.0" prefWidth="250.0" promptText="Tim kiem ho khau...">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
@@ -245,12 +245,12 @@
                         <!-- Function Buttons -->
                         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1106.0" spacing="15.0">
                            <children>
-                              <Button fx:id="btnAddHousehold" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #43A5DC; -fx-text-fill: white; -fx-cursor: hand;" text="+ Thêm hộ khẩu mới">
+                              <Button fx:id="btnAddHousehold" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #43A5DC; -fx-text-fill: white; -fx-cursor: hand;" text="+ Them ho khau moi">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="btnRefresh" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-cursor: hand;" text="Làm mới">
+                              <Button fx:id="btnRefresh" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-cursor: hand;" text="Lam moi">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -266,9 +266,9 @@
                         <TableView fx:id="tblHouseholds" prefHeight="600.0" prefWidth="1066.0" style="-fx-cursor: hand;">
 						  <columns>
 						    <TableColumn fx:id="colId" prefWidth="80.0" text="ID" />
-						    <TableColumn fx:id="colOwnerName" prefWidth="300.0" text="Chủ hộ" />
-						    <TableColumn fx:id="colRoomNumber" prefWidth="200.0" text="Số phòng" />
-						    <TableColumn fx:id="colActions" prefWidth="250.0" text="Thao tác" />
+						    <TableColumn fx:id="colOwnerName" prefWidth="300.0" text="Chu ho" />
+						    <TableColumn fx:id="colRoomNumber" prefWidth="200.0" text="So phong" />
+						    <TableColumn fx:id="colActions" prefWidth="250.0" text="Thao tac" />
 						  </columns>
 						  <VBox.margin>
 						    <Insets left="20.0" right="20.0" top="20.0" />

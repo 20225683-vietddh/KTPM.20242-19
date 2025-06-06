@@ -16,16 +16,20 @@ import exception.ServiceException;
 import models.Household;
 import models.Resident;
 import services.resident.ResidentServiceImpl;
+import services.room.RoomService;
+import services.room.RoomServiceImpl;
+import utils.FieldVerifier.ValidationResult;
 
 public class HouseholdServiceImpl implements HouseholdService {
 	private HouseholdDAO householdDAO;
 	private ResidentServiceImpl residentService = new ResidentServiceImpl();
+	private RoomService roomService = new RoomServiceImpl();
 
 	public HouseholdServiceImpl() {
 		this.householdDAO = new HouseholdDAO();
 	}
 
-	public List<Household> getAllHouseholds() throws ServiceException {
+	public List<Household> getAll() throws ServiceException {
 		return householdDAO.findAll();
 	}
 
@@ -36,45 +40,29 @@ public class HouseholdServiceImpl implements HouseholdService {
 
 
 	@Override
-	public void addResidentToHousehold(Household h, int residentId) throws HouseholdNotExist, ServiceException, SQLException {
-		Resident m = residentService.getResidentById(residentId);
-		householdDAO.addResidentToHousehold(h,m);
-	}
-
-	@Override
-	public void removeResident(Household h, int residentId) throws HouseholdNotExist, ServiceException, SQLException {
-		Resident m = residentService.getResidentById(residentId);
-		householdDAO.removeResident(h,m);
-		
-	}
-
-	@Override
 	public List<Resident> getResidents(int householdId) throws HouseholdNotExist, ServiceException {
-		try {
-			return residentService.getResidentsByHouseholdId(householdId);
-		} catch (ServiceException e) {
-			System.err.println("Error getting residents for household " + householdId + ": " + e.getMessage());
-			throw e;
-		}
+		return residentService.getResidentsByHouseholdId(householdId);
 	}
 
 	@Override
-	public List<Integer> getResidentIds(int householdId) throws HouseholdNotExist {
-		try {
+	public List<Integer> getResidentIds(int householdId) throws HouseholdNotExist, ServiceException {
+		
 			List<Resident> residents = getResidents(householdId);
 			return residents.stream()
 				.map(Resident::getId)
 				.collect(Collectors.toList());
-		} catch (ServiceException e) {
-			System.err.println("Error getting resident IDs for household " + householdId + ": " + e.getMessage());
-			return new ArrayList<>(); // Return empty list if no residents found
-		}
+		
 	}
 
 	@Override
+	public int getResidentCount(int id) throws HouseholdNotExist, ServiceException {
+		return getHouseholdById(id).getHouseholdSize();
+	}
+	
+	@Override
 	public void addHousehold(Household household)
-			throws HouseholdAlreadyExistsException, ResidentNotFoundException, InvalidHouseholdDataException, HouseholdNotExist, SQLException {
-		if (!validateAdd(household)) {
+			throws HouseholdAlreadyExistsException, ResidentNotFoundException, InvalidHouseholdDataException, HouseholdNotExist, SQLException, ServiceException {
+		if (!validateAddUpdate(household)) {
 			return;
 		}
 		
@@ -86,15 +74,11 @@ public class HouseholdServiceImpl implements HouseholdService {
 		List<Resident> residents = household.getResidents();
 		for (Resident resident : residents) {
 			resident.setHouseholdId(generatedId);
-			if (resident.getId() == household.getOwnerId()) {
-				resident.setHouseholdHead(true);
-				resident.setRelationship("Chủ hộ");
-			}
 		}
-		
-		// 3. Update all residents in one transaction
+		// 3. Update all residents + room in one transaction
 		try {
 			residentService.updateResidents(residents);
+			roomService.occupyRoom(household.getHouseNumber(), household.getId());
 		} catch (ServiceException e) {
 			// If resident update fails, we should rollback the household creation
 			try {
@@ -107,18 +91,24 @@ public class HouseholdServiceImpl implements HouseholdService {
 	}
 
 	@Override
-	public void addResidentsToHousehold(Household h, List<Integer> residentIds)
-			throws HouseholdNotExist, ServiceException, SQLException {
+	public void addResidentToHousehold(Household h, String residentCitizenId) throws HouseholdNotExist, ServiceException, SQLException {
+		Resident m = residentService.getResidentByCitizenId(residentCitizenId);
+		householdDAO.addResidentToHousehold(h,m);
+	}
 
-		for (int r : residentIds) {
+	@Override
+	public void addResidentsToHousehold(Household h, List<String> residentCitizenIds)
+			throws HouseholdNotExist, ServiceException, SQLException {
+	
+		for (String r : residentCitizenIds) {
 			addResidentToHousehold(h, r);
 		}
 	}
 
 	@Override
 	public void updateHousehold(Household household) throws HouseholdNotExist, HouseholdAlreadyExistsException,
-			ResidentNotFoundException, InvalidHouseholdDataException, SQLException {
-		if (!validateUpdate(household)) {
+			ResidentNotFoundException, InvalidHouseholdDataException, SQLException, ServiceException {
+		if (!validateAddUpdate(household)) {
 			return;
 		}
 		householdDAO.update(household);
@@ -131,61 +121,63 @@ public class HouseholdServiceImpl implements HouseholdService {
 	}
 
 	@Override
-	public int getResidentCount(int id) throws HouseholdNotExist, ServiceException {
-		return getHouseholdById(id).getHouseholdSize();
+	public void removeResident(Household h, String residentCitizenId) throws HouseholdNotExist, ServiceException, SQLException {
+		Resident m = residentService.getResidentByCitizenId(residentCitizenId);
+		householdDAO.removeResident(h,m);
+		
 	}
 
-	private boolean validateAdd(Household household)
-			throws HouseholdAlreadyExistsException, ResidentNotFoundException, HouseholdNotExist, InvalidHouseholdDataException{
-		// Call business rules validation
-		return validateBusinessRules(household);
-	}
-
-	private boolean validateUpdate(Household household) throws HouseholdNotExist, HouseholdAlreadyExistsException,
-			ResidentNotFoundException, InvalidHouseholdDataException {
-		// Apply business logic validations
-		return validateBusinessRules(household);
-	}
-
-	/**
-	 * Common business validation logic used by both add and update
-	 * @throws HouseholdNotExist 
-	 * @throws InvalidHouseholdDataException 
-	 */
-	private boolean validateBusinessRules(Household household)
-			throws ResidentNotFoundException, HouseholdNotExist, InvalidHouseholdDataException {
+	private boolean validateAddUpdate(Household household)
+			throws ResidentNotFoundException, HouseholdNotExist, InvalidHouseholdDataException, ServiceException {
+		//Deeper validation 
 		
 		// 1. Check if owner exists
 		if (!doesResidentExist(household.getOwnerId())) {
 			throw new ResidentNotFoundException(
 					"Chủ hộ với ID '" + household.getOwnerId() + "' không tồn tại trong hệ thống");
 		}
-		
+
 		// 2. Check if owner already belongs to another household
 	    if (isResidentInAnotherHousehold(household.getOwnerId(), household.getId())) {
 	        throw new InvalidHouseholdDataException("Chủ hộ đang thuộc về một hộ khẩu khác. Cần tách hộ trước khi thêm.");
 	    }
+		
+		// 3. Check if room is already occupied
+		if (roomExists(household.getHouseNumber())) {
+			throw new InvalidHouseholdDataException("Phòng " + household.getHouseNumber() + " đã có người ở");
+		}
 
-		// 3. Validate all resident IDs exist and not in another household
-		if (household.getResidentIds() != null && !household.getResidentIds().isEmpty()) {
-			List<Integer> residentIds = household.getResidentIds();
-			for (int residentId : residentIds) {
-				if (!doesResidentExist(residentId)) {
+		// 4. Check if phone is already used
+		if (phoneExists(household.getPhone())) {
+			throw new InvalidHouseholdDataException("Số điện thoại " + household.getPhone() + " đã được sử dụng bởi hộ khẩu khác");
+		}
+
+		// 5. Check if email is already used
+		if (emailExists(household.getEmail())) {
+			throw new InvalidHouseholdDataException("Email " + household.getEmail() + " đã được sử dụng bởi hộ khẩu khác");
+		}
+
+	    List<Integer> residentIds = household.getResidentIds();
+		// 6. Validate all resident IDs exist and not in another household
+		if (residentIds!= null && !residentIds.isEmpty()) {
+			
+			for (int rId : residentIds) {
+				if (!doesResidentExist(rId)) {
 					throw new ResidentNotFoundException(
-							"Thành viên với ID '" + residentId + "' không tồn tại trong hệ thống");
+							"Thành viên với ID '" + rId + "' không tồn tại trong hệ thống");
 				}
 				
 				// Check resident is not already in another household
-	            if (isResidentInAnotherHousehold(residentId, household.getId())) {
-	                throw new InvalidHouseholdDataException("Thành viên ID '" + residentId + "' đã thuộc hộ khẩu khác.");
+	            if (isResidentInAnotherHousehold(rId, household.getId())) {
+	                throw new InvalidHouseholdDataException("Thành viên ID '" + rId + "' đã thuộc hộ khẩu khác.");
 	            }
 			}
 		}
 
-		// 4. Owner must be in the resident list
-		if (household.getResidentIds() != null && !household.getResidentIds().isEmpty()) {
-			boolean ownerInResidents = household.getResidentIds().stream()
-					.anyMatch(resident -> resident.equals(household.getOwnerId()));
+		// 7. Owner must be in the resident list
+		if (residentIds != null && !residentIds.isEmpty()) {
+			boolean ownerInResidents = residentIds.stream()
+					.anyMatch(rId -> rId.equals(household.getOwnerId()));
 
 			if (!ownerInResidents) {
 				throw new InvalidHouseholdDataException(
@@ -193,18 +185,13 @@ public class HouseholdServiceImpl implements HouseholdService {
 			}
 		}
 
-		// 6. No duplicate resident IDs
-		if (household.getResidentIds() != null && household.getResidentIds().size() > 1) {
-			long uniqueResidentCount = household.getResidentIds().stream().distinct().count();
+		// 8. No duplicate resident IDs
+		if (residentIds != null && residentIds.size() > 1) {
+			long uniqueResidentCount = residentIds.stream().distinct().count();
 
-			if (uniqueResidentCount != household.getResidentIds().size()) {
+			if (uniqueResidentCount != residentIds.size()) {
 				throw new InvalidHouseholdDataException("Danh sách thành viên có ID trùng lặp");
 			}
-		}
-
-		// 7. Validate household size
-		if (household.getHouseholdSize() <= 0 || household.getHouseholdSize() > 20) {
-			throw new InvalidHouseholdDataException("Số thành viên hộ khẩu phải từ 1 đến 20 người");
 		}
 
 		return true;
@@ -221,6 +208,33 @@ public class HouseholdServiceImpl implements HouseholdService {
 
 	private boolean doesResidentExist(int residentId) {
 		return residentService.residentExists(residentId);
+	}
+
+	@Override
+	public boolean phoneExists(String phone) throws ServiceException {
+		try {
+			return householdDAO.phoneExists(phone);
+		} catch (SQLException e) {
+			throw new ServiceException("Error checking phone existence: " + e.getMessage());
+		}
+	}
+
+	@Override
+	public boolean emailExists(String email) throws ServiceException {
+		try {
+			return householdDAO.emailExists(email);
+		} catch (SQLException e) {
+			throw new ServiceException("Error checking email existence: " + e.getMessage());
+		}
+	}
+
+	@Override
+	public boolean roomExists(String roomNumber) throws ServiceException {
+		try {
+			return householdDAO.roomExists(roomNumber);
+		} catch (SQLException e) {
+			throw new ServiceException("Error checking room existence: " + e.getMessage());
+		}
 	}
 
 }

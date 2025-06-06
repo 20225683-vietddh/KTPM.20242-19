@@ -1,11 +1,11 @@
 package utils;
 
+import java.util.Optional;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.stage.Stage;
-
-import java.util.Optional;
 
 /**
  * Utility class for displaying alert dialogs in the application.
@@ -83,6 +83,18 @@ public class AlertUtils {
     }
 
     /**
+     * Shows a success alert dialog.
+     *
+     * @param title    The title of the alert dialog
+     * @param content  The content text of the alert dialog
+     */
+    public static void showSuccessDialog(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        configureAlert(alert, title, null, content);
+        alert.showAndWait();
+    }
+
+    /**
      * Configures common settings for an alert dialog.
      *
      * @param alert    The Alert to configure
@@ -97,7 +109,34 @@ public class AlertUtils {
         
         // Apply custom styling to the dialog
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(AlertUtils.class.getResource("/assets/css/style.css").toExternalForm());
+        
+        // Set font family that supports Vietnamese characters
+        dialogPane.setStyle(
+            "-fx-font-family: 'Segoe UI', system-ui, sans-serif; " +
+            "-fx-font-size: 14px;"
+        );
+        
+        // Style the content text
+        dialogPane.lookup(".content.label").setStyle(
+            "-fx-font-family: 'Segoe UI', system-ui, sans-serif; " +
+            "-fx-font-size: 14px;"
+        );
+        
+        // Style the buttons
+        dialogPane.getButtonTypes().forEach(buttonType -> {
+            Button button = (Button) dialogPane.lookupButton(buttonType);
+            button.setStyle(
+                "-fx-font-family: 'Segoe UI', system-ui, sans-serif; " +
+                "-fx-font-size: 14px;"
+            );
+        });
+        
+        // Set minimum width for better readability
+        dialogPane.setPrefWidth(400);
+        dialogPane.setMinHeight(100);
+        
+        // Make dialog resizable for long content
+        alert.setResizable(true);
         
         // Set the alert dialog to be application modal
         Stage stage = (Stage) dialogPane.getScene().getWindow();

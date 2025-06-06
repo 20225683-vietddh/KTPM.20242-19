@@ -11,15 +11,16 @@ public interface ResidentService {
 	
 	List<Resident> getAll() throws ServiceException; //
 	
-	Resident getResidentById(int residentId) throws ServiceException; //
-	
+	Resident getResidentById(int rId) throws ServiceException;
+
 	Resident getResidentByCitizenId(String citizenId) throws ServiceException; //
 
 	List<Resident> getResidentByCitizenIds(List<String> citizenIds) throws ServiceException;
 	
 	List<Resident> getResidentsByHouseholdId(int householdId) throws ServiceException;
 	
-	List<Resident> getResidentsByIds(List<Integer> residentIds) throws ServiceException;
+
+//	List<Resident> getResidentsByResidentsCitizenIds(List<String> residentCitizenIds) throws ServiceException;
 
 	boolean addResident(Resident resident) throws ServiceException, SQLException; //
 
@@ -28,9 +29,10 @@ public interface ResidentService {
 	void updateResidents(List<Resident> residents) throws ServiceException, SQLException;
 	
 
-	boolean deleteResident(int residentId) throws ServiceException, SQLException; //
+	boolean deleteResident(String residentCitizenId) throws ServiceException, SQLException; //
 
 	Resident getHouseholdHead(int householdId) throws ServiceException;
+
 
 	boolean residentExists(int residentId);
 

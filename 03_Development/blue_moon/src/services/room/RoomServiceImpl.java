@@ -1,7 +1,9 @@
 package services.room;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dao.room.RoomDAO;
 import exception.ServiceException;
@@ -9,6 +11,11 @@ import models.Room;
 
 public class RoomServiceImpl implements RoomService {
 	private final RoomDAO roomDAO = new RoomDAO();
+
+	@Override
+	public List<Room> getAllRooms() throws ServiceException, SQLException {
+		return roomDAO.findAll();
+	}
 
 	@Override
 	public Room getRoomById(int id) throws ServiceException, SQLException {
@@ -22,29 +29,24 @@ public class RoomServiceImpl implements RoomService {
 	
 	public String getRoomNumberByHouseholdId(int householdId) throws ServiceException {
 	    try {
-	        List<Room> allRooms = getAllRooms(); 
-	        
-	        for (Room room : allRooms) {
-	            if (room.getHouseholdId() != null && room.getHouseholdId() == householdId) {
-	                return room.getRoomNumber();
-	            }
-	        }
-	        
-	        return null; // Không tìm thấy phòng nào
-	        
+	    	Room room = roomDAO.findByHouseholdId(householdId);
+	        return room.getRoomNumber();
 	    } catch (Exception e) {
 	        throw new ServiceException("Lỗi khi lấy thông tin số phòng: " + e.getMessage(), e);
 	    }
 	}
 
 	@Override
-	public List<Room> getAllRooms() throws ServiceException, SQLException {
-		return roomDAO.findAll();
-	}
-
-	@Override
-	public boolean isRoomAvailable(String roomNumber) throws ServiceException, SQLException {
-		return roomDAO.isRoomAvailable(roomNumber);
+	public List<Room> getAvailableRooms() {
+		try {
+			List<Room> allRooms = getAllRooms();
+			return allRooms.stream()
+				.filter(room -> !room.isOccupied())
+				.collect(Collectors.toList());
+		} catch (Exception e) {
+			System.err.println("Error getting available rooms: " + e.getMessage());
+			return new ArrayList<>();
+		}
 	}
 
 	@Override
@@ -55,5 +57,25 @@ public class RoomServiceImpl implements RoomService {
 	@Override
 	public void vacateRoom(String roomNumber) throws ServiceException, SQLException {
 		roomDAO.vacateRoom(roomNumber);
+	}
+
+	@Override
+	public boolean isRoomAvailable(String roomNumber) throws ServiceException, SQLException {
+		return roomDAO.isRoomAvailable(roomNumber);
+	}
+
+	@Override
+	public Float getAreaByRoomNumber(String roomNumber) throws ServiceException {
+		return roomDAO.getAreaByRoomNumber(roomNumber);
+	}
+
+	@Override
+	public void add(Room room) throws ServiceException {
+		roomDAO.add(room);
+	}
+
+	@Override
+	public void update(Room room) throws ServiceException {
+		roomDAO.update(room);
 	}
 }

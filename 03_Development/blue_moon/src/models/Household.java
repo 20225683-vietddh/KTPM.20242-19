@@ -17,11 +17,10 @@ public class Household {
 
 	//giong
 	private int id;
-	private String houseNumber;
+	private String houseNumber;//room number
 	private String street;
-	private String district;
 	private String ward;
-	private Float area;
+	private String district;
 	private int householdSize;
 	private int ownerId;
 	private String ownerName;
@@ -37,33 +36,28 @@ public class Household {
 	
 
 	//full construtor
-	public Household(int id, String houseNumber, String district, String ward, String street, Float area,
-			LocalDate creationDate, int householdSize, int ownerId, String phone, String email, String ownerName,
-			List<Resident> residents) {
+	public Household(int id, String houseNumber, String street, String ward, String district,
+			int householdSize, int ownerId, String phone, String email, LocalDate creationDate) {
 		this.id = id;
 		this.houseNumber = houseNumber;
-		this.district = district;
-		this.ward = ward;
 		this.street = street;
-		this.area = area;
-		this.creationDate = creationDate;
+		this.ward = ward;
+		this.district = district;
 		this.householdSize = householdSize;
 		this.ownerId = ownerId;
 		this.phone = phone;
 		this.email = email;
-		this.ownerName = ownerName;
-		this.residents = residents;
+		this.creationDate = creationDate;
 	}
 	
 	//auto gen id
-	public Household(String houseNumber, String district, String ward, String street, Float area,
+	public Household(String houseNumber, String district, String ward, String street,
 			LocalDate creationDate, int householdSize, int ownerId, String phone, String email, String ownerName,
 			List<Resident> residents) throws ServiceException {
 		this.houseNumber = houseNumber;
 		this.district = district;
 		this.ward = ward;
 		this.street = street;
-		this.area = area;
 		this.creationDate = creationDate;
 		this.householdSize = householdSize;
 		this.ownerId = ownerId;
@@ -136,30 +130,21 @@ public class Household {
 		this.ownerName = ownerName;
 	}
 
-	public Float getArea() {
-		return area;
-	}
-
-	public void setArea(Float area) {
-		this.area = area;
-	}
-
 	public String getPhone() {
-		return phone;
-	}
+        return phone;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
+    public void setEmail(String email) {
+        this.email = email;
+    }
 	public int getHouseholdSize() {
 		return householdSize;
 	}
@@ -186,13 +171,12 @@ public class Household {
 
 	public void setResidents(List<Resident> residents) {
 		this.residents = residents != null ? residents : new ArrayList<>();
-		// Update household size based on resident count
 		this.householdSize = this.residents.size();
 	}
 	
-	public void setResidentIds(List<Integer> residentIds) throws ServiceException {
+	public void setResidentCitizenIds(List<String> residentCitizenIds) throws ServiceException {
 		residents.clear();
-		addResidentIds(residentIds);
+		addResidentCitizenIds(residentCitizenIds);
 	}
 
 	public void addResident(Resident resident) {
@@ -202,24 +186,32 @@ public class Household {
 		}
 	}
 	
-	public void addResidentId(int residentId) throws ServiceException {
-		Resident r= residentService.getResidentById(residentId);
+	public void addResidents(List<Resident> residents) {
+		if (residents != null ) {
+			for (Resident r : residents) residents.add(r);
+			this.householdSize = residents.size();
+		}
+		
+	}
+	
+	public void addResidentCitizenId(String residentCitizenId) throws ServiceException {
+		Resident r= residentService.getResidentByCitizenId(residentCitizenId);
 		addResident(r);
 	}
 	
-	public void addResidentIds(List<Integer> residentIds) throws ServiceException {
-		for (int residentId: residentIds) {
-			addResidentId(residentId);
+	public void addResidentCitizenIds(List<String> residentCitizenIds) throws ServiceException {
+		for (String residentCitizenId: residentCitizenIds) {
+			addResidentCitizenId(residentCitizenId);
 		}
 	}
 
-	public void removeResident(int residentId) {
-		residents.removeIf(resident -> resident.getId() == residentId);
+	public void removeResident(String residentCitizenId) {
+		residents.removeIf(resident -> resident.getCitizenId() == residentCitizenId);
 		this.householdSize = residents.size();
 	}
 
-	public boolean hasResident(int residentId) {
-		return residents.stream().map(Resident::getId).collect(Collectors.toList()).contains(residentId);
+	public boolean hasResident(String residentCitizenId) {
+		return residents.stream().map(Resident::getCitizenId).collect(Collectors.toList()).contains(residentCitizenId);
 	}
 
 	@Override
@@ -227,10 +219,11 @@ public class Household {
 		return "Household{" +
 				"id=" + id +
 				", houseNumber='" + houseNumber + '\'' +
-				", area='" + area + '\'' +
+				", street='" + street + '\'' +
+				", ward='" + ward + '\'' +
+				", district='" + district + '\'' +
 				", householdSize=" + householdSize +
-				", ownerId='" + ownerId + '\'' +
-				", ownerName='" + ownerName + '\'' +
+				", ownerId=" + ownerId +
 				", phone='" + phone + '\'' +
 				", email='" + email + '\'' +
 				", creationDate=" + creationDate +
@@ -252,5 +245,24 @@ public class Household {
 		return Objects.hash(id);
 	}
 	
-	
+	public void setRelationships(List<utils.enums.RelationshipType> relationships) throws ServiceException, SQLException {
+		if (relationships == null || relationships.isEmpty()) {
+			return;
+		}
+
+		// Đảm bảo số lượng quan hệ khớp với số lượng thành viên
+		if (relationships.size() != residents.size()) {
+			throw new ServiceException("Số lượng quan hệ không khớp với số lượng thành viên!");
+		}
+
+		// Cập nhật quan hệ cho từng thành viên
+		for (int i = 0; i < residents.size(); i++) {
+			Resident resident = residents.get(i);
+			utils.enums.RelationshipType relationship = relationships.get(i);
+
+			// Cập nhật quan hệ và trạng thái chủ hộ
+			resident.setRelationship(relationship);
+			resident.setHouseholdHead(resident.getId() == ownerId);
+		}
+	}
 }

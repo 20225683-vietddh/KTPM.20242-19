@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import controllers.household.HouseholdController;
 
@@ -30,7 +31,9 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import models.Household;
 import models.Resident;
+import models.Room;
 import services.resident.ResidentService;
+import services.resident.ResidentServiceImpl;
 import services.room.RoomService;
 import services.room.RoomServiceImpl;
 import utils.FieldVerifier;
@@ -41,7 +44,7 @@ import utils.AlertUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
-
+import utils.FieldVerifier.ValidationResult;
 public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
     private Runnable onSuccessCallback;
     
@@ -116,6 +119,8 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
     public AddHouseholdDialogHandler(HouseholdController householdController) {
         super();
         this.householdController = householdController;
+        this.roomService = new RoomServiceImpl();
+        this.residentService = new ResidentServiceImpl();
     }
 
     @Override
@@ -125,18 +130,35 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
     
     @FXML
     private void initialize() {
+        // Initialize services if not already initialized
+        if (roomService == null) {
+            roomService = new RoomServiceImpl();
+        }
+        if (residentService == null) {
+            residentService = new ResidentServiceImpl();
+        }
+        
         // Add real-time validation listeners
         addValidationListeners();
+        
         // Initialize room combo box
         initializeRoomComboBox();
     }
     
     private void initializeRoomComboBox() {
-        ObservableList<String> rooms = FXCollections.observableArrayList();
-        // Add available rooms
-        rooms.addAll("301", "302", "303", "401", "402", "403", "501", "502", "503");
-        cmbRoom.setItems(rooms);
-        cmbRoom.setPromptText("Chọn phòng");
+        try {
+            ObservableList<String> rooms = FXCollections.observableArrayList();
+            // Get available rooms from service
+            List<Room> availableRooms = roomService.getAvailableRooms();
+            rooms.addAll(availableRooms.stream()
+                .map(Room::getRoomNumber)
+                .collect(Collectors.toList()));
+            cmbRoom.setItems(rooms);
+            cmbRoom.setPromptText("Chọn phòng");
+        } catch (Exception e) {
+            System.err.println("Error initializing room combo box: " + e.getMessage());
+            AlertUtils.showErrorAlert("Lỗi", "Không thể tải danh sách phòng", e.getMessage());
+        }
     }
     
     private void addValidationListeners() {
@@ -180,11 +202,26 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
     
     private void validateRoomAvailability(String roomNumber) {
         try {
-            if (roomService != null && !roomService.isRoomAvailable(roomNumber)) {
+            if (roomService == null) {
+                System.err.println("RoomService is null");
+                return;
+            }
+            
+            // First check if room exists
+            Room room = roomService.getRoomByNumber(roomNumber);
+            if (room == null) {
+                showError(lblRoomError, "Phòng " + roomNumber + " không tồn tại");
+                return;
+            }
+            
+            // Then check if it's available
+            if (room.isOccupied()) {
                 showError(lblRoomError, "Phòng " + roomNumber + " đã có người thuê");
             }
-        } catch (Exception e) {
+        } catch (ServiceException e) {
             showError(lblRoomError, "Lỗi kiểm tra phòng: " + e.getMessage());
+        } catch (SQLException e) {
+            showError(lblRoomError, "Lỗi database: " + e.getMessage());
         }
     }
     
@@ -192,8 +229,9 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
     private void handleGenerateResidentFields() {
         String residentCountText = txtResidentCount.getText().trim();
         
-        if (!FieldVerifier.isValidResidentCount(residentCountText)) {
-            showError(lblResidentCountError, FieldVerifier.getInvalidResidentCountErrorMessage());
+        ValidationResult countResult = FieldVerifier.verifyResidentCount(residentCountText);
+        if (!countResult.isValid()) {
+            showError(lblResidentCountError, countResult.getMessage());
             return;
         }
         
@@ -212,7 +250,7 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
         residentFieldsContainer.setVisible(true);
         
         // Add a header for resident IDs section
-        Label headerLabel = new Label("CCCD các thành viên trong hộ:");
+        Label headerLabel = new Label("CCCD cac thanh vien trong ho:");
         headerLabel.setTextFill(javafx.scene.paint.Color.web("#43a5dc"));
         headerLabel.setFont(Font.font("System Bold", 14.0));
         VBox.setMargin(headerLabel, new Insets(10, 0, 5, 0));
@@ -223,7 +261,7 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
             VBox residentFieldBox = new VBox(5.0);
             
             // Resident label
-            Label residentLabel = new Label("Thành viên " + (i + 1) + ": *");
+            Label residentLabel = new Label("Thanh vien " + (i + 1) + ": *");
             residentLabel.setTextFill(javafx.scene.paint.Color.web("#43a5dc"));
             residentLabel.setFont(Font.font("System Bold", 12.0));
             
@@ -234,7 +272,7 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
             TextField residentCitizenIdField = new TextField();
             residentCitizenIdField.setPrefHeight(35.0);
             residentCitizenIdField.setPrefWidth(250.0);
-            residentCitizenIdField.setPromptText("Nhập CCCD thành viên " + (i + 1));
+            residentCitizenIdField.setPromptText("Nhap CCCD thanh vien " + (i + 1));
             residentCitizenIdField.setStyle("-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;");
             residentCitizenIdField.setFont(Font.font(14.0));
             
@@ -242,7 +280,7 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
             ComboBox<RelationshipType> relationshipCombo = new ComboBox<>();
             relationshipCombo.setPrefHeight(35.0);
             relationshipCombo.setPrefWidth(150.0);
-            relationshipCombo.setPromptText("Chọn quan hệ");
+            relationshipCombo.setPromptText("Chon quan he");
             relationshipCombo.setStyle("-fx-background-radius: 5; -fx-border-color: #ced4da; -fx-border-radius: 5;");
             
             // Set up relationship combo box items
@@ -307,21 +345,21 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
         boolean isValid = true;
         
         // Validate owner citizen ID
-        if (!FieldVerifier.isValidCitizenId(txtOwnerCitizenId.getText())) {
-            showError(lblOwnerCitizenIdError, txtOwnerCitizenId.getText().trim().isEmpty() ? 
-                FieldVerifier.getEmptyFieldErrorMessage() : FieldVerifier.getInvalidCitizenIdErrorMessage());
+        ValidationResult ownerIdResult = FieldVerifier.verifyCitizenId(txtOwnerCitizenId.getText().trim());
+        if (!ownerIdResult.isValid()) {
+            showError(lblOwnerCitizenIdError, ownerIdResult.getMessage());
             isValid = false;
         }
-        
+
         // Validate room selection
-        if (cmbRoom.getValue() == null || cmbRoom.getValue().isEmpty()) {
-            showError(lblRoomError, "Vui lòng chọn phòng");
+        ValidationResult roomResult = FieldVerifier.verifyNotEmpty(cmbRoom.getValue(), "Phòng");
+        if (!roomResult.isValid()) {
+            showError(lblRoomError, roomResult.getMessage());
             isValid = false;
         } else {
-            // Check room availability
             try {
-                if (roomService != null && !roomService.isRoomAvailable(cmbRoom.getValue())) {
-                    showError(lblRoomError, "Phòng " + cmbRoom.getValue() + " đã có người thuê");
+                if (!roomService.isRoomAvailable(cmbRoom.getValue())) {
+                    showError(lblRoomError, "Phòng này đã có người thuê");
                     isValid = false;
                 }
             } catch (Exception e) {
@@ -329,62 +367,57 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
                 isValid = false;
             }
         }
-        
-        // Validate phone (optional)
-        String phone = txtPhone.getText().trim();
-        if (!phone.isEmpty() && !FieldVerifier.isValidPhoneNumber(phone)) {
-            showError(lblPhoneError, FieldVerifier.getPhoneErrorMessage());
-            isValid = false;
+
+        // Validate phone number
+		String phone = txtPhone.getText().trim();
+		ValidationResult phoneResult = FieldVerifier.verifyPhoneNumber(phone, "Số điện thoại");
+		if (!phoneResult.isValid()) {
+			showError(lblPhoneError, phoneResult.getMessage());
+			isValid = false;
         }
-        
-        // Validate email (optional)
-        String email = txtEmail.getText().trim();
-        if (!email.isEmpty() && !FieldVerifier.isValidEmail(email)) {
-            showError(lblEmailError, FieldVerifier.getEmailErrorMessage());
-            isValid = false;
-        }
-        
+
+        // Validate email
+		String email = txtEmail.getText().trim();
+
+		ValidationResult emailResult = FieldVerifier.verifyEmail(email, "Email");
+		if (!emailResult.isValid()) {
+			showError(lblEmailError, emailResult.getMessage());
+			isValid = false;
+		}
+
         // Validate resident count
-        if (!FieldVerifier.isValidResidentCount(txtResidentCount.getText())) {
-            showError(lblResidentCountError, txtResidentCount.getText().trim().isEmpty() ? 
-                FieldVerifier.getEmptyFieldErrorMessage() : FieldVerifier.getInvalidResidentCountErrorMessage());
+        ValidationResult countResult = FieldVerifier.verifyResidentCount(txtResidentCount.getText().trim());
+        if (!countResult.isValid()) {
+            showError(lblResidentCountError, countResult.getMessage());
             isValid = false;
         }
-        
-        // Validate resident fields if they are visible
-        if (residentFieldsContainer.isVisible()) {
-            String ownerCitizenId = txtOwnerCitizenId.getText().trim();
-            boolean ownerFound = false;
+
+        // Validate resident citizen IDs
+        for (int i = 0; i < residentCitizenIdFields.size(); i++) {
+            TextField field = residentCitizenIdFields.get(i);
+            Label errorLabel = residentCitizenIdErrorLabels.get(i);
+            ComboBox<RelationshipType> relationshipField = relationshipFields.get(i);
             
-            for (int i = 0; i < residentCitizenIdFields.size(); i++) {
-                TextField residentField = residentCitizenIdFields.get(i);
-                Label errorLabel = residentCitizenIdErrorLabels.get(i);
-                ComboBox<RelationshipType> relationshipCombo = relationshipFields.get(i);
-                
-                if (!FieldVerifier.isValidCitizenId(residentField.getText())) {
-                    showError(errorLabel, residentField.getText().trim().isEmpty() ? 
-                        FieldVerifier.getEmptyFieldErrorMessage() : FieldVerifier.getInvalidCitizenIdErrorMessage());
-                    isValid = false;
-                }
-                
-                if (relationshipCombo.getValue() == null) {
-                    showError(errorLabel, "Vui lòng chọn quan hệ với chủ hộ");
-                    isValid = false;
-                }
-                
-                // Check if owner is in the resident list
-                if (residentField.getText().trim().equals(ownerCitizenId)) {
-                    ownerFound = true;
-                }
+            String citizenId = field.getText().trim();
+            ValidationResult residentResult = FieldVerifier.verifyCitizenId(citizenId);
+            
+            if (!residentResult.isValid()) {
+                showError(errorLabel, residentResult.getMessage());
+                isValid = false;
+                continue;
             }
             
-            // Validate that owner is included in resident list
-            if (!ownerFound && isValid) {
-                showError(lblOwnerCitizenIdError, "Chủ hộ phải được bao gồm trong danh sách thành viên");
+            // Validate relationship selection
+            ValidationResult relationshipResult = FieldVerifier.verifyNotEmpty(
+                relationshipField.getValue() != null ? relationshipField.getValue().toString() : null,
+                "Quan hệ với chủ hộ"
+            );
+            if (!relationshipResult.isValid()) {
+                showError(errorLabel, relationshipResult.getMessage());
                 isValid = false;
             }
         }
-        
+
         return isValid;
     }
     
@@ -400,88 +433,49 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
     private Household createHouseholdFromInput() throws ServiceException, SQLException {
         Household household = new Household();
         
-        // Auto-generated fields
-        household.setCreationDate(LocalDate.now());
-        
-        // Get owner by citizen ID and set owner info
+        // Set owner citizen ID (already validated)
         String ownerCitizenId = txtOwnerCitizenId.getText().trim();
         Resident owner = residentService.getResidentByCitizenId(ownerCitizenId);
         household.setOwnerId(owner.getId());
-        household.setOwnerName(owner.getFullName());
         
-        // Set address info - auto-filled as requested
-        household.setHouseNumber(cmbRoom.getValue()); // Room number as house number
+        // Set room number (already validated)
+        household.setHouseNumber(cmbRoom.getValue().trim());
+        
+        // Set default address info
         household.setStreet("Wall Street");
         household.setWard("Wall ward");
         household.setDistrict("Q2");
-        household.setArea(0.0f); // You might want to set this based on room
         
-        // User input fields
-        household.setPhone(txtPhone.getText().trim().replaceAll("\\s+", "")); // Remove spaces
-        household.setEmail(txtEmail.getText().trim());
-        household.setHouseholdSize(Integer.parseInt(txtResidentCount.getText().trim()));
+        // Set phone number if provided
+		String phone = txtPhone.getText().trim();
+		household.setPhone(phone);
         
-        // Collect resident citizen IDs and their relationships
+		// Set email if provided
+		String email = txtEmail.getText().trim();
+		household.setEmail(email);
+        
+        // Set creation date
+        household.setCreationDate(LocalDate.now());
+        
+        // Add residents and their relationships
         List<String> residentCitizenIds = new ArrayList<>();
         List<RelationshipType> relationships = new ArrayList<>();
         
-        // First, collect all residents from the dynamic fields
+        // Add other residents
         for (int i = 0; i < residentCitizenIdFields.size(); i++) {
-            String residentCitizenId = residentCitizenIdFields.get(i).getText().trim();
+            String citizenId = residentCitizenIdFields.get(i).getText().trim();
             RelationshipType relationship = relationshipFields.get(i).getValue();
             
-            if (!residentCitizenId.isEmpty() && relationship != null) {
-                residentCitizenIds.add(residentCitizenId);
-                relationships.add(relationship);
-            }
+            // Add to lists if valid
+            residentCitizenIds.add(citizenId);
+            relationships.add(relationship);
         }
         
-        // Check if owner citizen ID is in the resident list, if not add it with default relationship
-        boolean ownerFound = false;
-        for (int i = 0; i < residentCitizenIds.size(); i++) {
-            if (residentCitizenIds.get(i).equals(ownerCitizenId)) {
-                ownerFound = true;
-                break;
-            }
-        }
+        // Set residents first
+        household.setResidentCitizenIds(residentCitizenIds);
         
-        // If owner is not in the resident list, add them
-        if (!ownerFound) {
-            residentCitizenIds.add(0, ownerCitizenId); // Add at beginning
-            relationships.add(0, RelationshipType.FATHER); // Default relationship for household head
-        }
-        
-        // Get residents by citizen IDs and set their relationships
-        List<Resident> residents = residentService.getResidentByCitizenIds(residentCitizenIds);
-        for (int i = 0; i < residents.size() && i < relationships.size(); i++) {
-            Resident resident = residents.get(i);
-            RelationshipType relationship;
-            
-            // If this is the owner, set relationship to FATHER or appropriate value
-            if (resident.getCitizenId().equals(ownerCitizenId)) {
-                relationship = RelationshipType.FATHER; // Or determine based on gender/age
-            } else {
-                relationship = relationships.get(i);
-            }
-            
-            System.out.println("Setting relationship for resident " + resident.getId() + 
-                " (isOwner=" + resident.getCitizenId().equals(ownerCitizenId) + "): " + relationship);
-            
-            resident.setRelationship(relationship);
-            resident.setHouseholdHead(resident.getCitizenId().equals(ownerCitizenId));
-            
-            // Update resident in database immediately
-            try {
-                residentService.updateResident(resident);
-                System.out.println("Successfully updated resident " + resident.getId() + 
-                    " with relationship " + resident.getRelationship());
-            } catch (Exception e) {
-                System.err.println("Error updating resident " + resident.getId() + ": " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-        
-        household.setResidents(residents);
+        // Then update their relationships
+        household.setRelationships(relationships);
         
         return household;
     }
@@ -489,74 +483,48 @@ public class AddHouseholdDialogHandler implements HouseholdDialogHandler {
 
     @FXML
     private void handleAdd() {
-        System.out.println("Add button clicked");
-        
-        // Validate all fields
-        if (!validateRequiredFields()) {
-            System.out.println("Validation failed");
-            return;
+        // Clear previous errors
+        hideError(lblOwnerCitizenIdError);
+        hideError(lblRoomError);
+        hideError(lblPhoneError);
+        hideError(lblEmailError);
+        hideError(lblResidentCountError);
+        for (Label label : residentCitizenIdErrorLabels) {
+            hideError(label);
         }
-        
-        // Check if resident fields are generated
-        if (!residentFieldsContainer.isVisible()) {
-            showError(lblResidentCountError, "Vui lòng tạo trường nhập cho các thành viên");
-            return;
-        }
-        
+
         try {
-            // Create household object from input
-            Household household = null;
-            try {
-                household = createHouseholdFromInput();
-            } catch (ServiceException e1) {
-                e1.printStackTrace();
-                utils.AlertUtils.showErrorAlert("Lỗi", "Không thể tạo hộ khẩu", e1.getMessage());
-                return;
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-                utils.AlertUtils.showErrorAlert("Lỗi", "Lỗi cơ sở dữ liệu", e1.getMessage());
+            // Validate all required fields first
+            if (!validateRequiredFields()) {
                 return;
             }
+
+            // Create household from validated input
+            Household newHousehold = createHouseholdFromInput();
             
-            // Add household through controller - this will handle resident updates
-            try {
-                householdController.addHousehold(household);
-                
-                // Mark room as occupied
-                if (roomService != null) {
-                    roomService.occupyRoom(cmbRoom.getValue(), household.getId());
-                }
-                
-            } catch (HouseholdNotExist e) {
-                e.printStackTrace();
-                utils.AlertUtils.showErrorAlert("Lỗi", "Hộ khẩu không tồn tại", e.getMessage());
-                return;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                utils.AlertUtils.showErrorAlert("Lỗi", "Lỗi cơ sở dữ liệu", e.getMessage());
-                return;
-            } catch (ServiceException e) {
-                e.printStackTrace();
-                utils.AlertUtils.showErrorAlert("Lỗi", "Lỗi dịch vụ", e.getMessage());
-                return;
-            }
-            
-            System.out.println("Household added successfully");
+            // Try to add the household
+            householdController.addHousehold(newHousehold);
             
             // Show success message
-            utils.AlertUtils.showInfoAlert("Thành công", "Thêm hộ khẩu thành công", 
-                "Hộ khẩu đã được thêm vào hệ thống và phòng " + cmbRoom.getValue() + " đã được đánh dấu là có người thuê.");
+            AlertUtils.showSuccessDialog("Them ho khau thanh cong", "Ho khau moi da duoc them vao he thong");
             
-            // Call success callback and close dialog
+            // Close dialog and refresh parent view
             if (onSuccessCallback != null) {
                 onSuccessCallback.run();
             }
             
             ((Stage) btnAdd.getScene().getWindow()).close();
             
-        } catch (HouseholdAlreadyExistsException | ResidentNotFoundException | InvalidHouseholdDataException e) {
-            utils.AlertUtils.showErrorAlert("Lỗi", "Không thể thêm hộ khẩu", e.getMessage());
-        } 
+        } catch (HouseholdAlreadyExistsException e) {
+            AlertUtils.showErrorAlert("Loi","Loi", "Ho khau da ton tai trong he thong");
+        } catch (ResidentNotFoundException e) {
+            AlertUtils.showErrorAlert("Loi","Loi", "Khong tim thay nguoi dan: " + e.getMessage());
+        } catch (InvalidHouseholdDataException e) {
+            AlertUtils.showErrorAlert("Loi","Loi", "Du lieu ho khau khong hop le: " + e.getMessage());
+        } catch (Exception e) {
+            AlertUtils.showErrorAlert("Loi","Loi he thong", "Co loi xay ra: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
