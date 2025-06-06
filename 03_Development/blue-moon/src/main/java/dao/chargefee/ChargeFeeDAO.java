@@ -13,6 +13,7 @@ public interface ChargeFeeDAO {
 	public FeeAmountRecordDTO getPaymentRecord(int campaignFeeId, int householdId, int feeId) throws SQLException;
 	public List<Household> getHouseholds();
 	public int countTotalExpectedAmount(int campaignFeeId, int householdId);
-	public int countTotalPaidAmount(int campaignFeeId, int householdId);
+	public int countTotalCompulsoryPaidAmount(int campaignFeeId, int householdId);
+	public int countTotalOptionalPaidAmount(int campaignFeeId, int householdId);
 	public void updatePaidAmount(int campaignFeeId, int householdId, List<Integer> feeIds) throws SQLException;
 }

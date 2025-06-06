@@ -51,11 +51,11 @@ public class CampaignFeeChosenOption {
         btnOK.setPrefWidth(120);
         btnOK.setMaxWidth(120);
         btnOK.setStyle("-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-background-radius: 6px; -fx-cursor: hand; -fx-font-size: 18px; -fx-text-fill: white;");
-        VBox.setMargin(btnOK, new Insets(100, 0, 10, 120));
+        VBox.setMargin(btnOK, new Insets(300, 0, 10, 120));
         
         layout.getChildren().addAll(lblTitle, cbCampaignFee, btnOK);
         
-		Scene scene = new Scene(layout, 400, 600);
+		Scene scene = new Scene(layout, 400, 510);
 		popupStage.setTitle("Chọn đợt thu phí");
         popupStage.setScene(scene);
         popupStage.initModality(Modality.APPLICATION_MODAL); 

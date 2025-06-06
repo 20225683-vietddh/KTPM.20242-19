@@ -15,8 +15,12 @@ public class TrackCampaignFeeService {
 		return dao.getExpectedAmount(campaignFeeId);
 	}
 	
-	public int getPaidAmount(int campaignFeeId) throws SQLException {
-		return dao.getPaidAmount(campaignFeeId);
+	public int getTotalCompulsoryPaidAmount(int campaignFeeId) throws SQLException {
+		return dao.getTotalCompulsoryPaidAmount(campaignFeeId);
+	}
+	
+	public int getTotalOptionalPaidAmount(int campaignFeeId) throws SQLException {
+		return dao.getTotalOptionalPaidAmount(campaignFeeId);
 	}
 	
 	public boolean isCampaignFeeAssigned(int campaignFeeId) throws SQLException {

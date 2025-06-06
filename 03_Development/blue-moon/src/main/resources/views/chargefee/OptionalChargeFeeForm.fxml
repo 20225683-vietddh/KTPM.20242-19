@@ -15,7 +15,7 @@
          <children>
             <VBox prefWidth="560.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                <children>
-                  <Label alignment="CENTER" prefWidth="760.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);" text="Danh sách các khoản thu bắt buộc" textFill="WHITE">
+                  <Label alignment="CENTER" prefWidth="760.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);" text="Danh sách các khoản thu tự nguyện" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="22.0" />
                      </font>
@@ -33,7 +33,7 @@
                   </Label>
                   <HBox prefWidth="200.0" style="-fx-border-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-border-radius: 5px; -fx-border-width: 2px; -fx-background-color: #F8F8F8; -fx-background-radius: 5px;">
                      <children>
-                        <Label prefWidth="360.0" text="Tên khoản thu">
+                        <Label prefWidth="360.0" text="Tên khoản thu (tự nguyện)">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -41,12 +41,15 @@
                               <Insets left="10.0" />
                            </padding>
                         </Label>
-                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="200.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Số tiền cần nộp">
+                        <Label alignment="CENTER" layoutX="505.0" layoutY="10.0" prefWidth="200.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Số tiền đã nộp">
                            <font>
                               <Font size="18.0" />
                            </font>
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
                         </Label>
-                        <Label alignment="CENTER" layoutX="505.0" layoutY="10.0" prefWidth="195.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Hành động">
+                        <Label alignment="CENTER" layoutX="472.0" layoutY="22.0" prefWidth="195.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Hành động">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -70,26 +73,6 @@
                   <VBox prefWidth="100.0" style="-fx-border-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-border-width: 2px; -fx-border-radius: 5px; -fx-background-color: #F8F8F8; -fx-background-radius: 5px;">
                      <children>
                         <HBox prefWidth="200.0">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <children>
-                              <Label text="Tổng số tiền cần nộp (bắt buộc):">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="lblTotalExpectedAmount">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <HBox prefWidth="200.0">
                            <children>
                               <Label text="Tổng số tiền đã nộp:">
                                  <font>
@@ -97,46 +80,6 @@
                                  </font>
                               </Label>
                               <Label fx:id="lblTotalPaidAmount">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                           <VBox.margin>
-                              <Insets top="5.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <HBox layoutX="22.0" layoutY="54.0" prefWidth="200.0">
-                           <children>
-                              <Label text="Số tiền còn thiếu:">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="lblOutstandingAmount">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                           <VBox.margin>
-                              <Insets top="5.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <HBox layoutX="22.0" layoutY="86.0" prefWidth="200.0">
-                           <children>
-                              <Label text="Số tiền nộp thừa:">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="lblOverpaidAmount">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -159,18 +102,13 @@
                   </VBox>
                   <HBox spacing="10.0">
                      <children>
-                        <Button fx:id="btnChargeFee" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-cursor: hand;" text="Nộp tiền" textFill="WHITE">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="275.0" />
-                           </HBox.margin>
-                        </Button>
                         <Button fx:id="btnClose" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-cursor: hand;" text="Đóng" textFill="WHITE">
                            <font>
                               <Font size="18.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets left="330.0" />
+                           </HBox.margin>
                         </Button>
                      </children>
                      <VBox.margin>

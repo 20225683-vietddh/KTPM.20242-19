@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1463.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1463.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1039.0" prefWidth="1446.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);" stylesheets="@../../assets/css/style.css">
          <children>
@@ -104,6 +104,14 @@
                                     <Insets left="10.0" />
                                  </HBox.margin>
                               </Label>
+                              <Button fx:id="btnExportReport" mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Tải báo cáo thống kê">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="645.0" />
+                                 </HBox.margin>
+                              </Button>
                            </children>
                            <VBox.margin>
                               <Insets bottom="10.0" />
@@ -127,80 +135,86 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox prefWidth="1019.0">
-                     <children>
-                        <HBox prefWidth="200.0" spacing="20.0">
-                           <children>
-                              <HBox prefWidth="543.0" style="-fx-background-color: #F8F8F8; -fx-background-radius: 5px; -fx-border-color: black; -fx-border-radius: 5px;">
-                                 <children>
-                                    <Label text="Tổng số tiền cần thu (bắt buộc):" textFill="#948f8f">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </Label>
-                                    <Label fx:id="lblExpectedAmount">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="10.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="10.0" left="20.0" top="10.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox layoutX="10.0" layoutY="10.0" prefWidth="543.0" style="-fx-background-color: #F8F8F8; -fx-background-radius: 5px; -fx-border-color: black; -fx-border-radius: 5px;">
-                                 <children>
-                                    <Label text="Tổng số tiền đã thu:" textFill="#948f8f">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </Label>
-                                    <Label fx:id="lblPaidAmount">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="10.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="10.0" left="20.0" top="10.0" />
-                                 </padding>
-                              </HBox>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-                  <ScrollPane prefHeight="755.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: black; -fx-border-radius: 10;">
+                  <ScrollPane prefHeight="420.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: black; -fx-border-radius: 10;">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="1080.0" style="-fx-background-color: white;">
                            <children>
-                              <VBox prefWidth="100.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+                              <VBox prefWidth="1019.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefWidth="1019.0" style="-fx-text-fill: linear-gradient(to right, #43A5DC, #FF7BAC);" text="Các khoản thu bắt buộc">
+                                       <font>
+                                          <Font name="System Bold" size="22.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <HBox prefWidth="200.0" spacing="19.0">
+                                       <children>
+                                          <HBox prefWidth="500.0" style="-fx-background-color: #F8F8F8; -fx-background-radius: 5px; -fx-border-color: black; -fx-border-radius: 5px;">
+                                             <children>
+                                                <Label text="Tổng số tiền cần thu:" textFill="#948f8f">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <Label fx:id="lblTotalExpectedAmount">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="20.0" top="10.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox layoutX="10.0" layoutY="10.0" prefWidth="500.0" style="-fx-background-color: #F8F8F8; -fx-background-radius: 5px; -fx-border-color: black; -fx-border-radius: 5px;">
+                                             <children>
+                                                <Label text="Tổng số tiền đã thu:" textFill="#948f8f">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <Label fx:id="lblTotalCompulsoryPaidAmount">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="20.0" top="10.0" />
+                                             </padding>
+                                          </HBox>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox prefWidth="100.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="130.0">
                                  <children>
                                     <HBox prefWidth="200.0" style="-fx-border-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-border-radius: 5px; -fx-border-width: 2px; -fx-background-color: #F8F8F8; -fx-background-radius: 5px;">
                                        <children>
-                                          <Label prefWidth="250.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Tên khoản thu">
+                                          <Label prefWidth="445.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Tên khoản thu">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                              <padding>
                                                 <Insets left="10.0" />
                                              </padding>
-                                          </Label>
-                                          <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="200.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Có bắt buộc?">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
                                           </Label>
                                           <Label alignment="CENTER" layoutX="310.0" layoutY="10.0" prefWidth="190.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Số tiền cần thu">
                                              <font>
@@ -225,7 +239,7 @@
                                           <Insets bottom="10.0" />
                                        </VBox.margin>
                                     </HBox>
-                                    <VBox fx:id="vbFeesList" prefWidth="1019.0" spacing="10.0" style="-fx-background-radius: 10px;">
+                                    <VBox fx:id="vbCompulsoryFees" prefWidth="1019.0" spacing="10.0" style="-fx-background-radius: 10px;">
                                        <padding>
                                           <Insets bottom="10.0" top="10.0" />
                                        </padding>
@@ -236,10 +250,95 @@
                         </AnchorPane>
                      </content>
                      <VBox.margin>
-                        <Insets top="30.0" />
+                        <Insets bottom="20.0" />
                      </VBox.margin>
                      <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets bottom="15.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </ScrollPane>
+                  <ScrollPane layoutX="10.0" layoutY="158.0" prefHeight="400.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: black; -fx-border-radius: 10;">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="1080.0" style="-fx-background-color: white;">
+                           <children>
+                              <VBox prefWidth="1019.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefWidth="1019.0" style="-fx-text-fill: linear-gradient(to right, #43A5DC, #FF7BAC);" text="Các khoản thu tự nguyện">
+                                       <font>
+                                          <Font name="System Bold" size="22.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <HBox prefWidth="200.0" spacing="19.0">
+                                       <children>
+                                          <HBox layoutX="10.0" layoutY="10.0" prefWidth="1019.0" style="-fx-background-color: #F8F8F8; -fx-background-radius: 5px; -fx-border-color: black; -fx-border-radius: 5px;">
+                                             <children>
+                                                <Label text="Tổng số tiền đã thu:" textFill="#948f8f">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <Label fx:id="lblTotalOptionalPaidAmount">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="20.0" top="10.0" />
+                                             </padding>
+                                          </HBox>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox prefWidth="100.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="130.0">
+                                 <children>
+                                    <HBox prefWidth="200.0" style="-fx-border-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-border-radius: 5px; -fx-border-width: 2px; -fx-background-color: #F8F8F8; -fx-background-radius: 5px;">
+                                       <children>
+                                          <Label prefWidth="700.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Tên khoản thu">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="10.0" />
+                                             </padding>
+                                          </Label>
+                                          <Label alignment="CENTER" layoutX="510.0" layoutY="10.0" prefWidth="315.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Số tiền đã thu">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" top="10.0" />
+                                       </padding>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <VBox fx:id="vbOptionalFees" prefWidth="1019.0" spacing="10.0" style="-fx-background-radius: 10px;">
+                                       <padding>
+                                          <Insets bottom="10.0" top="10.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                     <padding>
+                        <Insets bottom="15.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </ScrollPane>
                </children>

@@ -35,11 +35,34 @@ public class TrackCampaignFeeDAOPostgreSQL implements TrackCampaignFeeDAO {
 		return 0;
 	}
 	
-	public int getPaidAmount(int campaignFeeId) throws SQLException {
+	public int getTotalCompulsoryPaidAmount(int campaignFeeId) throws SQLException {
 		String sql = """
 				    SELECT SUM(fpr.paid_amount) AS total
-				    FROM fee_payment_records fpr
+				    FROM fee_payment_records fpr, fees f 
 				    WHERE fpr.campaign_fee_id = ?
+				    AND fpr.fee_id = f.fee_id
+				    AND f.is_mandatory = TRUE
+				""";
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setInt(1, campaignFeeId);
+
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return rs.getInt("total");
+			}
+
+		}
+		return 0;
+	}
+	
+	public int getTotalOptionalPaidAmount(int campaignFeeId) throws SQLException {
+		String sql = """
+				    SELECT SUM(fpr.paid_amount) AS total
+				    FROM fee_payment_records fpr, fees f 
+				    WHERE fpr.campaign_fee_id = ?
+				    AND fpr.fee_id = f.fee_id
+				    AND f.is_mandatory = FALSE
 				""";
 
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -76,12 +99,8 @@ public class TrackCampaignFeeDAOPostgreSQL implements TrackCampaignFeeDAO {
 	                dto.setFeeId(rs.getInt("fee_id"));
 	                dto.setFeeName(rs.getString("name"));
 	                dto.setMandatory(rs.getBoolean("is_mandatory"));
-
-	                dto.setExpectedAmount(rs.getObject("expected_amount") != null
-	                        ? rs.getInt("expected_amount") : null);
-
-	                dto.setPaidAmount(rs.getObject("paid_amount") != null
-	                        ? rs.getInt("paid_amount") : null);
+	                dto.setExpectedAmount(rs.getInt("expected_amount"));
+	                dto.setPaidAmount(rs.getInt("paid_amount"));
 	            }
 	        }
 	    }

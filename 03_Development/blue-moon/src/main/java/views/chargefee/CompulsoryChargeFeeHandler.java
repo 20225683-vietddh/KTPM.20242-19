@@ -34,6 +34,8 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
     @FXML private VBox vbFeeAmounts;
     @FXML private Label lblTotalExpectedAmount;
     @FXML private Label lblTotalPaidAmount;
+    @FXML private Label lblOutstandingAmount;
+    @FXML private Label lblOverpaidAmount;
     private CampaignFee campaignFee;
     private Household household;
     private ChargeFeeService service;
@@ -57,42 +59,53 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
 	
 	@FXML
 	public void initialize() {
-		this.lblHouseNumber.setText("Hộ " + household.getHouseNumber());
-		try {
-			List<Fee> compulsoryFees = getCompulsoryFees();
-			if (compulsoryFees.isEmpty()) {
-				Label lblEmpty = new Label("Chưa có khoản thu bắt buộc nào!");
-				lblEmpty.setPrefWidth(760);
-				lblEmpty.setStyle("-fx-font-size: 20px;");
-				vbFeeAmounts.getChildren().addAll(lblEmpty);
-			} else {
-				for (Fee fee : compulsoryFees) {
-					boolean isExisted = service.isRecordExisted(campaignFee.getId(), household.getHouseholdId(), fee.getId());
-			        if (isExisted) {
-			        	FeeAmountRecordDTO dto = service.getPaymentRecord(campaignFee.getId(), household.getHouseholdId(), fee.getId());
-			        	String feeName = fee.getName();
-			        	int expectedAmount = dto.getExpectedAmount();
-			        	int feeId = dto.getFeeId();
-			        	int areas = dto.getAreas();
-			        	setupCompulsoryFeeRow(feeName, feeId, areas, expectedAmount);
-			        }
-				}
-			}
-		} catch (Exception e) {
-			ErrorDialog.showError("Lỗi hệ thống", "Không thể truy cập vào CSDL!");
-			e.printStackTrace();
-		}
-		
 		int totalExpectedAmount = service.countTotalExpectedAmount(campaignFee.getId(), household.getHouseholdId());
-		int totalPaidAmount = service.countTotalPaidAmount(campaignFee.getId(), household.getHouseholdId());
-		lblTotalExpectedAmount.setText(utils.Utils.formatCurrency(totalExpectedAmount) + " đồng.");
-		lblTotalPaidAmount.setText(utils.Utils.formatCurrency(totalPaidAmount) + " đồng.");
+        int totalPaidAmount = service.countTotalCompulsoryPaidAmount(campaignFee.getId(), household.getHouseholdId());
+        int totalOutstandingAmount = totalExpectedAmount - totalPaidAmount;
+		loadForm();
 		btnClose.setOnAction(e -> handleClose());
-		btnChargeFee.setOnAction(e -> handleChargeFee(totalExpectedAmount));
-		if (totalExpectedAmount == totalPaidAmount) {
-			btnChargeFee.setDisable(true);
-		}
+		btnChargeFee.setOnAction(e -> handleChargeFee(totalOutstandingAmount));
 	}
+	
+	private void loadForm() {
+	    vbFeeAmounts.getChildren().clear();
+	    lblHouseNumber.setText("Hộ " + household.getHouseNumber());
+	    try {
+	        List<Fee> compulsoryFees = getCompulsoryFees();
+	        if (compulsoryFees.isEmpty()) {
+	            Label lblEmpty = new Label("Chưa có khoản thu bắt buộc nào!");
+	            lblEmpty.setPrefWidth(760);
+	            lblEmpty.setStyle("-fx-font-size: 20px;");
+	            vbFeeAmounts.getChildren().add(lblEmpty);
+	        } else {
+	            for (Fee fee : compulsoryFees) {
+	                boolean isExisted = service.isRecordExisted(campaignFee.getId(), household.getHouseholdId(), fee.getId());
+	                if (isExisted) {
+	                    FeeAmountRecordDTO dto = service.getPaymentRecord(campaignFee.getId(), household.getHouseholdId(), fee.getId());
+	                    setupCompulsoryFeeRow(dto.getFeeName(), dto.getFeeId(), dto.getAreas(), dto.getExpectedAmount());
+	                }
+	            }
+	        }
+	        int totalExpectedAmount = service.countTotalExpectedAmount(campaignFee.getId(), household.getHouseholdId());
+	        int totalPaidAmount = service.countTotalCompulsoryPaidAmount(campaignFee.getId(), household.getHouseholdId());
+	        int totalOutstandingAmount = totalExpectedAmount - totalPaidAmount;
+	        int totalOverpaidAmount = totalPaidAmount - totalExpectedAmount;
+	        lblTotalExpectedAmount.setText(utils.Utils.formatCurrency(totalExpectedAmount) + " đồng.");
+	        lblTotalPaidAmount.setText(utils.Utils.formatCurrency(totalPaidAmount) + " đồng.");
+	        if (totalOutstandingAmount > 0) {
+	        	lblOutstandingAmount.setText(utils.Utils.formatCurrency(totalOutstandingAmount) + " đồng.");
+	        	lblOverpaidAmount.setText("0 đồng.");
+	        } else {
+	        	btnChargeFee.setDisable(true);
+	        	lblOutstandingAmount.setText("0 đồng");
+	        	lblOverpaidAmount.setText(utils.Utils.formatCurrency(totalOverpaidAmount) + " đồng.");
+	        }
+	    } catch (Exception e) {
+	        ErrorDialog.showError("Lỗi hệ thống", "Không thể tải lại dữ liệu!");
+	        e.printStackTrace();
+	    }
+	}
+
 	
 	private void handleClose() {
 		Stage stage = (Stage) btnClose.getScene().getWindow();
@@ -150,7 +163,7 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
 
         HBox row = new HBox(lblFeeName, tfExpectedAmount, btnDetailedAction);
         row.setStyle("-fx-background-color: #F8F8F8;");
-        row.setPrefWidth(770);
+        row.setPrefWidth(760);
         row.setAlignment(Pos.CENTER_LEFT);
         vbFeeAmounts.getChildren().add(row);
 	}
@@ -191,8 +204,7 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
 					continue;
 				}
 				service.updateRecord(campaignFee.getId(), household.getHouseholdId(), feeId, expectedAmount);
-				handleClose();
-				new CompulsoryChargeFeeHandler(this.stage, campaignFee, household, service);
+				loadForm();
 				break;
             } catch (NumberFormatException e) {
             	ErrorDialog.showError("Số tiền không hợp lệ", "Bạn phải nhập một giá trị nguyên dương.");
@@ -208,7 +220,7 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
 	
 	private void handleChargeFee(int totalExpectedAmount) {
 		try {
-			String option = ConfirmationDialog.getOption("Bạn chắc chắn hộ dân đã nộp đủ toàn bộ số tiền?");
+			String option = ConfirmationDialog.getOption("Bạn chắc chắn hộ dân đã nộp đủ toàn bộ số tiền còn thiếu " + utils.Utils.formatCurrency(totalExpectedAmount) + "?");
 			switch (option) {
 			case "YES":
 				service.updatePaidAmount(campaignFee.getId(), household.getHouseholdId(), getCompulsoryFeeIds());

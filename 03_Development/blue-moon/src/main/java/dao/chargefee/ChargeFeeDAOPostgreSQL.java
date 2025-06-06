@@ -173,13 +173,14 @@ public class ChargeFeeDAOPostgreSQL implements ChargeFeeDAO {
 	}
 	
 	@Override
-	public int countTotalPaidAmount(int campaignFeeId, int householdId) {
+	public int countTotalCompulsoryPaidAmount(int campaignFeeId, int householdId) {
 	    String sql = """
 	        SELECT SUM(fpr.paid_amount) AS total
 	        FROM fee_payment_records fpr
 	        JOIN fees f ON fpr.fee_id = f.fee_id
 	        WHERE fpr.campaign_fee_id = ?
 	          AND fpr.household_id = ?
+	          AND f.is_mandatory = true
 	    """;
 
 	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -198,5 +199,32 @@ public class ChargeFeeDAOPostgreSQL implements ChargeFeeDAO {
 
 	    return 0;
 	}
+	
+	@Override
+	public int countTotalOptionalPaidAmount(int campaignFeeId, int householdId) {
+	    String sql = """
+	        SELECT SUM(fpr.paid_amount) AS total
+	        FROM fee_payment_records fpr
+	        JOIN fees f ON fpr.fee_id = f.fee_id
+	        WHERE fpr.campaign_fee_id = ?
+	          AND fpr.household_id = ?
+	          AND f.is_mandatory = false
+	    """;
 
+	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        
+	        stmt.setInt(1, campaignFeeId);
+	        stmt.setInt(2, householdId);
+
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            return rs.getInt("total"); 
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return 0;
+	}
 }

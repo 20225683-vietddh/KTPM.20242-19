@@ -34,8 +34,12 @@ public class ChargeFeeService {
 		return dao.countTotalExpectedAmount(campaignFeeId, householdId);
 	}
 	
-	public int countTotalPaidAmount(int campaignFeeId, int householdId) {
-		return dao.countTotalPaidAmount(campaignFeeId, householdId);
+	public int countTotalCompulsoryPaidAmount(int campaignFeeId, int householdId) {
+		return dao.countTotalCompulsoryPaidAmount(campaignFeeId, householdId);
+	}
+	
+	public int countTotalOptionalPaidAmount(int campaignFeeId, int householdId) {
+		return dao.countTotalOptionalPaidAmount(campaignFeeId, householdId);
 	}
 	
 	public List<Household> getAllHouseholds() {

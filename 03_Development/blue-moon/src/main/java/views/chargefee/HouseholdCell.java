@@ -53,7 +53,7 @@ public class HouseholdCell extends HBox {
 	    btnOptional.setStyle("-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-text-fill: white; -fx-font-size: 16px; -fx-cursor: hand;");
 	    btnOptional.setPrefWidth(250);
 	    btnOptional.setPrefHeight(60);
-	    btnOptional.setOnAction(e -> handleCompulsoryChargeFee());
+	    btnOptional.setOnAction(e -> handleOptionalChargeFee());
 	    
 	    HBox hbButton = new HBox(10);
 	    hbButton.getChildren().addAll(btnCompulsory, btnOptional);
@@ -65,7 +65,19 @@ public class HouseholdCell extends HBox {
 		try {
 			new CompulsoryChargeFeeHandler(this.stage, campaignFee, household, service);
 		} catch (Exception e) {
-			ErrorDialog.showError("Lỗi hệ thống", "Không thể mở form!");
+			ErrorDialog.showError("Lỗi hệ thống", "Không thể mở form các khoản thu bắt buộc!");
+			e.printStackTrace();
+			if (onReload != null) {
+			    onReload.run();
+			}
+		}
+	}
+	
+	private void handleOptionalChargeFee() {
+		try {
+			new OptionalChargeFeeHandler(this.stage, campaignFee, household, service);
+		} catch (Exception e) {
+			ErrorDialog.showError("Lỗi hệ thống", "Không thể mở form các khoản thu tự nguyện!");
 			e.printStackTrace();
 			if (onReload != null) {
 			    onReload.run();
