@@ -10,6 +10,7 @@ import exception.ResidentNotFoundException;
 import exception.ServiceException;
 import models.Household;
 import models.Resident;
+import utils.enums.ActionType;
 
 public interface HouseholdService {
 	
@@ -32,7 +33,7 @@ public interface HouseholdService {
 
     void addResidentsToHousehold(Household h, List<String> residentCitizenIds) throws HouseholdNotExist, ServiceException, SQLException;
     
-	void updateHousehold(Household household) throws HouseholdNotExist,HouseholdAlreadyExistsException,ResidentNotFoundException,
+	void updateHousehold(Household household, String oldRoomNumber) throws HouseholdNotExist,HouseholdAlreadyExistsException,ResidentNotFoundException,
     	InvalidHouseholdDataException, SQLException, ServiceException;
     
   
@@ -40,9 +41,11 @@ public interface HouseholdService {
     
     void removeResident(Household h, String ResidentCitizenId) throws HouseholdNotExist, ServiceException, SQLException;
     
-    boolean phoneExists(String phone) throws ServiceException;
     
-    boolean emailExists(String email) throws ServiceException;
-    
-    boolean roomExists(String roomNumber) throws ServiceException;
+    boolean phoneExists(String phone, int householdId) throws ServiceException;
+
+    boolean emailExists(String email, int householdId) throws ServiceException;
+
+	boolean roomExists(String roomNumber, String oldRoomNUmber, ActionType actionType)
+			throws ServiceException, SQLException;
 }

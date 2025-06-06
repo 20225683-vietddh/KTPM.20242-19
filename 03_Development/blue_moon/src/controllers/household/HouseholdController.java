@@ -47,8 +47,8 @@ public class HouseholdController {
     }
     
     
-    public void updateHousehold(Household household) throws HouseholdNotExist, HouseholdAlreadyExistsException, ResidentNotFoundException, InvalidHouseholdDataException, SQLException, ServiceException {
-        householdService.updateHousehold(household);
+    public void updateHousehold(Household household, String oldRoomNumber) throws HouseholdNotExist, HouseholdAlreadyExistsException, ResidentNotFoundException, InvalidHouseholdDataException, SQLException, ServiceException {
+        householdService.updateHousehold(household, oldRoomNumber);
         getAllHouseholds();
     }
     

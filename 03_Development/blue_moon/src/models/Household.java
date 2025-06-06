@@ -61,7 +61,7 @@ public class Household {
 		this.creationDate = creationDate;
 		this.householdSize = householdSize;
 		this.ownerId = ownerId;
-		this.ownerName = ownerName = residentService.getResidentById(ownerId).getFullName();
+		this.ownerName = residentService.getResidentById(ownerId).getFullName();
 		this.phone = phone;
 		this.email = email;
 		this.residents = residents;
@@ -122,8 +122,9 @@ public class Household {
 	}
 
 
-	public String getOwnerName() {
-		return ownerName;
+	public String getOwnerName() throws ServiceException {
+		
+		return residentService.getResidentById(this.ownerId).getFullName();
 	}
 
 	public void setOwnerName(String ownerName) {

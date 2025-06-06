@@ -202,6 +202,7 @@ import utils.Utils;
 	    
 	    private void loadHouseholdData() {
 	        try {
+	        	tblHouseholds.refresh();
 	        	txtSearch.setText("");
 	            // Get all households from the controller
 	            householdList = FXCollections.observableArrayList(householdController.getAllHouseholds());
@@ -238,14 +239,19 @@ import utils.Utils;
 	                
 	                String lowerCaseFilter = newValue.toLowerCase();
 	                
-	                if (household.getOwnerName().toLowerCase().contains(lowerCaseFilter)) {
-	                    return true; // Match by owner name
-	                } else if (household.getHouseNumber().toLowerCase().contains(lowerCaseFilter)) {
-	                    return true; // Match by address
-	                } else if (household.getPhone() != null && 
-	                           household.getPhone().toLowerCase().contains(lowerCaseFilter)) {
-	                    return true; // Match by phone number
-	                }
+	                try {
+						if (household.getOwnerName().toLowerCase().contains(lowerCaseFilter)) {
+						    return true; // Match by owner name
+						} else if (household.getHouseNumber().toLowerCase().contains(lowerCaseFilter)) {
+						    return true; // Match by address
+						} else if (household.getPhone() != null && 
+						           household.getPhone().toLowerCase().contains(lowerCaseFilter)) {
+						    return true; // Match by phone number
+						}
+					} catch (ServiceException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 	                return false; // No match
 	            });
 	        });

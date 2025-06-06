@@ -19,7 +19,7 @@ public interface RoomService {
 
 	Float getAreaByRoomNumber(String roomNumber) throws ServiceException;
 
-	void occupyRoom(String value, int id) throws ServiceException, SQLException;
+	void occupyRoom(String roomNumber, int householdId) throws ServiceException, SQLException;
 
 	void vacateRoom(String roomNumber) throws ServiceException, SQLException;
 

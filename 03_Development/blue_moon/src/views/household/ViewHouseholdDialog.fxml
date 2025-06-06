@@ -142,8 +142,17 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="cmbRoom" disable="true" prefHeight="35.0" prefWidth="420.0" promptText="Chọn phòng" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
-                              </ComboBox>
+                              <HBox spacing="10.0">
+                                 <children>
+                                    <TextField fx:id="txtCurrentRoom" editable="false" prefHeight="35.0" prefWidth="200.0" promptText="Phòng hiện tại" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                    <ComboBox fx:id="cmbRoom" disable="true" prefHeight="35.0" prefWidth="210.0" promptText="Chọn phòng mới" style="-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                    </ComboBox>
+                                 </children>
+                              </HBox>
                            </children>
                         </VBox>
                         

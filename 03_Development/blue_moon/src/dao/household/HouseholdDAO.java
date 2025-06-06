@@ -63,7 +63,41 @@ public class HouseholdDAO {
     }
 
       
-    public int add(Household household) throws SQLException {
+    public Household findByPhone(String phone) throws ServiceException {
+	    String sql = "SELECT * FROM households WHERE phone = ?";
+	
+	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setString(1, phone);
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            return Utils.mapResultSetToHousehold(rs);
+	        }
+	        return null; // Return null if no household found with this phone number
+	    } catch (SQLException e) {
+	        System.err.println("Error in findByPhone(): " + e.getMessage());
+	        throw new ServiceException("Error finding household by phone: " + e.getMessage());
+	    }
+	}
+    
+
+    public Household findByEmail(String email) throws ServiceException {
+	    String sql = "SELECT * FROM households WHERE email = ?";
+	
+	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setString(1, email);
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            return Utils.mapResultSetToHousehold(rs);
+	        }
+	        return null;
+	    } catch (SQLException e) {
+	        System.err.println("Error in findByEmail(): " + e.getMessage());
+	        throw new ServiceException("Error finding household by email: " + e.getMessage());
+	    }
+	}
+
+
+	public int add(Household household) throws SQLException {
         // First, reset the sequence if needed
         try (Statement stmt = conn.createStatement()) {
             // Get current max id
@@ -135,24 +169,6 @@ public class HouseholdDAO {
         }
     }
 
-    // Helper method to test database connection
-    public boolean testConnection() {
-        try {
-            String sql = "SELECT COUNT(*) FROM households";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    int count = rs.getInt(1);
-                    System.out.println("Total households in database: " + count);
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Connection test failed: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     // Method to get household with residents
     public Household findByIdWithResidents(int id) throws HouseholdNotExist, ServiceException {
@@ -189,22 +205,6 @@ public class HouseholdDAO {
 		update(household);
 	}
 	
-	public boolean phoneExists(String phone) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM households WHERE phone = ?";
-        
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, phone);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (SQLException e) {
-            System.err.println("Error checking phone existence: " + e.getMessage());
-            throw e;
-        }
-        
-        return false;
-    }
 	
 	public boolean emailExists(String email) throws SQLException {
         String sql = "SELECT COUNT(*) FROM households WHERE email = ?";

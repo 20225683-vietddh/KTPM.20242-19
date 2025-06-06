@@ -94,11 +94,29 @@ public class RoomDAO {
     }
 
     public void occupyRoom(String roomNumber, int householdId) throws ServiceException {
+        // First find and vacate any room currently occupied by this household
+        String findCurrentRoomSql = "SELECT room_number FROM room WHERE household_id = ?";
+        try (PreparedStatement findStmt = conn.prepareStatement(findCurrentRoomSql)) {
+            findStmt.setInt(1, householdId);
+            ResultSet rs = findStmt.executeQuery();
+            if (rs.next()) {
+                String currentRoom = rs.getString("room_number");
+                System.out.println("Found household " + householdId + " in room " + currentRoom + ". Vacating it first.");
+                vacateRoom(currentRoom);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error finding current room: " + e.getMessage());
+            throw new ServiceException("Error finding current room for household: " + householdId);
+        }
+
+        // Now occupy the new room
         String sql = "UPDATE room SET is_occupied = true, household_id = ? WHERE room_number = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, householdId);
             stmt.setString(2, roomNumber);
+            System.out.println("Executing occupyRoom for room: " + roomNumber + " with household: " + householdId);
             int affectedRows = stmt.executeUpdate();
+            System.out.println("OccupyRoom affected rows: " + affectedRows);
             if (affectedRows == 0) {
                 throw new ServiceException("Room with number " + roomNumber + " not found.");
             }
@@ -112,7 +130,9 @@ public class RoomDAO {
         String sql = "UPDATE room SET is_occupied = false, household_id = NULL WHERE room_number = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, roomNumber);
+            System.out.println("Executing vacateRoom for room: " + roomNumber);
             int affectedRows = stmt.executeUpdate();
+            System.out.println("VacateRoom affected rows: " + affectedRows);
             if (affectedRows == 0) {
                 throw new ServiceException("Room with number " + roomNumber + " not found.");
             }

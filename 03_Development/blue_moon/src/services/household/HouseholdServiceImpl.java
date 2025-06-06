@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.Action;
+
 import dao.household.HouseholdDAO;
 import exception.HouseholdAlreadyExistsException;
 import exception.HouseholdNotExist;
@@ -19,6 +21,7 @@ import services.resident.ResidentServiceImpl;
 import services.room.RoomService;
 import services.room.RoomServiceImpl;
 import utils.FieldVerifier.ValidationResult;
+import utils.enums.ActionType;
 
 public class HouseholdServiceImpl implements HouseholdService {
 	private HouseholdDAO householdDAO;
@@ -62,7 +65,7 @@ public class HouseholdServiceImpl implements HouseholdService {
 	@Override
 	public void addHousehold(Household household)
 			throws HouseholdAlreadyExistsException, ResidentNotFoundException, InvalidHouseholdDataException, HouseholdNotExist, SQLException, ServiceException {
-		if (!validateAddUpdate(household)) {
+		if (!validateAddUpdate(household,"",ActionType.ADD)) {
 			return;
 		}
 		
@@ -106,12 +109,39 @@ public class HouseholdServiceImpl implements HouseholdService {
 	}
 
 	@Override
-	public void updateHousehold(Household household) throws HouseholdNotExist, HouseholdAlreadyExistsException,
+	public void updateHousehold(Household household, String oldRoomNumber) throws HouseholdNotExist, HouseholdAlreadyExistsException,
 			ResidentNotFoundException, InvalidHouseholdDataException, SQLException, ServiceException {
-		if (!validateAddUpdate(household)) {
+		if (!validateAddUpdate(household, oldRoomNumber, ActionType.UPDATE)) {
 			return;
 		}
+
+		// First handle room changes if room number has changed
+		try {
+			if (!oldRoomNumber.equals(household.getHouseNumber())) {
+				// First vacate the old room
+				roomService.vacateRoom(oldRoomNumber);
+			}
+		} catch (SQLException ex) {
+			throw new SQLException("Failed to vacate old room: " + ex.getMessage(), ex);
+		}
+
+		// Then update the household
 		householdDAO.update(household);
+
+		// Finally occupy the new room if room number has changed
+		try {
+			if (!oldRoomNumber.equals(household.getHouseNumber())) {
+				roomService.occupyRoom(household.getHouseNumber(), household.getId());
+			}
+		} catch (SQLException ex) {
+			// If occupying new room fails, try to restore old room
+			try {
+				roomService.occupyRoom(oldRoomNumber, household.getId());
+			} catch (SQLException restoreEx) {
+				throw new SQLException("Failed to update room and restore failed: " + restoreEx.getMessage(), restoreEx);
+			}
+			throw new SQLException("Failed to occupy new room: " + ex.getMessage(), ex);
+		}
 	}
 
 	@Override
@@ -127,8 +157,8 @@ public class HouseholdServiceImpl implements HouseholdService {
 		
 	}
 
-	private boolean validateAddUpdate(Household household)
-			throws ResidentNotFoundException, HouseholdNotExist, InvalidHouseholdDataException, ServiceException {
+	private boolean validateAddUpdate(Household household, String oldRoomNumber, ActionType actionType)
+			throws ResidentNotFoundException, HouseholdNotExist, InvalidHouseholdDataException, ServiceException, SQLException {
 		//Deeper validation 
 		
 		// 1. Check if owner exists
@@ -143,17 +173,17 @@ public class HouseholdServiceImpl implements HouseholdService {
 	    }
 		
 		// 3. Check if room is already occupied
-		if (roomExists(household.getHouseNumber())) {
+		if (roomExists(household.getHouseNumber(), oldRoomNumber, actionType)) {
 			throw new InvalidHouseholdDataException("Phòng " + household.getHouseNumber() + " đã có người ở");
 		}
 
 		// 4. Check if phone is already used
-		if (phoneExists(household.getPhone())) {
+		if (phoneExists(household.getPhone() , household.getId())) {
 			throw new InvalidHouseholdDataException("Số điện thoại " + household.getPhone() + " đã được sử dụng bởi hộ khẩu khác");
 		}
 
 		// 5. Check if email is already used
-		if (emailExists(household.getEmail())) {
+		if (emailExists(household.getEmail(), household.getId())) {
 			throw new InvalidHouseholdDataException("Email " + household.getEmail() + " đã được sử dụng bởi hộ khẩu khác");
 		}
 
@@ -211,30 +241,23 @@ public class HouseholdServiceImpl implements HouseholdService {
 	}
 
 	@Override
-	public boolean phoneExists(String phone) throws ServiceException {
-		try {
-			return householdDAO.phoneExists(phone);
-		} catch (SQLException e) {
-			throw new ServiceException("Error checking phone existence: " + e.getMessage());
-		}
+	public boolean phoneExists(String phone, int householdId) throws ServiceException {
+		Household h =  householdDAO.findByPhone(phone);
+		return h != null && h.getId() != householdId;
 	}
 
 	@Override
-	public boolean emailExists(String email) throws ServiceException {
-		try {
-			return householdDAO.emailExists(email);
-		} catch (SQLException e) {
-			throw new ServiceException("Error checking email existence: " + e.getMessage());
-		}
+	public boolean emailExists(String email, int householdId) throws ServiceException {
+		Household h =  householdDAO.findByEmail(email);
+		return h != null && h.getId() != householdId;
 	}
 
 	@Override
-	public boolean roomExists(String roomNumber) throws ServiceException {
-		try {
-			return householdDAO.roomExists(roomNumber);
-		} catch (SQLException e) {
-			throw new ServiceException("Error checking room existence: " + e.getMessage());
-		}
+	public boolean roomExists(String roomNumber, String oldRoomNUmber, ActionType actionType) throws ServiceException, SQLException {
+		if (actionType.equals(ActionType.ADD)) return !roomService.isRoomAvailable(roomNumber);
+		else if (actionType.equals(ActionType.UPDATE)) return !roomService.isRoomAvailable(roomNumber) 
+				&& !roomNumber.equals(oldRoomNUmber) ;
+		return false; 
 	}
 
 }

@@ -40,13 +40,15 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 
 	
 	// You need to initialize this
-	private HouseholdController householdController; // You need to initialize this
-	private ResidentService residentService;
-	private RoomService roomService;
+	private HouseholdController householdController ; // You need to initialize this
+	private ResidentService residentService = new ResidentServiceImpl();
+	private RoomService roomService = new RoomServiceImpl();
 	
 	private Household currentHousehold;
 	private Runnable onSuccessCallback;
 	private boolean isEditMode = false;
+	
+	private String oldRoomNumber;
 
 
 	// Text fields
@@ -70,6 +72,8 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 	private TextField txtCreationDate;
 	@FXML
 	private ComboBox<Room> cmbRoom;
+	@FXML
+	private TextField txtCurrentRoom;
 
 	// Controls
 	@FXML
@@ -120,11 +124,9 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 	
 	public void updateAfterMemberDialog() throws ServiceException, HouseholdNotExist {
 		currentHousehold = householdController.getHouseholdDetails(currentHousehold.getId());
-		System.out.println("do heree");
-		System.out.println(currentHousehold.toString());
-		Resident owner = residentService.getResidentByCitizenId(currentHousehold.getOwnerCitizenId());
+		Resident owner = residentService.getResidentById(currentHousehold.getOwnerId());
 		this.txtOwnerCCCD.setText(owner.getCitizenId());
-		this.txtOwnerName.setText(currentHousehold.getOwnerName());
+		this.txtOwnerName.setText(owner.getFullName());
 		this.txtHouseholdSize.setText(currentHousehold.getHouseholdSize()+"");
 	}
 
@@ -140,6 +142,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 		
 		// Kiểm tra xem FXML đã được khởi tạo chưa
 		if (currentHousehold != null) {
+			oldRoomNumber = household.getHouseNumber();
 			try {
 				fillFormData();
 			} catch (ServiceException e) {
@@ -164,13 +167,14 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 
 			// Set owner info
 			if (residentService != null) {
-				Resident owner = residentService.getResidentByCitizenId(currentHousehold.getOwnerCitizenId());
+				Resident owner = residentService.getResidentById(currentHousehold.getOwnerId());
 				if (owner != null) {
 					if (txtOwnerCCCD != null) {
 						txtOwnerCCCD.setText(owner.getCitizenId());
 					}
 					if (txtOwnerName != null) {
-						txtOwnerName.setText(currentHousehold.getOwnerName());
+						
+						txtOwnerName.setText(owner.getFullName());
 					}
 				}
 			}
@@ -194,7 +198,8 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 			
 			// Set other fields
 			if (txtArea != null) {
-				txtArea.setText(currentHousehold.getArea() + "");
+				Float area = roomService.getAreaByRoomNumber(currentHousehold.getHouseNumber());
+				txtArea.setText(area + "");
 			}
 			if (txtPhone != null) {
 				txtPhone.setText(currentHousehold.getPhone());
@@ -226,11 +231,16 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 			if (roomService != null) {
 				List<Room> availableRooms = roomService.getAvailableRooms();
 				
-				// Add current room if it exists
+				// Set current room in TextField
 				if (currentHousehold != null && currentHousehold.getHouseNumber() != null) {
 					Room currentRoom = roomService.getRoomByNumber(currentHousehold.getHouseNumber());
-					if (currentRoom != null && !availableRooms.contains(currentRoom)) {
-						availableRooms.add(0, currentRoom);
+					if (currentRoom != null) {
+						txtCurrentRoom.setText("Phòng " + currentRoom.getRoomNumber());
+						
+						// Remove current room from available rooms if it's in the list
+						availableRooms = availableRooms.stream()
+							.filter(room -> !room.getRoomNumber().equals(currentRoom.getRoomNumber()))
+							.collect(Collectors.toList());
 					}
 				}
 				
@@ -250,9 +260,9 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 					}
 				});
 			}
-		} catch (ServiceException e) {
+		} catch (Exception e) {
 			System.err.println("Error loading available rooms: " + e.getMessage());
-			showErrorDialog("Error", "Không thể tải danh sách phòng trống: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -305,6 +315,8 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 		if (lblRequiredNote != null) {
 			lblRequiredNote.setVisible(false);
 		}
+		txtCurrentRoom.setDisable(true);
+		txtCurrentRoom.setStyle(VIEW_MODE_STYLE);
 	}
 
 	private void setEditMode() {
@@ -318,7 +330,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 		}
 
 		// Enable only specific editable fields
-		setFieldEditable(txtArea, true);
+		
 		setFieldEditable(txtPhone, true);
 		setFieldEditable(txtEmail, true);
 		
@@ -329,6 +341,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 		}
 
 		// System-generated and restricted fields remain disabled
+		setFieldEditable(txtArea, false);
 		setFieldEditable(txtOwnerCCCD, false); 
 		setFieldEditable(txtOwnerName, false);
 		setFieldEditable(txtId, false);
@@ -347,6 +360,9 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 		if (lblRequiredNote != null) {
 			lblRequiredNote.setVisible(true);
 		}
+		txtCurrentRoom.setDisable(true);
+		cmbRoom.setStyle(EDIT_MODE_STYLE);
+		txtCurrentRoom.setStyle(VIEW_MODE_STYLE);
 	}
 
 	private void setFieldEditable(TextField field, boolean editable) {
@@ -363,73 +379,55 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 	@FXML
 	private void handleUpdate() throws HouseholdNotExist, HouseholdAlreadyExistsException, ResidentNotFoundException,
 			InvalidHouseholdDataException {
-		if (!isEditMode) {
-			System.out.println("Update attempted while not in edit mode");
-			return;
-		}
-
-		System.out.println("Update button clicked in edit mode");
-
-		// Validate required fields
-		if (!validateRequiredFields()) {
-			// Show error message (you can implement your own error handling here)
-			System.out.println("Validation failed - required fields are empty");
-			return;
-		}
-
 		try {
-
-			// Update the household object with new values
 			updateHouseholdFromForm();
-
-			// TODO: Add your update logic here (save to database, etc.)
-			 householdController.updateHousehold(currentHousehold);
-
-			// After successful update, call the callback
+			householdController.updateHousehold(currentHousehold, oldRoomNumber);
+			showSuccessDialog("Thành công", "Cập nhật thông tin hộ khẩu thành công!");
+			
 			if (onSuccessCallback != null) {
 				onSuccessCallback.run();
 			}
-
-			// Switch back to view mode after successful update
-			setViewMode();
-
-			showSuccessDialog("Success", "Cập nhật thông tin hộ khẩu thành công!");
-			System.out.println("Household updated successfully");
-
-		} catch (Exception e) {
-			showErrorDialog("Update Error", "Có lỗi xảy ra khi cập nhật: " + e.getMessage());
+			
+			// Close the dialog
+			Stage stage = (Stage) btnUpdate.getScene().getWindow();
+			stage.close();
+			
+		} catch (ServiceException | SQLException e) {
+			showErrorDialog("Có lỗi xảy ra khi cập nhật", e.getMessage());
 			e.printStackTrace();
 		}
-
-	}
-
-	private boolean validateRequiredFields() {
-		return !txtArea.getText().trim().isEmpty();
 	}
 
 	private void updateHouseholdFromForm() throws ServiceException {
 		if (currentHousehold != null) {
-			Float area = Float.parseFloat(txtArea.getText().trim());
+			// Update phone and email
 			String phone = txtPhone.getText().trim();
 			String email = txtEmail.getText().trim();
-			Room selectedRoom = cmbRoom.getValue();
-			String roomNumber = selectedRoom != null ? selectedRoom.getRoomNumber() : null;
-
-			if (currentHousehold.getArea() != area ||
-					!currentHousehold.getPhone().equalsIgnoreCase(phone) ||
-					!currentHousehold.getEmail().equalsIgnoreCase(email) ||
-					!currentHousehold.getHouseNumber().equals(roomNumber)) {
-				
-				// Update only the editable fields
-				currentHousehold.setArea(area);
-				currentHousehold.setPhone(phone);
-				currentHousehold.setEmail(email);
-				if (selectedRoom != null) {
-					currentHousehold.setHouseNumber(roomNumber); // This is the room number
-				}
-				return;
+			
+			// Validate phone and email
+			if (phone.isEmpty()) {
+				throw new ServiceException("Số điện thoại không được để trống");
 			}
-			throw new ServiceException("Please update at least 1 field!");
+			if (email.isEmpty()) {
+				throw new ServiceException("Email không được để trống");
+			}
+			
+			currentHousehold.setPhone(phone);
+			currentHousehold.setEmail(email);
+			
+			// Update room and area if a new room is selected
+			Room selectedRoom = cmbRoom.getValue();
+			if (selectedRoom != null) {
+				currentHousehold.setHouseNumber(selectedRoom.getRoomNumber());
+				
+				// Update area from the selected room
+				try {
+					Float area = roomService.getAreaByRoomNumber(selectedRoom.getRoomNumber());
+					txtArea.setText(area.toString());
+				} catch (ServiceException e) {
+					System.err.println("Error getting area for room " + selectedRoom.getRoomNumber() + ": " + e.getMessage());
+				}
+			}
 		}
 	}
 
@@ -474,7 +472,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 		}
 	}
 
-	private void openMemberDetailsDialog(Household household, TextField txtHouseholdSize, List<Resident> members, Runnable onSuccess) {
+	private void openMemberDetailsDialog(Household household, TextField txtHouseholdSize, List<Resident> members, Runnable onSuccess) throws ServiceException {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(Configs.RESIDENT_DETAILS_DIALOG_PATH));
 			Parent root = loader.load();
