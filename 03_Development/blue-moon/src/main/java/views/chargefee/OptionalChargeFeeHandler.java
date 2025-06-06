@@ -54,8 +54,6 @@ public class OptionalChargeFeeHandler extends BaseScreenHandler {
 	public void initialize() {
 		loadForm();
 		btnClose.setOnAction(e -> handleClose());
-		int totalOptionalPaidAmount = service.countTotalOptionalPaidAmount(campaignFee.getId(), household.getHouseholdId());
-		lblTotalPaidAmount.setText(utils.Utils.formatCurrency(totalOptionalPaidAmount));
 	}
 	
 	private void loadForm() {
@@ -68,6 +66,7 @@ public class OptionalChargeFeeHandler extends BaseScreenHandler {
 				lblEmpty.setPrefWidth(760);
 				lblEmpty.setStyle("-fx-font-size: 20px;");
 				vbFeeAmounts.getChildren().add(lblEmpty);
+				lblTotalPaidAmount.setText("0 đồng.");
 			} else {
 				for (Fee fee : optionalFees) {
 					boolean isExisted = service.isRecordExisted(campaignFee.getId(), household.getHouseholdId(), fee.getId());
@@ -76,6 +75,8 @@ public class OptionalChargeFeeHandler extends BaseScreenHandler {
 						setupOptionalFeeRow(dto.getFeeName(), fee.getId(), dto.getPaidAmount());
 					}
 				}
+				int totalOptionalPaidAmount = service.countTotalOptionalPaidAmount(campaignFee.getId(), household.getHouseholdId());
+				lblTotalPaidAmount.setText(utils.Utils.formatCurrency(totalOptionalPaidAmount) + " đồng.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -127,7 +128,7 @@ public class OptionalChargeFeeHandler extends BaseScreenHandler {
 					ErrorDialog.showError("Số tiền không hợp lệ", "Bạn phải nhập một giá trị nguyên dương.");
 					continue;
 				}
-				service.updateRecord(campaignFee.getId(), household.getHouseholdId(), feeId, paidAmount);
+				service.updatePaidAmount(campaignFee.getId(), household.getHouseholdId(), feeId, paidAmount);
 				loadForm();
 				break;
             } catch (NumberFormatException e) {

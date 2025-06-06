@@ -49,4 +49,8 @@ public class ChargeFeeService {
 	public void updatePaidAmount(int campaignFeeId, int householdId, List<Integer> feeIds) throws SQLException {
 		dao.updatePaidAmount(campaignFeeId, householdId, feeIds);
 	}
+	
+	public void updatePaidAmount(int campaignFeeId, int householdId, int feeId, int paidAmount) throws SQLException {
+		dao.updatePaidAmount(campaignFeeId, householdId, feeId, paidAmount);
+	}
 }

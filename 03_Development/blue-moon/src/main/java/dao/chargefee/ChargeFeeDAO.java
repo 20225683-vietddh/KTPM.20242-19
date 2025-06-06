@@ -16,4 +16,5 @@ public interface ChargeFeeDAO {
 	public int countTotalCompulsoryPaidAmount(int campaignFeeId, int householdId);
 	public int countTotalOptionalPaidAmount(int campaignFeeId, int householdId);
 	public void updatePaidAmount(int campaignFeeId, int householdId, List<Integer> feeIds) throws SQLException;
+	public void updatePaidAmount(int campaignFeeId, int householdId, int feeId, int paidAmount) throws SQLException;
 }

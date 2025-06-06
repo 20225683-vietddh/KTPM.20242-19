@@ -220,11 +220,11 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
 	
 	private void handleChargeFee(int totalExpectedAmount) {
 		try {
-			String option = ConfirmationDialog.getOption("Bạn chắc chắn hộ dân đã nộp đủ toàn bộ số tiền còn thiếu " + utils.Utils.formatCurrency(totalExpectedAmount) + "?");
+			String option = ConfirmationDialog.getOption("Bạn có chắc chắn hộ dân đã nộp đủ toàn bộ số tiền còn thiếu " + utils.Utils.formatCurrency(totalExpectedAmount) + " đồng không?");
 			switch (option) {
 			case "YES":
 				service.updatePaidAmount(campaignFee.getId(), household.getHouseholdId(), getCompulsoryFeeIds());
-				InformationDialog.showNotification("Xác nhận nộp tiền thành công", "Biên lai đã được xuất dưới dạng file .docx.");
+				InformationDialog.showNotification("Thành công", "Xác nhận thu tiền thành công. Biên lai đã được xuất dưới dạng file .docx.");
 				Map<String, Integer> feeWithExpectedAmounts = this.getFeeNameWithExpectedAmount();
 				ReceiptGenerator generator = new ReceiptGenerator();
 				generator.generateReceipt("output/bien_lai_cac_khoan_bat_buoc_ho_dan_" + household.getHouseholdId() + "_dot_thu_" + campaignFee.getId() + ".docx",

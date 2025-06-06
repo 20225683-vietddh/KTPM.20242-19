@@ -123,6 +123,25 @@ public class ChargeFeeDAOPostgreSQL implements ChargeFeeDAO {
 	    }
 	}
 	
+	public void updatePaidAmount(int campaignFeeId, int householdId, int feeId, int paidAmount) throws SQLException {
+	    String sql = """
+	        UPDATE fee_payment_records
+	        SET paid_amount = paid_amount + ?,
+	            paid_date = CURRENT_DATE
+	        WHERE campaign_fee_id = ?
+	          AND household_id = ?
+	          AND fee_id = ?
+	    """;
+
+	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+	    	stmt.setInt(1, paidAmount);
+	        stmt.setInt(2, campaignFeeId);
+	        stmt.setInt(3, householdId);
+	        stmt.setInt(4, feeId);
+	        stmt.executeUpdate();
+	    }
+	}
+	
 	@Override
 	public List<Household> getHouseholds() {
 		String sql = "SELECT household_id, house_number FROM households";
