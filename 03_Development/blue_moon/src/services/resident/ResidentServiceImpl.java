@@ -72,6 +72,12 @@ public class ResidentServiceImpl  implements ResidentService {
 	}
 
 	@Override
+	public int countResidentsByHouseholdId(int householdId) throws ServiceException {
+		return getResidentsByHouseholdId(householdId).size();
+	}
+
+
+	@Override
     public boolean residentExists(int residentId) {
     	return residentDAO.residentExists(residentId);
     }

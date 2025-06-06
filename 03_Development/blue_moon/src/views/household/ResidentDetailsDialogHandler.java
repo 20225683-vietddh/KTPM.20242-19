@@ -222,8 +222,7 @@ public class ResidentDetailsDialogHandler {
 
             if (citizenId != null && !citizenId.trim().isEmpty()) {
                 // Sử dụng FieldVerifier để kiểm tra CCCD
-                FieldVerifier.ValidationResult result = 
-                    FieldVerifier.verifyCitizenId(citizenId, residentService, household.getId());
+                FieldVerifier.ValidationResult result = FieldVerifier.verifyCitizenId(citizenId);
                 
                 isValidResidentId = result.isValid();
                 
@@ -377,7 +376,7 @@ public class ResidentDetailsDialogHandler {
         colDateOfBirth.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateOfBirth().toString()));
         colIdCard.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCitizenId()));
         colRelationship.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRelationship().toString()));
-        colIsHead.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCitizenId().equals(household.getOwnerCitizenId())  ? "Chủ hộ" : ""));
+        colIsHead.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId() == household.getOwnerId()  ? "Chủ hộ" : ""));
 
         // Add double click handler to copy citizen ID
         tblResidents.setRowFactory(tv -> {
@@ -484,9 +483,12 @@ public class ResidentDetailsDialogHandler {
             selectedResident.setHouseholdHead(true);
             residentService.updateResident(selectedResident);
             
-            household.setOwnerCitizenId(selectedResident.getCitizenId());
+            household.setOwnerId(selectedResident.getId());
+            //TODO :ddd
+            
             household.setOwnerName(selectedResident.getFullName());
-            householdController.updateHousehold(household);
+            
+            householdController.updateHousehold(household, household.getHouseNumber());
             
             // Refresh table and update UI
             refreshTable();
@@ -733,9 +735,14 @@ public class ResidentDetailsDialogHandler {
         // Update UI with household info
         if (household != null) {
             // Set household info
-            if (household.getOwnerName() != null) {
-                setHouseholdInfo(household.getOwnerName());
-            }
+            try {
+				if (household.getOwnerName() != null) {
+				    setHouseholdInfo(household.getOwnerName());
+				}
+			} catch (ServiceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             
             // Load members if available
             if (household.getResidents() != null) {

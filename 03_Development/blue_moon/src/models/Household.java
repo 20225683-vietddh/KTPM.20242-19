@@ -9,11 +9,13 @@ import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import controllers.household.HouseholdController;
 import exception.ServiceException;
 import services.resident.ResidentServiceImpl;
 
 public class Household {
 	private final ResidentServiceImpl residentService = new ResidentServiceImpl();
+	private final HouseholdController householdController = new HouseholdController();
 
 	//giong
 	private int id;
@@ -147,7 +149,18 @@ public class Household {
         this.email = email;
     }
 	public int getHouseholdSize() {
-		return householdSize;
+		int actualHouseholdSize = 0;
+		try {
+			actualHouseholdSize = residentService.countResidentsByHouseholdId(this.id);
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (householdSize != actualHouseholdSize ) {
+			this.householdSize = actualHouseholdSize;
+			
+		}
+		return actualHouseholdSize;
 	}
 
 	public void setHouseholdSize(int householdSize) {
