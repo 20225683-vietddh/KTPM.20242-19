@@ -77,7 +77,7 @@ public class CompulsoryChargeFeeHandler extends BaseScreenHandler {
 	        if (compulsoryFees.isEmpty()) {
 	            Label lblEmpty = new Label("Chưa có khoản thu bắt buộc nào!");
 	            lblEmpty.setPrefWidth(760);
-	            lblEmpty.setStyle("-fx-font-size: 20px;");
+	            lblEmpty.setStyle("-fx-font-size: 20px; -fx-alignment: center;");
 	            vbFeeAmounts.getChildren().add(lblEmpty);
 	        } else {
 	            for (Fee fee : compulsoryFees) {

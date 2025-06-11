@@ -64,7 +64,7 @@ public class OptionalChargeFeeHandler extends BaseScreenHandler {
 			if (optionalFees.isEmpty()) {
 				Label lblEmpty = new Label("Đợt này không có khoản thu tự nguyện nào!");
 				lblEmpty.setPrefWidth(760);
-				lblEmpty.setStyle("-fx-font-size: 20px;");
+				lblEmpty.setStyle("-fx-font-size: 20px; -fx-alignment: cetner;");
 				vbFeeAmounts.getChildren().add(lblEmpty);
 				lblTotalPaidAmount.setText("0 đồng.");
 			} else {

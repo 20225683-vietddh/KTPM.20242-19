@@ -180,6 +180,9 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 		String updateSQL = "UPDATE campaign_fees SET name = ?, start_date = ?, due_date = ?, status = ?, description = ? WHERE campaign_fee_id = ?";
 		String deleteItemsSql = "DELETE FROM campaign_fee_items WHERE campaign_fee_id = ?";
 	    String insertItemSql = "INSERT INTO campaign_fee_items (campaign_fee_id, fee_id) VALUES (?, ?)";
+	    String getExistingFeesSql = "SELECT fee_id FROM campaign_fee_items WHERE campaign_fee_id = ?";
+	    String selectHouseholdsSQL = "SELECT household_id FROM households";
+	    String insertPaymentRecordSQL = "INSERT INTO fee_payment_records (campaign_fee_id, household_id, fee_id) VALUES (?, ?, ?)";
 	    
 		LocalDate startDate = utils.Utils.parseDateSafely(dto.getStartDay(), dto.getStartMonth(), dto.getStartYear());
 		LocalDate dueDate = utils.Utils.parseDateSafely(dto.getDueDay(), dto.getDueMonth(), dto.getDueYear());
@@ -187,9 +190,29 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 		try {
 			conn.setAutoCommit(false);
 			
+			// Bước 1: Lấy danh sách khoản thu hiện tại
+			List<Integer> existingFeeIds = new ArrayList<>();
+			try (PreparedStatement existingStmt = conn.prepareStatement(getExistingFeesSql)) {
+				existingStmt.setInt(1, dto.getId());
+				try (ResultSet rs = existingStmt.executeQuery()) {
+					while (rs.next()) {
+						existingFeeIds.add(rs.getInt("fee_id"));
+					}
+				}
+			}
+			
+			// Bước 2: Tìm ra khoản thu mới (có trong dto.getFeeIds() nhưng không có trong existingFeeIds)
+			List<Integer> newFeeIds = new ArrayList<>();
+			for (Integer feeId : dto.getFeeIds()) {
+				if (!existingFeeIds.contains(feeId)) {
+					newFeeIds.add(feeId);
+				}
+			}
+			
 			try (PreparedStatement updateStmt = conn.prepareStatement(updateSQL);
 		            PreparedStatement deleteStmt = conn.prepareStatement(deleteItemsSql);
 		            PreparedStatement insertStmt = conn.prepareStatement(insertItemSql)) {
+				// Bước 3: Cập nhật thông tin chính của đợt thu
 				updateStmt.setString(1, dto.getName());
 				updateStmt.setObject(2, startDate);
 				updateStmt.setObject(3, dueDate);
@@ -198,6 +221,7 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 				updateStmt.setInt(6, dto.getId());
 				updateStmt.executeUpdate();
 				
+				// Bước 4: Cập nhật campaign_fee_items
 				deleteStmt.setInt(1, dto.getId());
 	            deleteStmt.executeUpdate();
 
@@ -207,6 +231,31 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 	                insertStmt.addBatch();
 	            }
 	            insertStmt.executeBatch();
+	            
+	            // Bước 5: Tạo fee_payment_records cho khoản thu mới
+	            if (!newFeeIds.isEmpty()) {
+	            	// Lấy danh sách household_id
+	            	List<Integer> householdIds = new ArrayList<>();
+	            	try (PreparedStatement householdStmt = conn.prepareStatement(selectHouseholdsSQL);
+	            		 ResultSet householdRs = householdStmt.executeQuery()) {
+	            		while (householdRs.next()) {
+	            			householdIds.add(householdRs.getInt("household_id"));
+	            		}
+	            	}
+	            	
+	            	// Tạo records cho khoản thu mới
+	            	try (PreparedStatement paymentStmt = conn.prepareStatement(insertPaymentRecordSQL)) {
+	            		for (int householdId : householdIds) {
+	            			for (int newFeeId : newFeeIds) {
+	            				paymentStmt.setInt(1, dto.getId());
+	            				paymentStmt.setInt(2, householdId);
+	            				paymentStmt.setInt(3, newFeeId);
+	            				paymentStmt.addBatch();
+	            			}
+	            		}
+	            		paymentStmt.executeBatch();
+	            	}
+	            }
 	            
 	            conn.commit();
 			} catch (Exception e) {
@@ -222,7 +271,7 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 	
 	@Override
 	public boolean isFeesExisted(int campaignFeeId, List<Integer> feeIds) throws SQLException {
-		String sql = "SELECT 1 FROM fee_payment_records WHERE campaign_fee_id = ? AND fee_id = ? LIMIT 1";
+		String sql = "SELECT 1 FROM fee_payment_records WHERE campaign_fee_id = ? AND fee_id = ? AND paid_amount > 0 LIMIT 1";
 	    
 	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 	        for (int feeId : feeIds) {
@@ -231,7 +280,7 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 	            
 	            try (ResultSet rs = stmt.executeQuery()) {
 	                if (rs.next()) {
-	                    return true;
+	                    return true; // Tìm thấy ít nhất 1 record có paid_amount > 0
 	                }
 	            }
 	        }
@@ -240,7 +289,7 @@ public class CampaignFeeDAOPostgreSQL implements CampaignFeeDAO {
 	        throw e;
 	    }
 	    
-	    return false;
+	    return false; // Không tìm thấy record nào có paid_amount > 0
 	}
 
 	@Override

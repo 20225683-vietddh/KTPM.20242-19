@@ -104,12 +104,12 @@
                                     <Insets left="10.0" />
                                  </HBox.margin>
                               </Label>
-                              <Button fx:id="btnExportReport" mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Tải báo cáo thống kê">
+                              <Button fx:id="btnExportReport" mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-cursor: hand;" text="⬇ Tải báo cáo thống kê">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="645.0" />
+                                    <Insets left="620.0" />
                                  </HBox.margin>
                               </Button>
                            </children>
@@ -208,7 +208,7 @@
                                  <children>
                                     <HBox prefWidth="200.0" style="-fx-border-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-border-radius: 5px; -fx-border-width: 2px; -fx-background-color: #F8F8F8; -fx-background-radius: 5px;">
                                        <children>
-                                          <Label prefWidth="445.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Tên khoản thu">
+                                          <Label prefWidth="320.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Tên khoản thu">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -216,17 +216,22 @@
                                                 <Insets left="10.0" />
                                              </padding>
                                           </Label>
-                                          <Label alignment="CENTER" layoutX="310.0" layoutY="10.0" prefWidth="190.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Số tiền cần thu">
+                                          <Label alignment="CENTER" layoutX="310.0" layoutY="10.0" prefWidth="180.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Số tiền cần thu">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label alignment="CENTER" layoutX="510.0" layoutY="10.0" prefWidth="190.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Số tiền đã thu">
+                                          <Label alignment="CENTER" layoutX="510.0" layoutY="10.0" prefWidth="180.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Số tiền đã thu">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label alignment="CENTER" layoutX="660.0" layoutY="10.0" prefWidth="190.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Còn thiếu?">
+                                          <Label alignment="CENTER" layoutX="712.0" layoutY="22.0" prefWidth="180.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Còn thiếu?">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label alignment="CENTER" layoutX="660.0" layoutY="10.0" prefWidth="155.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Hành động">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -306,7 +311,7 @@
                                  <children>
                                     <HBox prefWidth="200.0" style="-fx-border-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-border-radius: 5px; -fx-border-width: 2px; -fx-background-color: #F8F8F8; -fx-background-radius: 5px;">
                                        <children>
-                                          <Label prefWidth="700.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Tên khoản thu">
+                                          <Label prefWidth="500.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Tên khoản thu">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -314,7 +319,12 @@
                                                 <Insets left="10.0" />
                                              </padding>
                                           </Label>
-                                          <Label alignment="CENTER" layoutX="510.0" layoutY="10.0" prefWidth="315.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Số tiền đã thu">
+                                          <Label alignment="CENTER" layoutX="510.0" layoutY="10.0" prefWidth="250.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Số tiền đã thu">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label alignment="CENTER" layoutX="512.0" layoutY="22.0" prefWidth="264.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Số tiền đã thu">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>

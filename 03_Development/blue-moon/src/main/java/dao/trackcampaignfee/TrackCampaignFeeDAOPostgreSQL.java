@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import dao.PostgreSQLConnection;
 import dto.campaignfee.PaidFeeResponseDTO;
+import dto.campaignfee.HouseholdFeeDetailDTO;
 
 public class TrackCampaignFeeDAOPostgreSQL implements TrackCampaignFeeDAO {
 	private Connection conn;
@@ -124,5 +127,38 @@ public class TrackCampaignFeeDAOPostgreSQL implements TrackCampaignFeeDAO {
 
 		}
 		return 0;
+	}
+	
+	@Override
+	public List<HouseholdFeeDetailDTO> getHouseholdDetailsByFee(int campaignFeeId, int feeId) throws SQLException {
+		List<HouseholdFeeDetailDTO> result = new ArrayList<>();
+		String sql = """
+				SELECT h.household_id, h.house_number,
+				       COALESCE(fpr.expected_amount, 0) AS expected_amount,
+				       COALESCE(fpr.paid_amount, 0) AS paid_amount
+				FROM households h
+				LEFT JOIN fee_payment_records fpr ON h.household_id = fpr.household_id
+				                                   AND fpr.campaign_fee_id = ?
+				                                   AND fpr.fee_id = ?
+				ORDER BY h.house_number
+				""";
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setInt(1, campaignFeeId);
+			stmt.setInt(2, feeId);
+
+			try (ResultSet rs = stmt.executeQuery()) {
+				while (rs.next()) {
+					HouseholdFeeDetailDTO dto = new HouseholdFeeDetailDTO(
+						rs.getInt("household_id"),
+						rs.getString("house_number"),
+						rs.getInt("expected_amount"),
+						rs.getInt("paid_amount")
+					);
+					result.add(dto);
+				}
+			}
+		}
+		return result;
 	}
 }

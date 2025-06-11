@@ -2,7 +2,9 @@ package services;
 
 import dao.trackcampaignfee.*;
 import dto.campaignfee.PaidFeeResponseDTO;
+import dto.campaignfee.HouseholdFeeDetailDTO;
 import java.sql.SQLException;
+import java.util.List;
 
 public class TrackCampaignFeeService {
 	private final TrackCampaignFeeDAO dao;
@@ -29,5 +31,9 @@ public class TrackCampaignFeeService {
 	
 	public PaidFeeResponseDTO getExpectedAndPaidAmount(int campaignFeeId, int feeId) throws SQLException {
 		return dao.getExpectedAndPaidAmount(campaignFeeId, feeId);
+	}
+	
+	public List<HouseholdFeeDetailDTO> getHouseholdDetailsByFee(int campaignFeeId, int feeId) throws SQLException {
+		return dao.getHouseholdDetailsByFee(campaignFeeId, feeId);
 	}
 }
