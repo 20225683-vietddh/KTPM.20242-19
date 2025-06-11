@@ -222,21 +222,4 @@ public class HouseholdDAO {
         
         return false;
     }
-	
-	public boolean roomExists(String roomNumber) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM households WHERE house_number = ?";
-        
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, roomNumber);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (SQLException e) {
-            System.err.println("Error checking room existence: " + e.getMessage());
-            throw e;
-        }
-        
-        return false;
-    }
 }

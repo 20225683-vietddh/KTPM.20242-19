@@ -78,4 +78,14 @@ public class RoomServiceImpl implements RoomService {
 	public void update(Room room) throws ServiceException {
 		roomDAO.update(room);
 	}
+
+	public boolean roomExists(String roomNumber) throws ServiceException {
+		try {
+			Room room = roomDAO.findByRoomNumber(roomNumber);
+			return room != null;
+		} catch (ServiceException e) {
+			// If room is not found, return false
+			return false;
+		}
+	}
 }

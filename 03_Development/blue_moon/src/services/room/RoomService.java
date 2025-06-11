@@ -29,4 +29,6 @@ public interface RoomService {
 
 	boolean isRoomAvailable(String roomNumber) throws ServiceException, SQLException;
 
+	boolean roomExists(String roomNumber) throws ServiceException;
+
 }

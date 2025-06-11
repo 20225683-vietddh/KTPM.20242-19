@@ -29,21 +29,47 @@ public class ResidentDAO {
     }
 
     public List<Resident> findAll() {
-    	
-    	
         List<Resident> residents = new ArrayList<>();
         String sql = "SELECT * FROM residents";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                residents.add(Utils.mapResultSetToResident(rs));
+        try {
+            System.out.println("Starting findAll() method in ResidentDAO");
+            
+            if (conn == null) {
+                System.err.println("Database connection is null!");
+                throw new SQLException("Database connection is not available");
+            }
+            System.out.println("Database connection is valid");
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                System.out.println("Executing query: " + sql);
+                ResultSet rs = stmt.executeQuery();
+                
+                boolean hasResults = false;
+                while (rs.next()) {
+                    hasResults = true;
+                    try {
+                        Resident resident = Utils.mapResultSetToResident(rs);
+                        residents.add(resident);
+                        System.out.println("Loaded resident: " + resident.getId() + " - " + resident.getFullName() + " - " + resident.getCitizenId());
+                    } catch (SQLException e) {
+                        System.err.println("Error mapping resident from ResultSet: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+                
+                if (!hasResults) {
+                    System.out.println("No residents found in database.");
+                } else {
+                    System.out.println("Total residents loaded: " + residents.size());
+                }
             }
         } catch (SQLException e) {
             System.err.println("Error in findAll(): " + e.getMessage());
             e.printStackTrace();
         }
 
+        System.out.println("Returning " + residents.size() + " residents from findAll()");
         return residents;
     }
 

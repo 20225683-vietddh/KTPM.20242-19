@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import views.BaseScreenHandler;
 import views.homepage.*;
+import views.household.HouseholdListHandler;
+import views.resident.ResidentListHandler;
 import controllers.LoginController;
 import dto.login.LoginRequestDTO;
 import dto.login.LoginResponseDTO;
@@ -77,7 +79,7 @@ public class LoginPageHandler extends BaseScreenHandler {
 			handler.show();
 			break;
 		case LEADER:
-			handler = new LeaderHomePageHandler(this.stage, responseDTO.getUserName());
+			handler = new ResidentListHandler(this.stage, responseDTO.getUserName());
 			handler.show();
 			break;
 		default:

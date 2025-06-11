@@ -46,9 +46,9 @@ public class ResidentController {
         }
     }
 
-    // Kiem tra ton tai
-    public boolean residentExists(String residentCitizenId) {
-        return residentService.residentExists(residentCitizenId);
+    // Kiem tra ton tai bang id
+    public boolean residentExists(int residentId) {
+        return residentService.residentExists(residentId);
     }
 
     // Them resident

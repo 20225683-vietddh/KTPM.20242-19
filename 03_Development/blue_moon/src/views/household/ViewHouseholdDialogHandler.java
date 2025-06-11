@@ -329,25 +329,28 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 					"-fx-background-color: #43A5DC; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 15;");
 		}
 
-		// Enable only specific editable fields
-		
-		setFieldEditable(txtPhone, true);
-		setFieldEditable(txtEmail, true);
-		
-		// Enable combobox
-		if (cmbRoom != null) {
+		// Check if current room is room 0
+		if (currentHousehold != null && currentHousehold.getHouseNumber().equals("0")) {
+			// Disable room selection for room 0
+			cmbRoom.setDisable(true);
+			showInfoDialog("Thông báo", "Không thể chọn phòng mới vì đây là phòng mặc định (phòng 0) dành cho các hộ khẩu tạm thời.");
+		} else {
+			// Enable fields that can be edited
+			setFieldEditable(txtPhone, true);
+			setFieldEditable(txtEmail, true);
 			cmbRoom.setDisable(false);
 			cmbRoom.setStyle(EDIT_MODE_STYLE);
+		  
 		}
 
 		// System-generated and restricted fields remain disabled
-		setFieldEditable(txtArea, false);
-		setFieldEditable(txtOwnerCCCD, false); 
-		setFieldEditable(txtOwnerName, false);
-		setFieldEditable(txtId, false);
-		setFieldEditable(txtAddress, false);
-		setFieldEditable(txtHouseholdSize, false);
-		setFieldEditable(txtCreationDate, false);
+		// setFieldEditable(txtArea, false);
+		// setFieldEditable(txtOwnerCCCD, false); 
+		// setFieldEditable(txtOwnerName, false);
+		// setFieldEditable(txtId, false);
+		// setFieldEditable(txtAddress, false);
+		// setFieldEditable(txtHouseholdSize, false);
+		// setFieldEditable(txtCreationDate, false);
 
 		// Update button enabled
 		if (btnUpdate != null) {

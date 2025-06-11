@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,7 +15,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1043.0" prefWidth="1464.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1463.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1039.0" prefWidth="1446.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);" stylesheets="@../../assets/css/style.css">
          <children>
@@ -33,7 +34,112 @@
                               <Insets left="68.0" top="16.0" />
                            </VBox.margin>
                         </ImageView>
-                        <Button fx:id="btnGoBack" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Quay lại">
+                        <Label fx:id="lblUserName" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="300.0" text="Ten nguoi dung" >
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <VBox prefWidth="100.0" style="-fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;">
+                           <children>
+                              <Button fx:id="btnHomePage" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Trang chu">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/images/home-page.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <VBox.margin>
+                                    <Insets left="3.0" right="3.0" top="3.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets right="98.0" />
+                                 </padding>
+                              </Button>
+                              <Button fx:id="btnHouseholdList" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Danh sach ho khau">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/images/list-icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <padding>
+                                    <Insets right="27.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets left="3.0" right="3.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button layoutX="11.0" layoutY="64.0" fx:id="btnResidentList" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-content-display: left; -fx-cursor: hand; -fx-text-fill: white;" text="Danh sach nhan khau">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/images/list-icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <padding>
+                                    <Insets right="7.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets left="3.0" right="3.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Tam tru, tam vang">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="26.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/images/absence.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <padding>
+                                    <Insets right="33.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets left="3.0" right="3.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button layoutX="11.0" layoutY="165.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Thong ke nhan khau">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/images/statistics.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <padding>
+                                    <Insets right="15.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets left="3.0" right="3.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="16.0" right="16.0" top="30.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="3.0" />
+                           </padding>
+                        </VBox>
+                        <Button fx:id="btnGoBack" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Quay lai">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -60,7 +166,7 @@
                               <Insets bottom="16.0" left="70.0" right="70.0" top="30.0" />
                            </VBox.margin>
                         </ImageView>
-                        <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Đăng xuất">
+                        <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Dang xuat">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -87,10 +193,10 @@
                            <children>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../assets/images/home-page.png" />
+                                    <Image url="@../../assets/images/list-icon.png" />
                                  </image>
                               </ImageView>
-                              <Label prefHeight="40.0" text="Trang chủ">
+                              <Label prefHeight="40.0" text="Nhan khau">
                                  <font>
                                     <Font name="System Bold" size="22.0" />
                                  </font>
@@ -104,48 +210,72 @@
                            </VBox.margin>
                         </HBox>
                         <Line endX="1006.0" startX="-100.0" />
-                        <Label alignment="CENTER" prefWidth="1106.0" text="Danh sách nhân khẩu">
-                           <font>
-                              <Font name="System Bold" size="22.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets top="32.0" />
-                           </VBox.margin>
-                        </Label>
                      </children>
                   </VBox>
+                  
+                  <!-- Content Box for Resident Management -->
                   <VBox prefHeight="837.0" prefWidth="1106.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-width: 1; -fx-border-radius: 10; -fx-border-color: black;">
                      <VBox.margin>
                         <Insets top="32.0" />
                      </VBox.margin>
                      <children>
-                        <HBox prefHeight="62.0" prefWidth="1106.0">
+                        <!-- Title and Search Bar -->
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1106.0">
+                           <children>
+                              <Label text="Danh sach nhan khau" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <TextField fx:id="txtSearch" prefHeight="40.0" prefWidth="250.0" promptText="Tim kiem nhan khau...">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                           </children>
                            <VBox.margin>
-                              <Insets top="40.0" />
+                              <Insets left="20.0" right="20.0" top="20.0" />
                            </VBox.margin>
-                           <children>
-                              <Button fx:id="btnAddResident" alignment="CENTER" maxHeight="50.0" maxWidth="180.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="217.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-content-display: left;" text="Thêm nhân khẩu mới">
-                                 <HBox.margin>
-                                    <Insets left="20.0" />
-                                 </HBox.margin></Button>
-                              <Label prefHeight="18.0" prefWidth="902.0" />
-                           </children>
                         </HBox>
-                        <HBox prefHeight="673.0" prefWidth="1106.0">
+                        
+                        <!-- Function Buttons -->
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1106.0" spacing="15.0">
                            <children>
-                              <Label prefHeight="18.0" prefWidth="51.0" />
-                              <TableView fx:id="tableResident" prefHeight="690.0" prefWidth="1106.0">
-                                <columns>
-                                  <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
-                                  <TableColumn fx:id="colFullName" prefWidth="312.26671600341797" text="Họ tên" />
-                                    <TableColumn fx:id="colHousehold_id" prefWidth="151.73336791992188" text="Mã hộ khẩu" />
-                                    <TableColumn fx:id="colRelationship_with_head" prefWidth="309.06640625" text="Quan hệ với chủ hộ" />
-                                    <TableColumn fx:id="colActions" minWidth="0.0" prefWidth="221.60009765625" text="Thao tác" />
-                                </columns>
-                              </TableView>
-                              <Label prefHeight="18.0" prefWidth="51.0" />
+                              <Button fx:id="btnAddResident" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #43A5DC; -fx-text-fill: white; -fx-cursor: hand;" text="+ Them nhan khau moi">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="btnRefresh" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-cursor: hand;" text="Lam moi">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Button>
+                              
                            </children>
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" top="10.0" />
+                           </VBox.margin>
                         </HBox>
+                        
+                        <!-- Resident Table -->
+                        <TableView fx:id="tblResidents" prefHeight="600.0" prefWidth="1066.0" style="-fx-cursor: hand;">
+						  <columns>
+						    <TableColumn fx:id="colId" prefWidth="60.0" text="ID" />
+						    <TableColumn fx:id="colFullName" prefWidth="200.0" text="Ho va ten" />
+						    <TableColumn fx:id="colCitizenId" prefWidth="150.0" text="CCCD" />
+						    <TableColumn fx:id="colRelationship" prefWidth="150.0" text="Quan he chu ho" />
+						    <TableColumn fx:id="colHouseholdId" prefWidth="100.0" text="Ho khau ID" />
+						    <TableColumn fx:id="colActions" prefWidth="200.0" text="Thao tac" />
+						  </columns>
+						  <VBox.margin>
+						    <Insets left="20.0" right="20.0" top="20.0" />
+						  </VBox.margin>
+						</TableView>
                      </children>
                   </VBox>
                </children>

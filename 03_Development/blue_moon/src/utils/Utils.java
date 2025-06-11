@@ -153,23 +153,60 @@ public class Utils {
 	}
 	
 	public static Resident mapResultSetToResident(ResultSet rs) throws SQLException {
-        return new Resident(
-        	rs.getInt("id"),
-            rs.getString("full_name"),
-            rs.getDate("date_of_birth").toLocalDate(),
-            Gender.valueOf(rs.getString("gender").toUpperCase()),
-            rs.getString("ethnicity"),
+        try {
+            // Get nullable fields first
+            java.sql.Date dateOfBirth = rs.getDate("date_of_birth");
+            java.sql.Date dateOfIssue = rs.getDate("date_of_issue");
+            java.sql.Date addedDate = rs.getDate("added_date");
+            String genderStr = rs.getString("gender");
+            String relationshipStr = rs.getString("relationship");
             
-            rs.getString("religion"),
-            rs.getString("citizen_id"),
-            rs.getDate("date_of_issue").toLocalDate(),
-            rs.getString("place_of_issue"),
-            RelationshipType.valueOf(rs.getString("relationship").toUpperCase()),
-            rs.getString("occupation"),
-            rs.getDate("added_date").toLocalDate(),
-            rs.getInt("household_id"),
-            rs.getBoolean("is_household_head")
-        );
+            // Convert nullable fields
+            LocalDate dob = dateOfBirth != null ? dateOfBirth.toLocalDate() : null;
+            LocalDate issueDate = dateOfIssue != null ? dateOfIssue.toLocalDate() : null;
+            LocalDate added = addedDate != null ? addedDate.toLocalDate() : LocalDate.now();
+            
+            // Handle gender enum conversion
+            Gender gender = Gender.UNKNOWN;
+            if (genderStr != null && !genderStr.isEmpty()) {
+                try {
+                    gender = Gender.valueOf(genderStr.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid gender value: " + genderStr);
+                }
+            }
+            
+            // Handle relationship enum conversion
+            RelationshipType relationship = RelationshipType.UNKNOWN;
+            if (relationshipStr != null && !relationshipStr.isEmpty()) {
+                try {
+                    relationship = RelationshipType.valueOf(relationshipStr.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid relationship value: " + relationshipStr);
+                }
+            }
+            
+            // Create resident with null checks for all fields
+            return new Resident(
+                rs.getInt("id"),
+                rs.getString("full_name"),
+                dob,
+                gender,
+                rs.getString("ethnicity"),
+                rs.getString("religion"),
+                rs.getString("citizen_id"),
+                issueDate,
+                rs.getString("place_of_issue"),
+                relationship,
+                rs.getString("occupation"),
+                added,
+                rs.getInt("household_id"),
+                rs.getBoolean("is_household_head")
+            );
+        } catch (SQLException e) {
+            System.err.println("Error mapping resident: " + e.getMessage());
+            throw e;
+        }
     }
 
     public static void setResidentData(PreparedStatement stmt, Resident resident) throws SQLException {

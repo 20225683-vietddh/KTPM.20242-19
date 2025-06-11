@@ -20,6 +20,10 @@ import utils.Configs;
 import java.io.IOException;
 
 import controllers.household.HouseholdController;
+import controllers.resident.ResidentController;
+import javafx.scene.control.Button;
+import views.resident.AddResidentDialogHandler;
+import models.Resident;
 
 /**
  * Utility class for managing JavaFX scenes and navigation between screens.
@@ -47,7 +51,7 @@ public class SceneUtils {
      */
     public static void navigateToHouseholdList(ActionEvent event) {
         try {
-            loadNewScene(event, "/view/HouseholdList.fxml", "Quản lý hộ khẩu - Danh sách hộ khẩu");
+            loadNewScene(event, Configs.HOUSEHOLD_LIST_PATH,"Quản lý hộ khẩu - Danh sách hộ khẩu");
         } catch (IOException e) {
             AlertUtils.showErrorAlert("Lỗi", "Không thể mở danh sách hộ khẩu", e.getMessage());
             e.printStackTrace();
@@ -61,7 +65,7 @@ public class SceneUtils {
      */
     public static void navigateToResidentList(ActionEvent event) {
         try {
-            loadNewScene(event, "/view/ResidentList.fxml", "Quản lý hộ khẩu - Danh sách nhân khẩu");
+            loadNewScene(event, Configs.RESIDENT_LIST_PATH, "Quản lý hộ khẩu - Danh sách nhân khẩu");
         } catch (IOException e) {
             AlertUtils.showErrorAlert("Lỗi", "Không thể mở danh sách nhân khẩu", e.getMessage());
             e.printStackTrace();
@@ -106,6 +110,20 @@ public class SceneUtils {
             loadNewScene(event, "/view/Login.fxml", "Quản lý hộ khẩu - Đăng nhập");
         } catch (IOException e) {
             AlertUtils.showErrorAlert("Lỗi", "Không thể mở trang đăng nhập", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Navigates to the leader home page.
+     *
+     * @param event The event that triggered the navigation
+     */
+    public static void navigateToLeaderHomePage(ActionEvent event) {
+        try {
+            loadNewScene(event, Configs.HOUSEHOLD_LIST_PATH, "Quản lý hộ khẩu - Trang chủ");
+        } catch (IOException e) {
+            AlertUtils.showErrorAlert("Lỗi", "Không thể mở trang chủ", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -206,5 +224,57 @@ public class SceneUtils {
         void setHousehold(Household household);
     }
 
+    public static void openAddResidentDialog(ResidentController residentController, Button sourceButton, Runnable onSuccess) {
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneUtils.class.getResource(Configs.ADD_RESIDENT_DIALOG_PATH));
+            AddResidentDialogHandler controller = new AddResidentDialogHandler(residentController);
+            loader.setController(controller);
+            
+            Scene scene = new Scene(loader.load());
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Thêm nhân khẩu mới");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(sourceButton.getScene().getWindow());
+            stage.setResizable(false);
+            
+            // Set callback to refresh table after successful save
+            controller.setOnSuccessCallback(onSuccess);
+            
+            // Show dialog
+            stage.showAndWait();
+            
+        } catch (IOException e) {
+            AlertUtils.showErrorAlert("Lỗi", "Không thể mở form thêm nhân khẩu", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void openViewResidentDialog(ResidentController residentController, Resident resident, Button sourceButton, Runnable onSuccess) {
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneUtils.class.getResource(Configs.ADD_RESIDENT_DIALOG_PATH));
+            AddResidentDialogHandler controller = new AddResidentDialogHandler(residentController);
+            loader.setController(controller);
+            
+            Scene scene = new Scene(loader.load());
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Thông tin nhân khẩu");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(sourceButton.getScene().getWindow());
+            stage.setResizable(false);
+            
+            // Set resident data and callback
+            controller.setResident(resident);
+            controller.setOnSuccessCallback(onSuccess);
+            
+            // Show dialog
+            stage.showAndWait();
+            
+        } catch (IOException e) {
+            AlertUtils.showErrorAlert("Lỗi", "Không thể mở thông tin nhân khẩu", e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
 }
