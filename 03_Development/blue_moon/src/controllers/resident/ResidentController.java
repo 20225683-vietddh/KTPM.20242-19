@@ -80,17 +80,8 @@ public class ResidentController {
     }
 
     // Xoa resident
-    public boolean deleteResident(String residentCitizenId) throws SQLException {
-        try {
-            boolean result = residentService.deleteResident(residentCitizenId);
-            if (result) {
-                System.out.println("Resident deleted successfully.");
-            }
-            return result;
-        } catch (ServiceException e) {
-            showErrorMessage("Failed to delete resident: " + e.getMessage());
-            return false;
-        }
+    public void deleteResident(String citizenId) throws ServiceException, SQLException {
+        residentService.deleteResident(citizenId);
     }
 
     // Lay chu ho

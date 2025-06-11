@@ -108,6 +108,18 @@ public class ResidentServiceImpl  implements ResidentService {
 
     @Override
 	public boolean deleteResident(String residentCitizenId) throws ServiceException, SQLException {
+        // Get resident to check household status
+        Resident resident = getResidentByCitizenId(residentCitizenId);
+        if (resident == null) {
+            throw new ServiceException("Không tìm thấy người dân với CCCD: " + residentCitizenId);
+        }
+
+        // Check if resident is in default household (id = 0)
+        if (resident.getHouseholdId() != 0) {
+            throw new ServiceException("Không thể xóa người dân vì đang thuộc hộ khẩu có ID: " + resident.getHouseholdId() + 
+                ". Vui lòng xóa người dân khỏi hộ khẩu trước.");
+        }
+
     	residentDAO.delete(residentCitizenId);
     	return true;
 	}

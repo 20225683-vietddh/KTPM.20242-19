@@ -13,6 +13,7 @@ import services.resident.ResidentService;
 import services.resident.ResidentServiceImpl;
 import services.room.RoomService;
 import services.room.RoomServiceImpl;
+import views.BaseScreenHandler;
 import views.household.AddHouseholdDialogHandler;
 import views.household.ViewHouseholdDialogHandler;
 import utils.Configs;
@@ -23,6 +24,7 @@ import controllers.household.HouseholdController;
 import controllers.resident.ResidentController;
 import javafx.scene.control.Button;
 import views.resident.AddResidentDialogHandler;
+import views.resident.ViewResidentDialogHandler;
 import models.Resident;
 
 /**
@@ -35,7 +37,7 @@ public class SceneUtils {
      *
      * @param event The event that triggered the navigation
      */
-    public static void navigateToMainDashboard(ActionEvent event) {
+    public static void navigateToMainDashboard(ActionEvent event, String username) {
         try {
             loadNewScene(event, "/view/MainDashboard.fxml", "Quản lý hộ khẩu - Bảng điều khiển");
         } catch (IOException e) {
@@ -49,10 +51,10 @@ public class SceneUtils {
      *
      * @param event The event that triggered the navigation
      */
-    public static void navigateToHouseholdList(ActionEvent event) {
+    public static void navigateToHouseholdList(ActionEvent event, String username) {
         try {
-            loadNewScene(event, Configs.HOUSEHOLD_LIST_PATH,"Quản lý hộ khẩu - Danh sách hộ khẩu");
-        } catch (IOException e) {
+            loadNewSceneWithUserName(event, Configs.HOUSEHOLD_LIST_PATH,"Quản lý hộ khẩu - Danh sách hộ khẩu" , username, true);
+        } catch (Exception e) {
             AlertUtils.showErrorAlert("Lỗi", "Không thể mở danh sách hộ khẩu", e.getMessage());
             e.printStackTrace();
         }
@@ -63,10 +65,10 @@ public class SceneUtils {
      *
      * @param event The event that triggered the navigation
      */
-    public static void navigateToResidentList(ActionEvent event) {
+    public static void navigateToResidentList(ActionEvent event, String username) {
         try {
-            loadNewScene(event, Configs.RESIDENT_LIST_PATH, "Quản lý hộ khẩu - Danh sách nhân khẩu");
-        } catch (IOException e) {
+            loadNewSceneWithUserName(event, Configs.RESIDENT_LIST_PATH, "Quản lý hộ khẩu - Danh sách nhân khẩu", username, false);
+        } catch (Exception e) {
             AlertUtils.showErrorAlert("Lỗi", "Không thể mở danh sách nhân khẩu", e.getMessage());
             e.printStackTrace();
         }
@@ -77,9 +79,9 @@ public class SceneUtils {
      *
      * @param event The event that triggered the navigation
      */
-    public static void navigateToTemporaryResidenceView(ActionEvent event) {
+    public static void navigateToTemporaryResidenceView(ActionEvent event, String username) {
         try {
-            loadNewScene(event, "/view/TemporaryResidence.fxml", "Quản lý hộ khẩu - Tạm trú tạm vắng");
+            loadNewScene(event, "/view/TemporaryResidence.fxml", "Quản lý hộ khẩu - Tạm trú tạm vắng" );
         } catch (IOException e) {
             AlertUtils.showErrorAlert("Lỗi", "Không thể mở trang tạm trú tạm vắng", e.getMessage());
             e.printStackTrace();
@@ -91,7 +93,7 @@ public class SceneUtils {
      *
      * @param event The event that triggered the navigation
      */
-    public static void navigateToStatisticsView(ActionEvent event) {
+    public static void navigateToStatisticsView(ActionEvent event, String username) {
         try {
             loadNewScene(event, "/view/Statistics.fxml", "Quản lý hộ khẩu - Thống kê");
         } catch (IOException e) {
@@ -105,28 +107,28 @@ public class SceneUtils {
      *
      * @param event The event that triggered the navigation
      */
-    public static void navigateToLoginScreen(ActionEvent event) {
+    public static void navigateToLoginScreen(ActionEvent event, String username) {
         try {
-            loadNewScene(event, "/view/Login.fxml", "Quản lý hộ khẩu - Đăng nhập");
+            loadNewScene(event, "/view/Login.fxml", "Quản lý hộ khẩu - Đăng nhập" );
         } catch (IOException e) {
             AlertUtils.showErrorAlert("Lỗi", "Không thể mở trang đăng nhập", e.getMessage());
             e.printStackTrace();
         }
     }
-
-    /**
-     * Navigates to the leader home page.
-     *
-     * @param event The event that triggered the navigation
-     */
-    public static void navigateToLeaderHomePage(ActionEvent event) {
-        try {
-            loadNewScene(event, Configs.HOUSEHOLD_LIST_PATH, "Quản lý hộ khẩu - Trang chủ");
-        } catch (IOException e) {
-            AlertUtils.showErrorAlert("Lỗi", "Không thể mở trang chủ", e.getMessage());
-            e.printStackTrace();
-        }
-    }
+//
+//    /**
+//     * Navigates to the leader home page.
+//     *
+//     * @param event The event that triggered the navigation
+//     */
+//    public static void navigateToLeaderHomePage(ActionEvent event, String username) {
+//        try {
+//            loadNewSceneWithUserName(event, Configs.HOUSEHOLD_LIST_PATH, "Quản lý hộ khẩu - Trang chủ", username, false );
+//        } catch (Exception e) {
+//            AlertUtils.showErrorAlert("Lỗi", "Không thể mở trang chủ", e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * Opens the add household form as a modal dialog.
@@ -183,7 +185,7 @@ public class SceneUtils {
      * @param fxmlPath  The path to the FXML file to load
      * @param title     The title for the stage
      * @throws IOException If the FXML file cannot be loaded
-     */
+//     */
     private static void loadNewScene(ActionEvent event, String fxmlPath, String title) throws IOException {
         Parent root = FXMLLoader.load(SceneUtils.class.getResource(fxmlPath));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -191,6 +193,24 @@ public class SceneUtils {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+    
+    private static void loadNewSceneWithUserName(ActionEvent event, String fxmlPath, 
+            String title, String userName, boolean isHouseholdList) throws Exception {
+        
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setTitle(title);
+        
+        // Create the appropriate controller with username
+        BaseScreenHandler controller;
+        if (isHouseholdList) {
+            controller = new views.household.HouseholdListHandler(stage, userName);
+        } else {
+            controller = new views.resident.ResidentListHandler(stage, userName);
+        }
+        
+        // Show the screen
+        controller.show();
     }
 
     /**
@@ -227,6 +247,7 @@ public class SceneUtils {
     public static void openAddResidentDialog(ResidentController residentController, Button sourceButton, Runnable onSuccess) {
         try {
             FXMLLoader loader = new FXMLLoader(SceneUtils.class.getResource(Configs.ADD_RESIDENT_DIALOG_PATH));
+            loader.setCharset(java.nio.charset.StandardCharsets.UTF_8);
             AddResidentDialogHandler controller = new AddResidentDialogHandler(residentController);
             loader.setController(controller);
             
@@ -252,8 +273,9 @@ public class SceneUtils {
 
     public static void openViewResidentDialog(ResidentController residentController, Resident resident, Button sourceButton, Runnable onSuccess) {
         try {
-            FXMLLoader loader = new FXMLLoader(SceneUtils.class.getResource(Configs.ADD_RESIDENT_DIALOG_PATH));
-            AddResidentDialogHandler controller = new AddResidentDialogHandler(residentController);
+            FXMLLoader loader = new FXMLLoader(SceneUtils.class.getResource(Configs.VIEW_RESIDENT_DIALOG_PATH));
+            loader.setCharset(java.nio.charset.StandardCharsets.UTF_8);
+            ViewResidentDialogHandler controller = new ViewResidentDialogHandler();
             loader.setController(controller);
             
             Scene scene = new Scene(loader.load());
@@ -266,6 +288,7 @@ public class SceneUtils {
             
             // Set resident data and callback
             controller.setResident(resident);
+            controller.setResidentController(residentController);
             controller.setOnSuccessCallback(onSuccess);
             
             // Show dialog

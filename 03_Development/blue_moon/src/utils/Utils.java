@@ -19,7 +19,9 @@ import services.household.HouseholdService;
 import services.household.HouseholdServiceImpl;
 import services.resident.ResidentService;
 import services.resident.ResidentServiceImpl;
+import utils.enums.Ethnicity;
 import utils.enums.Gender;
+import utils.enums.PlaceOfIssue;
 import utils.enums.RelationshipType;
 import javafx.animation.Interpolator;
 import java.time.LocalDate;
@@ -160,6 +162,8 @@ public class Utils {
             java.sql.Date addedDate = rs.getDate("added_date");
             String genderStr = rs.getString("gender");
             String relationshipStr = rs.getString("relationship");
+            String ethnicityStr = rs.getString("ethnicity");
+            String placeOfIssueStr = rs.getString("place_of_issue");
             
             // Convert nullable fields
             LocalDate dob = dateOfBirth != null ? dateOfBirth.toLocalDate() : null;
@@ -167,7 +171,7 @@ public class Utils {
             LocalDate added = addedDate != null ? addedDate.toLocalDate() : LocalDate.now();
             
             // Handle gender enum conversion
-            Gender gender = Gender.UNKNOWN;
+            Gender gender = Gender.OTHER;
             if (genderStr != null && !genderStr.isEmpty()) {
                 try {
                     gender = Gender.valueOf(genderStr.toUpperCase());
@@ -186,17 +190,38 @@ public class Utils {
                 }
             }
             
+         // Handle relationship enum conversion
+            Ethnicity ethnicity = Ethnicity.OTHER;
+            if (ethnicityStr != null && !ethnicityStr.isEmpty()) {
+                try {
+                    ethnicity = Ethnicity.valueOf(ethnicityStr.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid ethnicity value: " + ethnicityStr);
+                }
+            }
+            
+         // Handle relationship enum conversion
+            PlaceOfIssue placeOfIssue = PlaceOfIssue.OTHER;
+            if (placeOfIssueStr != null && !placeOfIssueStr.isEmpty()) {
+                try {
+                    placeOfIssue = PlaceOfIssue.valueOf(placeOfIssueStr.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid place of issue value: " + placeOfIssueStr);
+                }
+            }
+            
+            
             // Create resident with null checks for all fields
             return new Resident(
                 rs.getInt("id"),
                 rs.getString("full_name"),
                 dob,
                 gender,
-                rs.getString("ethnicity"),
-                rs.getString("religion"),
+                ethnicity,
+                rs.getBoolean("religion"),
                 rs.getString("citizen_id"),
                 issueDate,
-                rs.getString("place_of_issue"),
+                placeOfIssue,
                 relationship,
                 rs.getString("occupation"),
                 added,
@@ -215,13 +240,13 @@ public class Utils {
         // Common fields for both INSERT and UPDATE
         stmt.setString(paramIndex++, resident.getFullName());
         stmt.setDate(paramIndex++, Date.valueOf(resident.getDateOfBirth()));
-        stmt.setString(paramIndex++, resident.getGender().toString());
-        stmt.setString(paramIndex++, resident.getEthnicity());
-        stmt.setString(paramIndex++, resident.getReligion());
+        stmt.setString(paramIndex++, resident.getGender().name());
+        stmt.setString(paramIndex++, resident.getEthnicity().name());
+        stmt.setBoolean(paramIndex++, resident.isReligion());
         stmt.setString(paramIndex++, resident.getCitizenId());
         stmt.setDate(paramIndex++, Date.valueOf(resident.getDateOfIssue()));
-        stmt.setString(paramIndex++, resident.getPlaceOfIssue());
-        stmt.setString(paramIndex++, resident.getRelationship().toString());
+        stmt.setString(paramIndex++, resident.getPlaceOfIssue().name());
+        stmt.setString(paramIndex++, resident.getRelationship().name());
         stmt.setString(paramIndex++, resident.getOccupation());
         stmt.setDate(paramIndex++, Date.valueOf(resident.getAddedDate()));
         stmt.setInt(paramIndex++, resident.getHouseholdId());

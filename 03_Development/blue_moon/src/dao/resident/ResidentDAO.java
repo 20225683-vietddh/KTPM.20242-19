@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,23 +161,61 @@ public class ResidentDAO {
 	        throw new ServiceException("Database error when finding household head for household: " + householdId);
 	    }
 	}
+//
+//	public void add(Resident resident) throws ServiceException, SQLException {
+//        if (residentExists(resident.getId())) {
+//            throw new ServiceException("Resident with CCCD " + resident.getCitizenId() + " already exists.");
+//        }
+//        
+//        String sql = "INSERT INTO residents (id, full_name, date_of_birth, gender, ethnicity, religion, citizen_id, date_of_issue, place_of_issue, relationship, occupation, added_date, household_id, is_household_head) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//
+//        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+//        	Utils.setResidentData(stmt, resident);
+//            stmt.executeUpdate();
+//            
+//        } catch (SQLException e) {
+//            System.err.println("Error in add(): " + e.getMessage());
+//            throw e;
+//        }
+//    }
+//	
+	public int add(Resident resident) throws SQLException {
+	    // First, reset the sequence if needed
+	    try (Statement stmt = conn.createStatement()) {
+	        // Get current max id
+	        ResultSet rs = stmt.executeQuery("SELECT MAX(id) FROM residents");
+	        if (rs.next()) {
+	            int maxId = rs.getInt(1);
+	            // Reset sequence to start from max + 1
+	            if (maxId > 0) {
+	                stmt.execute("ALTER SEQUENCE residents_id_seq RESTART WITH " + (maxId + 1));
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Warning: Could not reset sequence: " + e.getMessage());
+	        // Continue anyway as this is not critical
+	    }
+	    
+	    String sql = "INSERT INTO residents (full_name, date_of_birth, gender, ethnicity, religion, " +
+	                 "citizen_id, date_of_issue, place_of_issue, relationship, occupation, " +
+	                 "added_date, household_id, is_household_head) " +
+	                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-	public void add(Resident resident) throws ServiceException, SQLException {
-        if (residentExists(resident.getId())) {
-            throw new ServiceException("Resident with CCCD " + resident.getCitizenId() + " already exists.");
-        }
-        
-        String sql = "INSERT INTO residents (id, full_name, date_of_birth, gender, ethnicity, religion, citizen_id, date_of_issue, place_of_issue, relationship, occupation, added_date, household_id, is_household_head) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-        	Utils.setResidentData(stmt, resident);
-            stmt.executeUpdate();
-            
-        } catch (SQLException e) {
-            System.err.println("Error in add(): " + e.getMessage());
-            throw e;
-        }
-    }
+	    try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+	        Utils.setResidentData(stmt, resident);
+	        stmt.executeUpdate();
+	        
+	        ResultSet rs = stmt.getGeneratedKeys();
+	        if (rs.next()) {
+	            return rs.getInt(1);
+	        } else {
+	            throw new SQLException("Creating resident failed, no ID obtained.");
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error in add(): " + e.getMessage());
+	        throw e;
+	    }
+	}
 
     //TODO : 
     public void update(Resident resident) throws ServiceException, SQLException {

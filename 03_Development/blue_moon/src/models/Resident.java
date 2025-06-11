@@ -3,7 +3,9 @@ package models;
 
 import java.time.LocalDate;
 
+import utils.enums.Ethnicity;
 import utils.enums.Gender;
+import utils.enums.PlaceOfIssue;
 import utils.enums.RelationshipType;
 import utils.enums.Role;
 
@@ -12,11 +14,11 @@ public class Resident {
     private String fullName;    
     private LocalDate dateOfBirth;
     private Gender gender;
-    private String ethnicity;
-    private String religion;    
+    private Ethnicity ethnicity;
+    private boolean religion;    
     private String citizenId;      
     private LocalDate dateOfIssue;
-    private String placeOfIssue;
+    private PlaceOfIssue placeOfIssue;
     private RelationshipType relationship;    
     private String occupation;
     private LocalDate addedDate;    
@@ -33,11 +35,11 @@ public class Resident {
 			String fullName, 
 			LocalDate dateOfBirth, 
 			Gender gender, 
-			String ethnicity, 
-			String religion,
+			Ethnicity ethnicity, 
+			boolean religion,
 			String citizenId, 
 			LocalDate dateOfIssue, 
-			String placeOfIssue, 
+			PlaceOfIssue placeOfIssue, 
 			RelationshipType relationship,
 			String occupation, 
 			LocalDate addedDate, 
@@ -94,19 +96,34 @@ public class Resident {
         this.id = id;
     }
     
-    public String getEthnicity() {
+    public Ethnicity getEthnicity() {
 		return ethnicity;
 	}
-
-	public void setEthnicity(String ethnicity) {
-		this.ethnicity = ethnicity;
+    
+    public String getEthnicityString() {
+		return ethnicity.toString();
 	}
 
-	public String getReligion() {
+	public void setEthnicity(Ethnicity ethnicity) {
+		this.ethnicity = ethnicity;
+	}
+	
+	public void setEthnicity(String ethnicityStr) {
+		try {
+			this.ethnicity = Ethnicity.valueOf(ethnicityStr.toUpperCase());
+		}
+		catch (IllegalArgumentException e) {
+            // If the string doesn't match any enum value, set to UNKNOWN
+            this.ethnicity = Ethnicity.OTHER;
+        }
+		
+	}
+
+	public boolean isReligion() {
 		return religion;
 	}
 
-	public void setReligion(String religion) {
+	public void setReligion(boolean religion) {
 		this.religion = religion;
 	}
 
@@ -126,13 +143,30 @@ public class Resident {
 		this.dateOfIssue = dateOfIssue;
 	}
 
-	public String getPlaceOfIssue() {
+	public PlaceOfIssue getPlaceOfIssue() {
 		return placeOfIssue;
 	}
 
-	public void setPlaceOfIssue(String placeOfIssue) {
+	public String getPlaceOfIssueString() {
+		return placeOfIssue.toString();
+	}
+
+	
+	public void setPlaceOfIssue(PlaceOfIssue placeOfIssue) {
 		this.placeOfIssue = placeOfIssue;
 	}
+	
+	public void setPlaceOfIssue(String placeStr) {
+		try {
+			this.placeOfIssue = PlaceOfIssue.valueOf(placeStr.toUpperCase());
+		}
+		catch (IllegalArgumentException e) {
+            // If the string doesn't match any enum value, set to UNKNOWN
+            this.placeOfIssue = PlaceOfIssue.OTHER;
+        }
+		
+	}
+
 
 	public LocalDate getAddedDate() {
 		return addedDate;
@@ -200,6 +234,10 @@ public class Resident {
     public String getRelationshipString() {
     	return relationship != null ? relationship.name() : RelationshipType.UNKNOWN.name();
     }
+    
+    public String getRelationshipDisplayName() {
+    	return relationship != null ? relationship.toString() : RelationshipType.UNKNOWN.toString();
+    }
 
     public void setRelationship(String relationshipStr) {
         try {
@@ -254,7 +292,6 @@ public class Resident {
                ", dateOfIssue=" + dateOfIssue +
                ", placeOfIssue='" + placeOfIssue + '\'' +
                ", occupation='" + occupation + '\'' +
-//               ", notes='" + notes + '\'' +
                ", addedDate=" + addedDate +
                ", relationship='" + relationship.toString() + '\'' +
                ", isHouseholdHead=" + isHouseholdHead +

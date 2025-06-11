@@ -43,7 +43,7 @@ public class ResidentCellFactory extends TableCell<Resident, Void> {
 
     private void handleViewResident(Resident resident) {
         try {
-            ResidentViewFormHandler formHandler = new ResidentViewFormHandler(new Stage(), resident);
+            ViewResidentDialogHandler formHandler = new ViewResidentDialogHandler(new Stage(), resident);
             formHandler.show();
         } catch (Exception e) {
             ErrorDialog.showError("Loi hien thi thong tin", "Khong the mo form xem nhan khau: " + e.getMessage());

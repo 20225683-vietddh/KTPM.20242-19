@@ -111,7 +111,7 @@ public class ResidentFormHandler {
             cbGender.setValue(resident.getGender().toString());
             cbEthnicity.setValue(resident.getEthnicity());
             cbPlaceOfIssue.setValue(resident.getPlaceOfIssue());
-            tfReligion.setText(resident.getReligion() != null ? resident.getReligion() : "");
+            tfReligion.setText(resident.isReligion() != null ? resident.isReligion() : "");
             tfCitizenId.setText(resident.getCitizenId() != null ? resident.getCitizenId() : "");
             tfOccupation.setText(resident.getOccupation() != null ? resident.getOccupation() : "");
             tfRelationshipWithHead.setText(resident.getRelationship() != null ? resident.getRelationship().toString() : "");

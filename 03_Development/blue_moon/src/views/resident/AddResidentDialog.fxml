@@ -2,12 +2,12 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,151 +15,234 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="750.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox prefHeight="700.0" prefWidth="500.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         
-         <!-- Header Section -->
+      <VBox fx:id="contentVBox" prefHeight="750.0" prefWidth="500.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="500.0" spacing="10.0" style="-fx-background-color: #43a5dc;">
-               <padding>
-                  <Insets left="30.0" />
-               </padding>
+            <!-- Header Section -->
+            <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="500.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-background-radius: 10 10 0 0;">
                <children>
-                  
-                  <Label text="Thông tin nhân khẩu" textFill="WHITE">
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../assets/images/resident-icon.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label text="Thêm nhân khẩu mới" textFill="WHITE">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="System Bold" size="20.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
                   </Label>
-                  <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-                     <children>
-                        <ToggleButton fx:id="toggleEditMode" mnemonicParsing="false" text="Chế độ chỉnh sửa" />
-                     </children>
-                     <padding>
-                        <Insets right="20.0" />
-                     </padding>
-                  </HBox>
                </children>
             </HBox>
             
-            <!-- Error Label -->
-            <Label fx:id="lblError" alignment="CENTER" prefHeight="30.0" prefWidth="500.0" textFill="RED">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            
-            <!-- Required Note -->
-            <Label fx:id="lblRequiredNote" text="(*) Trường bắt buộc" textFill="#757575">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="20.0" top="10.0" />
-               </VBox.margin>
-            </Label>
-            
             <!-- Form Section -->
-            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+            <ScrollPane fitToWidth="true" prefHeight="620.0" prefWidth="500.0" style="-fx-background-color: white;">
                <content>
-                  <VBox spacing="15.0">
+                  <VBox prefWidth="480.0" spacing="15.0" style="-fx-background-color: white;">
                      <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+                        <Insets bottom="20.0" left="30.0" right="30.0" top="30.0" />
                      </padding>
                      <children>
-                        <!-- ID Field -->
-                        <VBox spacing="5.0">
-                           <Label text="ID" />
-                           <TextField fx:id="tfId" editable="false" promptText="ID tự động sinh" />
-                        </VBox>
                         
                         <!-- Full Name Field -->
                         <VBox spacing="5.0">
-                           <Label text="Họ và tên *" />
-                           <TextField fx:id="tfFullName" promptText="Nhập họ và tên" />
+                           <children>
+                              <Label text="Họ và tên: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="tfFullName" prefHeight="35.0" promptText="Nhập họ và tên" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Label fx:id="lblFullNameError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
                         </VBox>
                         
                         <!-- Date of Birth Field -->
                         <VBox spacing="5.0">
-                           <Label text="Ngày sinh *" />
-                           <DatePicker fx:id="dpDateOfBirth" prefWidth="460.0" promptText="Chọn ngày sinh" />
+                           <children>
+                              <Label text="Ngày sinh: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker fx:id="dpDateOfBirth" prefHeight="35.0" prefWidth="440.0" promptText="Chọn ngày sinh" style="-fx-background-radius: 5; -fx-border-color: #d0d0d0; -fx-border-radius: 5;" />
+                              <Label fx:id="lblDateOfBirthError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
                         </VBox>
                         
                         <!-- Gender Field -->
                         <VBox spacing="5.0">
-                           <Label text="Giới tính *" />
-                           <ComboBox fx:id="cbGender" prefWidth="460.0" promptText="Chọn giới tính" />
+                           <children>
+                              <Label text="Giới tính: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="cbGender" prefHeight="35.0" prefWidth="440.0" promptText="Chọn giới tính" style="-fx-background-radius: 5; -fx-border-color: #d0d0d0; -fx-border-radius: 5;" />
+                              <Label fx:id="lblGenderError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
                         </VBox>
                         
                         <!-- Ethnicity Field -->
                         <VBox spacing="5.0">
-                           <Label text="Dân tộc *" />
-                           <ComboBox fx:id="cbEthnicity" prefWidth="460.0" promptText="Chọn dân tộc" />
+                           <children>
+                              <Label text="Dân tộc: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="cbEthnicity" prefHeight="35.0" prefWidth="440.0" promptText="Chọn dân tộc" style="-fx-background-radius: 5; -fx-border-color: #d0d0d0; -fx-border-radius: 5;" />
+                              <Label fx:id="lblEthnicityError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
                         </VBox>
                         
-                        <!-- Religion Field -->
                         <VBox spacing="5.0">
-                           <Label text="Tôn giáo" />
-                           <TextField fx:id="tfReligion" promptText="Nhập tôn giáo" />
+                           <children>
+                              <Label text="Tôn giáo:" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <CheckBox fx:id="cbReligion" text="Có" style="-fx-text-fill: #333;">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <Label fx:id="lblReligionError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
                         </VBox>
                         
                         <!-- Citizen ID Field -->
                         <VBox spacing="5.0">
-                           <Label text="CCCD/CMND *" />
-                           <TextField fx:id="tfCitizenId" promptText="Nhập số CCCD/CMND" />
+                           <children>
+                              <Label text="CCCD/CMND: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="tfCitizenId" prefHeight="35.0" promptText="Nhập số CCCD/CMND" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Label fx:id="lblCitizenIdError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
                         </VBox>
                         
                         <!-- Date of Issue Field -->
                         <VBox spacing="5.0">
-                           <Label text="Ngày cấp *" />
-                           <DatePicker fx:id="dpDateOfIssue" prefWidth="460.0" promptText="Chọn ngày cấp" />
+                           <children>
+                              <Label text="Ngày cấp: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker fx:id="dpDateOfIssue" prefHeight="35.0" prefWidth="440.0" promptText="Chọn ngày cấp" style="-fx-background-radius: 5; -fx-border-color: #d0d0d0; -fx-border-radius: 5;" />
+                              <Label fx:id="lblDateOfIssueError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
                         </VBox>
                         
                         <!-- Place of Issue Field -->
                         <VBox spacing="5.0">
-                           <Label text="Nơi cấp *" />
-                           <ComboBox fx:id="cbPlaceOfIssue" prefWidth="460.0" promptText="Chọn nơi cấp" />
+                           <children>
+                              <Label text="Nơi cấp: *" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="cbPlaceOfIssue" prefHeight="35.0" prefWidth="440.0" promptText="Chọn nơi cấp" style="-fx-background-radius: 5; -fx-border-color: #d0d0d0; -fx-border-radius: 5;" />
+                              <Label fx:id="lblPlaceOfIssueError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
                         </VBox>
                         
                         <!-- Occupation Field -->
                         <VBox spacing="5.0">
-                           <Label text="Nghề nghiệp" />
-                           <TextField fx:id="tfOccupation" promptText="Nhập nghề nghiệp" />
+                           <children>
+                              <Label text="Nghề nghiệp:" textFill="#43a5dc">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="tfOccupation" prefHeight="35.0" promptText="Nhập nghề nghiệp (tùy chọn)" style="-fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Label fx:id="lblOccupationError" textFill="#dc3545" visible="false">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
                         </VBox>
                         
-                        <!-- Relationship Field -->
-                        <VBox spacing="5.0">
-                           <Label text="Quan hệ với chủ hộ *" />
-                           <ComboBox fx:id="cbRelationship" prefWidth="460.0" promptText="Chọn quan hệ với chủ hộ" />
-                        </VBox>
-                        
-                        <!-- Household ID Field -->
-                        <VBox spacing="5.0">
-                           <Label text="Mã hộ khẩu *" />
-                           <TextField fx:id="tfHouseholdId" promptText="Nhập mã hộ khẩu" />
-                        </VBox>
                      </children>
                   </VBox>
                </content>
             </ScrollPane>
             
             <!-- Button Section -->
-            <HBox alignment="CENTER" spacing="20.0" style="-fx-background-color: white;">
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="500.0" spacing="20.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #e9ecef; -fx-border-width: 1 0 0 0;">
                <children>
-                  <Button fx:id="btnSave" defaultButton="true" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #43a5dc;" text="Lưu" textFill="WHITE">
+                  <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#handleCancel" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Hủy">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnClose" cancelButton="true" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #e0e0e0;" text="Đóng">
+                  <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#handleAdd" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Thêm">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                   </Button>
                </children>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
             </HBox>
+            
          </children>
       </VBox>
    </children>
-</AnchorPane> 
+</AnchorPane>

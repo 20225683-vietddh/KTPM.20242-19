@@ -32,7 +32,7 @@ public class Configs {
 	
 	public static final String NEW_RESIDENT_FORM = "/views/resident/NewResidentForm.fxml";
 	public static final String RESIDENT_EDIT_FORM = "/views/resident/ResidentEditForm.fxml";
-	public static final String RESIDENT_VIEW_FORM = "/views/resident/ResidentViewForm.fxml";
+	
 	
 	//public static final String CITIZEN_MANAGEMENT_PAGE_PATH = "/views/citizen/CitizenManagementPage.fxml";
 	public static final String RESIDENT_LIST_PATH = "/views/resident/ResidentList.fxml";

@@ -103,18 +103,24 @@ public class HouseholdListHandler extends HomePageHandler implements Initializab
 
 	public HouseholdListHandler(Stage stage, String userName) throws Exception {
 		super(stage, Configs.HOUSEHOLD_LIST_PATH);
-		this.householdController = new HouseholdController();
+		this.stage = stage;
 		this.userName = userName;
+		this.householdController = new HouseholdController();
 
 		// Set this instance as the controller before loading FXML
 		super.loader.setController(this);
 
-		// Load FXML content
+		// Load FXML content and set scene
 		this.setContent();
 		this.setScene();
 
-		// Set the username
-		super.lblUserName.setText(userName);
+		// Set the username after FXML is loaded
+		if (lblUserName != null) {
+			lblUserName.setText(userName);
+		}
+
+		// Initialize components
+		initialize(null, null);
 	}
 
 	@Override
@@ -277,8 +283,7 @@ public class HouseholdListHandler extends HomePageHandler implements Initializab
 		// Resident list button
 		btnResidentList.setOnAction(event -> {
 			try {
-				Stage stage = (Stage) btnResidentList.getScene().getWindow();
-				SceneUtils.navigateToResidentList(event);
+				SceneUtils.navigateToResidentList(event, this.userName);
 			} catch (Exception e) {
 				AlertUtils.showErrorAlert("Lỗi", "Không thể mở danh sách nhân khẩu", e.getMessage());
 			}
