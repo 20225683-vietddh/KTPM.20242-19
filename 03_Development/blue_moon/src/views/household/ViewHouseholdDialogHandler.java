@@ -502,7 +502,7 @@ public class ViewHouseholdDialogHandler implements HouseholdDialogHandler {
 			
 			// Create and show the dialog
 			Stage stage = new Stage();
-			stage.setTitle("Chi tiết thành viên hộ khẩu");
+			stage.setTitle("Chi tiết thành viên hộ khẩu "+household.getHouseNumber() );
 			stage.setScene(new Scene(root));
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initOwner(btnMemberDetails.getScene().getWindow());
