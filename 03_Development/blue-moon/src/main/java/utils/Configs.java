@@ -18,6 +18,16 @@ public class Configs {
 	public static final String TRACK_CAMPAIGN_FEE_SCREEN = "/views/trackcampaignfee/TrackCampaignFeeScreen.fxml";
 	public static final String COMPULSORY_FEE_DETAIL_POPUP = "/views/trackcampaignfee/CompulsoryFeeDetailPopup.fxml";
 	public static final String OPTIONAL_FEE_DETAIL_POPUP = "/views/trackcampaignfee/OptionalFeeDetailPopup.fxml";
+	public static final String HOUSEHOLD_SCREEN_PATH = "/views/household/HouseholdScreen.fxml";
+	public static final String HOUSEHOLD_DETAIL_POPUP = "/views/household/HouseholdDetailPopup.fxml";
+	public static final String HOUSEHOLD_UPDATE_FORM = "/views/household/HouseholdUpdateForm.fxml";
+	public static final String HOUSEHOLD_ADD_FORM = "/views/household/HouseholdAddForm.fxml";
+	public static final String RESIDENT_SCREEN_PATH = "/views/resident/ResidentScreen.fxml";
+	public static final String RESIDENT_DETAIL_POPUP = "/views/resident/ResidentDetailPopup.fxml";
+	public static final String RESIDENT_ADD_FORM = "/views/resident/ResidentAddForm.fxml";
+	public static final String RESIDENT_UPDATE_FORM = "/views/resident/ResidentUpdateForm.fxml";
+	public static final String ROOM_SCREEN_PATH = "/views/room/RoomScreen.fxml";
+	public static final String ROOM_DETAIL_POPUP = "/views/room/RoomDetailPopup.fxml";
 	public static final String[] DAY = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", 
 			                            "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", 
 			                            "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};

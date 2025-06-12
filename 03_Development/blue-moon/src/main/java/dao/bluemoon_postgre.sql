@@ -28,7 +28,8 @@ CREATE TABLE IF NOT EXISTS households (
     street VARCHAR,
     registration_date DATE,
     number_of_residents INTEGER,
-    head_resident_id INTEGER
+    head_resident_id INTEGER,
+    areas INTEGER DEFAULT 0
 );
 
 --- Bảng residents ---
@@ -53,6 +54,23 @@ CREATE TABLE IF NOT EXISTS residents (
 ALTER TABLE households
 ADD CONSTRAINT fk_head_resident
 FOREIGN KEY (head_resident_id) REFERENCES residents(resident_id);
+
+--- Thêm cột areas nếu chưa có (cho database đã tồn tại) ---
+ALTER TABLE households 
+ADD COLUMN IF NOT EXISTS areas INTEGER DEFAULT 0;
+
+--- Bảng rooms (phòng) ---
+CREATE TABLE IF NOT EXISTS rooms (
+    room_number VARCHAR PRIMARY KEY CHECK (
+        room_number ~ '^Nhà_[0-9]+/Tầng_[0-9]+/BlueMoon$'
+    ),
+    is_empty BOOLEAN DEFAULT TRUE
+);
+
+--- Thêm foreign key constraint để tạo mối quan hệ 1-1 giữa households và rooms ---
+ALTER TABLE households 
+ADD CONSTRAINT fk_households_rooms 
+FOREIGN KEY (house_number) REFERENCES rooms(room_number) ON DELETE SET NULL;
 
 --- Bảng stay_absence_records ---
 CREATE TABLE IF NOT EXISTS stay_absence_records (
@@ -116,11 +134,25 @@ CREATE TABLE campaign_fee_items (
 );
 
 
---- Chèn dữ liệu mẫu cho bảng households ---
-INSERT INTO households (house_number, district, ward, street, registration_date)
+--- Chèn dữ liệu mẫu cho bảng rooms ---
+INSERT INTO rooms (room_number, is_empty)
 VALUES
-('Nhà_6/Tầng_3/BlueMoon', 'Hà Đông', 'Phú La', 'Hà Nội', '2022-01-01'),
-('Nhà_8/Tầng_2/BlueMoon', 'Hà Đông', 'Phú La', 'Hà Nội', '2023-03-15');
+('Nhà_1/Tầng_1/BlueMoon', TRUE),
+('Nhà_2/Tầng_1/BlueMoon', TRUE),
+('Nhà_3/Tầng_1/BlueMoon', TRUE),
+('Nhà_4/Tầng_1/BlueMoon', TRUE),
+('Nhà_5/Tầng_1/BlueMoon', TRUE),
+('Nhà_6/Tầng_3/BlueMoon', FALSE),  -- Phòng đã có hộ khẩu
+('Nhà_7/Tầng_2/BlueMoon', TRUE),
+('Nhà_8/Tầng_2/BlueMoon', FALSE),  -- Phòng đã có hộ khẩu
+('Nhà_9/Tầng_2/BlueMoon', TRUE),
+('Nhà_10/Tầng_3/BlueMoon', TRUE);
+
+--- Chèn dữ liệu mẫu cho bảng households ---
+INSERT INTO households (house_number, district, ward, street, registration_date, areas)
+VALUES
+('Nhà_6/Tầng_3/BlueMoon', 'Hà Đông', 'Phú La', 'Hà Nội', '2022-01-01', 75),
+('Nhà_8/Tầng_2/BlueMoon', 'Hà Đông', 'Phú La', 'Hà Nội', '2023-03-15', 82);
 
 
 --- Chèn dữ liệu mẫu cho bảng residents ---
@@ -149,6 +181,10 @@ WHERE household_id = 1;
 UPDATE households
 SET head_resident_id = 3
 WHERE household_id = 2;
+
+--- Cập nhật diện tích cho các hộ khẩu hiện có ---
+UPDATE households SET areas = 75 WHERE household_id = 1;
+UPDATE households SET areas = 82 WHERE household_id = 2;
 
 
 --- Chèn dữ liệu mẫu cho bảng fees ---

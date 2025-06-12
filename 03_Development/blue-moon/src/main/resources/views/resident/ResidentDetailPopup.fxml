@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #e0e0e0; -fx-border-radius: 10; -fx-border-width: 2;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label alignment="CENTER" prefWidth="500.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-background-radius: 10 10 0 0;" text="Chi tiết nhân khẩu" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <padding>
+            <Insets bottom="15.0" top="15.0" />
+         </padding>
+      </Label>
+      
+      <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+         <content>
+            <VBox spacing="20.0">
+               <VBox.margin>
+                  <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+               </VBox.margin>
+               <children>
+                  <!-- Thông tin cơ bản -->
+                  <VBox spacing="15.0">
+                     <children>
+                        <Label text="THÔNG TIN CƠ BẢN" textFill="#2c3e50">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        
+                        <GridPane hgap="20.0" vgap="10.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="NEVER" minWidth="120.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                           <children>
+                              <Label text="Họ và tên:" textFill="#34495e" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblFullName" text="N/A" textFill="#2c3e50" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              
+                              <Label text="Ngày sinh:" textFill="#34495e" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblDateOfBirth" text="N/A" textFill="#2c3e50" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              
+                              <Label text="Giới tính:" textFill="#34495e" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblGender" text="N/A" textFill="#2c3e50" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              
+                              <Label text="Dân tộc:" textFill="#34495e" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblEthnicity" text="N/A" textFill="#2c3e50" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              
+                              <Label text="Tôn giáo:" textFill="#34495e" GridPane.columnIndex="0" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblReligion" text="N/A" textFill="#2c3e50" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Thông tin CCCD -->
+                  <VBox spacing="15.0">
+                     <children>
+                        <Label text="THÔNG TIN CCCD" textFill="#2c3e50">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        
+                        <GridPane hgap="20.0" vgap="10.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="NEVER" minWidth="120.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                           <children>
+                              <Label text="Số CCCD:" textFill="#34495e" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblCitizenId" text="N/A" textFill="#2c3e50" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              
+                              <Label text="Ngày cấp:" textFill="#34495e" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblDateOfIssue" text="N/A" textFill="#2c3e50" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              
+                              <Label text="Nơi cấp:" textFill="#34495e" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblPlaceOfIssue" text="N/A" textFill="#2c3e50" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Thông tin khác -->
+                  <VBox spacing="15.0">
+                     <children>
+                        <Label text="THÔNG TIN KHÁC" textFill="#2c3e50">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        
+                        <GridPane hgap="20.0" vgap="10.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="NEVER" minWidth="120.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                           <children>
+                              <Label text="Nghề nghiệp:" textFill="#34495e" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblOccupation" text="N/A" textFill="#2c3e50" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              
+                              <Label text="Quan hệ với chủ hộ:" textFill="#34495e" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblRelationshipWithHead" text="N/A" textFill="#2c3e50" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              
+                              <Label text="Hộ khẩu:" textFill="#34495e" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblHouseholdInfo" text="N/A" textFill="#2c3e50" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              
+                              <Label text="Ngày thêm:" textFill="#34495e" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblAddedDate" text="N/A" textFill="#2c3e50" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Ghi chú -->
+                  <VBox spacing="10.0">
+                     <children>
+                        <Label text="GHI CHÚ" textFill="#2c3e50">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblNotes" text="Không có ghi chú" textFill="#7f8c8d" wrapText="true">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+      
+      <HBox alignment="CENTER">
+         <VBox.margin>
+            <Insets bottom="20.0" top="10.0" />
+         </VBox.margin>
+         <children>
+            <Button fx:id="btnClose" mnemonicParsing="false" prefWidth="120.0" style="-fx-background-color: #95a5a6; -fx-cursor: hand;" text="Đóng" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</VBox> 

@@ -46,7 +46,7 @@
                         </Label>
                         <VBox prefWidth="100.0" style="-fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-content-display: left;" text="Trang chủ" textFill="WHITE">
+                              <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-content-display: left;" styleClass="menu-button" text="Trang chủ" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -64,7 +64,7 @@
                                     <Insets right="98.0" />
                                  </padding>
                               </Button>
-                              <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Danh sách hộ khẩu">
+                              <Button fx:id="btnManageHouseholds" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" styleClass="menu-button" text="Quản lý hộ khẩu">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -76,13 +76,13 @@
                                     </ImageView>
                                  </graphic>
                                  <padding>
-                                    <Insets right="27.0" />
+                                    <Insets right="47.0" />
                                  </padding>
                                  <VBox.margin>
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button layoutX="11.0" layoutY="64.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Danh sách nhân khẩu">
+                              <Button fx:id="btnManageResident" layoutX="11.0" layoutY="64.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" styleClass="menu-button" text="Quản lý nhân khẩu">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -94,13 +94,28 @@
                                     </ImageView>
                                  </graphic>
                                  <padding>
-                                    <Insets right="7.0" />
+                                    <Insets right="29.0" />
                                  </padding>
                                  <VBox.margin>
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Tạm trú, tạm vắng">
+                              <Button fx:id="btnManageRoom" layoutX="14.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" styleClass="menu-button" text="Quản lý phòng">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/images/list-icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <padding>
+                                    <Insets right="58.0" />
+                                 </padding>
+                              </Button>
+                              <Button fx:id="btnStayAbsence" layoutX="11.0" layoutY="115.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" styleClass="menu-button" text="Tạm trú, tạm vắng">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -118,7 +133,7 @@
                                     <Insets left="3.0" right="3.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button layoutX="11.0" layoutY="165.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-background-color: white; -fx-content-display: left; -fx-cursor: hand;" text="Thống kê nhân khẩu">
+                              <Button fx:id="btnTrackResident" layoutX="11.0" layoutY="165.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="236.0" style="-fx-content-display: left; -fx-cursor: hand;" styleClass="menu-button" text="Thống kê nhân khẩu">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -156,7 +171,7 @@
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets left="52.0" right="52.0" top="200.0" />
+                              <Insets left="52.0" right="52.0" top="150.0" />
                            </VBox.margin>
                         </Button>
                      </children>
