@@ -31,7 +31,12 @@ public class ResidentHandler extends BaseScreenWithLogoutAndGoBackHandler {
 	public ResidentHandler(Stage stage, String userName) throws Exception {
 		super(stage, utils.Configs.RESIDENT_SCREEN_PATH, utils.Configs.LOGO_PATH, "Danh sách nhân khẩu");
 		this.householdService = new HouseholdService();
-		this.residentService = new ResidentService();
+		try {
+			this.residentService = new ResidentService();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("Không thể khởi tạo ResidentService: " + e.getMessage());
+		}
 		loader.setController(this);
 		this.setContent();
 		this.setScene();
@@ -39,6 +44,7 @@ public class ResidentHandler extends BaseScreenWithLogoutAndGoBackHandler {
         if (this.scene != null) {
             this.scene.setUserData(this);
         }
+		this.show();
 	}
 	
 	@FXML

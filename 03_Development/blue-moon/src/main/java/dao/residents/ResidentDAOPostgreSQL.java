@@ -96,7 +96,7 @@ public class ResidentDAOPostgreSQL implements ResidentDAO {
         String sql = "INSERT INTO residents (full_name, date_of_birth, gender, ethnicity, religion, " +
                     "citizen_id, date_of_issue, place_of_issue, occupation, notes, " +
                     "relationship_with_head, household_id, added_date) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING resident_id";
         
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, resident.getFullName());
@@ -104,7 +104,15 @@ public class ResidentDAOPostgreSQL implements ResidentDAO {
             stmt.setString(3, resident.getGender());
             stmt.setString(4, resident.getEthnicity());
             stmt.setString(5, resident.getReligion());
-            stmt.setString(6, resident.getCitizenId());
+            
+            // Xử lý citizen_id: nếu null hoặc rỗng thì set NULL
+            String citizenId = resident.getCitizenId();
+            if (citizenId == null || citizenId.trim().isEmpty()) {
+                stmt.setNull(6, java.sql.Types.VARCHAR);
+            } else {
+                stmt.setString(6, citizenId.trim());
+            }
+            
             stmt.setDate(7, resident.getDateOfIssue() != null ? Date.valueOf(resident.getDateOfIssue()) : null);
             stmt.setString(8, resident.getPlaceOfIssue());
             stmt.setString(9, resident.getOccupation());
@@ -113,7 +121,14 @@ public class ResidentDAOPostgreSQL implements ResidentDAO {
             stmt.setInt(12, resident.getHouseholdId());
             stmt.setDate(13, Date.valueOf(LocalDate.now()));
             
-            return stmt.executeUpdate() > 0;
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int newResidentId = rs.getInt("resident_id");
+                    resident.setResidentId(newResidentId); // Set ID cho object
+                    return true;
+                }
+            }
+            return false;
         }
     }
     
@@ -131,7 +146,15 @@ public class ResidentDAOPostgreSQL implements ResidentDAO {
             stmt.setString(3, resident.getGender());
             stmt.setString(4, resident.getEthnicity());
             stmt.setString(5, resident.getReligion());
-            stmt.setString(6, resident.getCitizenId());
+            
+            // Xử lý citizen_id: nếu null hoặc rỗng thì set NULL
+            String citizenId = resident.getCitizenId();
+            if (citizenId == null || citizenId.trim().isEmpty()) {
+                stmt.setNull(6, java.sql.Types.VARCHAR);
+            } else {
+                stmt.setString(6, citizenId.trim());
+            }
+            
             stmt.setDate(7, resident.getDateOfIssue() != null ? Date.valueOf(resident.getDateOfIssue()) : null);
             stmt.setString(8, resident.getPlaceOfIssue());
             stmt.setString(9, resident.getOccupation());

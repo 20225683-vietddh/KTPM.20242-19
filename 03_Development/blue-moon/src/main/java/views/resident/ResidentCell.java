@@ -26,7 +26,12 @@ public class ResidentCell extends HBox {
 		this.stage = stage;
 		this.resident = resident;
 		this.parentHandler = parentHandler;
-		this.residentService = new ResidentService();
+		try {
+			this.residentService = new ResidentService();
+		} catch (Exception e) {
+			e.printStackTrace();
+			ErrorDialog.showError("Lỗi", "Không thể khởi tạo ResidentService: " + e.getMessage());
+		}
 		setupCell();
 	}
 	
@@ -111,7 +116,7 @@ public class ResidentCell extends HBox {
 	private void handleDelete() {
 		try {
 			String warningMessage = "Bạn có chắc chắn muốn xóa nhân khẩu \"" + resident.getFullName() + "\" không?\n\n" +
-									"⚠️ CẢNH BÁO: Hành động này không thể hoàn tác!\n\n";
+									"⚠️CẢNH BÁO: Hành động này không thể hoàn tác!\n\n";
 			
 			// Thêm cảnh báo đặc biệt nếu là chủ hộ
 			if ("Chủ hộ".equals(resident.getRelationshipWithHead())) {
@@ -125,11 +130,11 @@ public class ResidentCell extends HBox {
 			boolean confirmed = "YES".equals(option);
 			
 			if (confirmed) {
-				boolean success = residentService.deleteResidentSafely(resident.getResidentId());
+				boolean success = residentService.deleteResident(resident.getResidentId());
 				
 				if (success) {
 					views.messages.InformationDialog.showNotification("Thành công", 
-						"Xóa nhân khẩu thành công!\nHệ thống đã tự động cập nhật thông tin hộ khẩu và phòng.");
+						"Xóa nhân khẩu thành công!\nHệ thống đã tự động ghi lại lịch sử thay đổi.");
 					
 					// Refresh parent list
 					if (parentHandler != null) {

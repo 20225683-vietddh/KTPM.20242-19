@@ -66,7 +66,12 @@ public class AddHouseholdHandler extends BaseScreenHandler {
         this.ownerStage = ownerStage;
         this.parentHandler = parentHandler;
         this.householdService = new HouseholdService();
-        this.residentService = new ResidentService();
+        try {
+            this.residentService = new ResidentService();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Không thể khởi tạo ResidentService: " + e.getMessage());
+        }
         this.roomService = new RoomService();
         this.residentList = new ArrayList<>();
         this.setContent();

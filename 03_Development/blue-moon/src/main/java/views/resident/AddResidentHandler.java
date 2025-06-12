@@ -47,7 +47,12 @@ public class AddResidentHandler extends BaseScreenHandler {
         this.ownerStage = ownerStage;
         this.parentHandler = parentHandler;
         this.householdService = new HouseholdService();
-        this.residentService = new ResidentService();
+        try {
+            this.residentService = new ResidentService();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Không thể khởi tạo ResidentService: " + e.getMessage());
+        }
         this.setContent();
         this.setScene();
 
@@ -115,9 +120,11 @@ public class AddResidentHandler extends BaseScreenHandler {
                 return;
             }
             
-            if (tfCitizenId.getText().trim().isEmpty()) {
-                ErrorDialog.showError("Lỗi", "Vui lòng nhập số CCCD!");
-                return;
+            // CCCD không bắt buộc, nhưng nếu có thì phải kiểm tra trùng lặp
+            String citizenIdInput = tfCitizenId.getText().trim();
+            if (!citizenIdInput.isEmpty()) {
+                // Kiểm tra trùng lặp CCCD (optional)
+                // TODO: Có thể thêm kiểm tra này nếu cần
             }
             
             if (cbHousehold.getValue() == null) {
@@ -137,12 +144,15 @@ public class AddResidentHandler extends BaseScreenHandler {
             resident.setGender(cbGender.getValue());
             resident.setEthnicity(tfEthnicity.getText().trim());
             resident.setReligion(tfReligion.getText().trim());
-            resident.setCitizenId(tfCitizenId.getText().trim());
             
-            if (dpDateOfIssue.getValue() != null) {
-                resident.setDateOfIssue(dpDateOfIssue.getValue());
+            // Xử lý CCCD: nếu rỗng thì set null
+            if (citizenIdInput.isEmpty()) {
+                resident.setCitizenId(null);
+            } else {
+                resident.setCitizenId(citizenIdInput);
             }
             
+            resident.setDateOfIssue(dpDateOfIssue.getValue());
             resident.setPlaceOfIssue(tfPlaceOfIssue.getText().trim());
             resident.setOccupation(tfOccupation.getText().trim());
             resident.setNotes(taNotes.getText().trim());

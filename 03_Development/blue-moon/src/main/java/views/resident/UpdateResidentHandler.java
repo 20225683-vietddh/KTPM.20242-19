@@ -49,7 +49,12 @@ public class UpdateResidentHandler extends BaseScreenHandler {
         this.resident = resident;
         this.parentHandler = parentHandler;
         this.householdService = new HouseholdService();
-        this.residentService = new ResidentService();
+        try {
+            this.residentService = new ResidentService();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Không thể khởi tạo ResidentService: " + e.getMessage());
+        }
         this.setContent();
         this.setScene();
 
@@ -139,10 +144,8 @@ public class UpdateResidentHandler extends BaseScreenHandler {
                 return;
             }
             
-            if (tfCitizenId.getText().trim().isEmpty()) {
-                ErrorDialog.showError("Lỗi", "Vui lòng nhập số CCCD!");
-                return;
-            }
+            // CCCD không bắt buộc
+            String citizenIdInput = tfCitizenId.getText().trim();
             
             if (cbHousehold.getValue() == null) {
                 ErrorDialog.showError("Lỗi", "Vui lòng chọn hộ khẩu!");
@@ -160,7 +163,13 @@ public class UpdateResidentHandler extends BaseScreenHandler {
             resident.setGender(cbGender.getValue());
             resident.setEthnicity(tfEthnicity.getText().trim());
             resident.setReligion(tfReligion.getText().trim());
-            resident.setCitizenId(tfCitizenId.getText().trim());
+            
+            // Xử lý CCCD: nếu rỗng thì set null
+            if (citizenIdInput.isEmpty()) {
+                resident.setCitizenId(null);
+            } else {
+                resident.setCitizenId(citizenIdInput);
+            }
             
             if (dpDateOfIssue.getValue() != null) {
                 resident.setDateOfIssue(dpDateOfIssue.getValue());

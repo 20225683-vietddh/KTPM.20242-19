@@ -28,6 +28,7 @@ public class HouseholdDetailHandler extends BaseScreenHandler {
     @FXML private Label lblAreas;
     @FXML private Label lblHeadResident;
     @FXML private TableView<Resident> tblResidents;
+    @FXML private Button btnHistory;
     @FXML private Button btnClose;
     
     private final Stage ownerStage;
@@ -53,6 +54,7 @@ public class HouseholdDetailHandler extends BaseScreenHandler {
     public void initialize() {
         setupHouseholdInfo();
         setupResidentsTable();
+        btnHistory.setOnAction(e -> handleViewHistory());
         btnClose.setOnAction(e -> handleClose());
     }
     
@@ -162,6 +164,15 @@ public class HouseholdDetailHandler extends BaseScreenHandler {
             tblResidents.setItems(residentList);
         } catch (Exception e) {
             ErrorDialog.showError("Lỗi", "Không thể tải danh sách nhân khẩu: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    private void handleViewHistory() {
+        try {
+            new ChangeHistoryHandler(this.stage, household.getHouseholdId());
+        } catch (Exception e) {
+            ErrorDialog.showError("Lỗi", "Không thể mở lịch sử thay đổi: " + e.getMessage());
             e.printStackTrace();
         }
     }

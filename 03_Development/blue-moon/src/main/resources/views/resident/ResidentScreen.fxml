@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefWidth="1200.0" style="-fx-background-color: #f8f9fa;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefWidth="1200.0" style="-fx-background-color: #f8f9fa;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <!-- Header với logo và thông tin user -->
       <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="1200.0" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;">
@@ -37,25 +43,25 @@
       </HBox>
 
       <!-- Search và Filter Section -->
-      <VBox spacing="20.0" style="-fx-background-color: white;">
+      <VBox spacing="20.0" style="-fx-background-color: #f8f9fa;">
          <VBox.margin>
             <Insets bottom="20.0" left="30.0" right="30.0" top="30.0" />
          </VBox.margin>
          <children>
             <HBox alignment="CENTER_LEFT" spacing="20.0">
                <children>
-                  <VBox spacing="5.0">
+                  <VBox spacing="5.0" style="-fx-background-color: #f8f9fa;">
                      <children>
                         <Label text="Tìm kiếm nhân khẩu:" textFill="#2c3e50">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="tfSearch" promptText="Nhập tên, CCCD hoặc nghề nghiệp..." prefWidth="300.0" style="-fx-background-radius: 5; -fx-border-color: #e0e0e0; -fx-border-radius: 5;" />
+                        <TextField fx:id="tfSearch" prefWidth="300.0" promptText="Nhập tên, CCCD hoặc nghề nghiệp..." style="-fx-background-radius: 5; -fx-border-color: #e0e0e0; -fx-border-radius: 5;" />
                      </children>
                   </VBox>
                   
-                  <VBox spacing="5.0">
+                  <VBox spacing="5.0" style="-fx-background-color: #f8f9fa;">
                      <children>
                         <Label text="Lọc theo hộ khẩu:" textFill="#2c3e50">
                            <font>
@@ -88,4 +94,4 @@
          </content>
       </ScrollPane>
    </children>
-</VBox> 
+</VBox>

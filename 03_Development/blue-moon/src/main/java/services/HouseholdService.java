@@ -9,9 +9,11 @@ import java.util.List;
 
 public class HouseholdService {
     private final HouseholdDAO householdDAO;
+    private final ChangeHistoryService changeHistoryService;
     
     public HouseholdService() throws SQLException {
         this.householdDAO = new HouseholdDAOPostgreSQL();
+        this.changeHistoryService = new ChangeHistoryService();
     }
     
     /**
@@ -110,11 +112,21 @@ public class HouseholdService {
             List<Resident> residents = residentDAO.getResidentsByHouseholdId(householdId);
             
             for (Resident resident : residents) {
+                // Ghi lại lịch sử TRƯỚC khi xóa
+                changeHistoryService.recordResidentDeleted(
+                    resident.getResidentId(), 
+                    resident.getHouseholdId(), 
+                    resident.getFullName()
+                );
+                
                 boolean residentDeleted = residentDAO.deleteResident(resident.getResidentId());
                 if (!residentDeleted) {
                     throw new Exception("Không thể xóa nhân khẩu: " + resident.getFullName());
                 }
             }
+            
+            // Xóa tất cả lịch sử thay đổi của hộ khẩu sau khi xóa hết nhân khẩu
+            changeHistoryService.deleteHouseholdChangeHistory(householdId);
             
             // Bước 2: Xóa hộ khẩu
             boolean householdDeleted = householdDAO.deleteHousehold(householdId);
