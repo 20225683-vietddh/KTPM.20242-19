@@ -72,10 +72,12 @@ public class LeaderHomePageHandler extends HomePageHandler {
 	@FXML
 	private void handleStayAbsence() {
 		try {
-			// TODO: Implement navigate to temporary stay/absence management screen
-			System.out.println("Navigating to temporary stay/absence management...");
+			views.stayabsence.StayAbsenceHandler stayAbsenceHandler = 
+				new views.stayabsence.StayAbsenceHandler(this.stage, this.lblUserName.getText());
+			stayAbsenceHandler.show();
 		} catch (Exception e) {
 			e.printStackTrace();
+			views.messages.ErrorDialog.showError("Lỗi", "Không thể mở màn hình quản lý tạm trú/tạm vắng!");
 		}
 	}
 	

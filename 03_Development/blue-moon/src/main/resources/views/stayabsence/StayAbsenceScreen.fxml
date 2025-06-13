@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1463.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1039.0" prefWidth="1446.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);" stylesheets="@../../assets/css/style.css">
+         <children>
+            <VBox prefHeight="987.0" prefWidth="264.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="26.0">
+               <children>
+                  <VBox prefHeight="743.0" prefWidth="264.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;">
+                     <VBox.margin>
+                        <Insets bottom="17.0" />
+                     </VBox.margin>
+                     <children>
+                        <ImageView fitHeight="128.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../assets/images/leader.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets left="68.0" top="16.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <Label fx:id="lblUserName" alignment="CENTER" prefWidth="292.0">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Button fx:id="btnGoBack" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Quay lại">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../assets/images/back.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="52.0" right="52.0" top="490.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="227.0" prefWidth="264.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;">
+                     <children>
+                        <ImageView fitHeight="124.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../assets/images/logo-2.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets bottom="16.0" left="70.0" right="70.0" top="30.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Đăng xuất">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../assets/images/exit.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="52.0" right="52.0" top="15.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="987.0" prefWidth="1106.0" AnchorPane.leftAnchor="314.0" AnchorPane.topAnchor="26.0">
+               <children>
+                  <VBox prefWidth="100.0">
+                     <children>
+                        <HBox prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../assets/images/absence.png" />
+                                 </image>
+                              </ImageView>
+                              <Label prefHeight="40.0" text="Quản lý tạm trú &amp; tạm vắng">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Line endX="1006.0" startX="-100.0" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="885.0" prefWidth="200.0" spacing="30.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: black; -fx-border-radius: 10;">
+                     <VBox.margin>
+                        <Insets top="50.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                     </padding>
+                     <children>
+                        <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="🏠 QUẢN LÝ TẠM TRÚ &amp; TẠM VẮNG" textAlignment="CENTER" />
+                        
+                        <VBox alignment="CENTER" prefWidth="900.0" spacing="20.0" style="-fx-background-color: #ecf0f1; -fx-background-radius: 15; -fx-border-radius: 15;">
+                           <padding>
+                              <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+                           </padding>
+                           <children>
+                              <Label style="-fx-font-size: 18px; -fx-text-fill: #34495e;" text="Lựa chọn chức năng bạn muốn thực hiện:" />
+                              
+                              <HBox alignment="CENTER" spacing="30.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefWidth="250.0" spacing="15.0">
+                                       <children>
+                                          <Button fx:id="btnTemporaryStay" mnemonicParsing="false" prefHeight="120.0" prefWidth="220.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 15; -fx-cursor: hand; -fx-font-size: 16px; -fx-font-weight: bold;" text="🏡&#10;CẤP TẠM TRÚ" textAlignment="CENTER">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Button>
+                                          <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;" text="Cấp giấy tạm trú cho người từ ngoài" textAlignment="CENTER" wrapText="true" />
+                                       </children>
+                                    </VBox>
+                                    
+                                    <VBox alignment="CENTER" prefWidth="250.0" spacing="15.0">
+                                       <children>
+                                          <Button fx:id="btnTemporaryAbsence" mnemonicParsing="false" prefHeight="120.0" prefWidth="220.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 15; -fx-cursor: hand; -fx-font-size: 16px; -fx-font-weight: bold;" text="✈&#10;CẤP TẠM VẮNG" textAlignment="CENTER">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Button>
+                                          <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;" text="Cấp giấy tạm vắng cho cư dân hiện tại" textAlignment="CENTER" wrapText="true" />
+                                       </children>
+                                    </VBox>
+                                    
+                                    <VBox alignment="CENTER" prefWidth="250.0" spacing="15.0">
+                                       <children>
+                                          <Button fx:id="btnViewRecords" mnemonicParsing="false" prefHeight="120.0" prefWidth="220.0" style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-background-radius: 15; -fx-cursor: hand; -fx-font-size: 16px; -fx-font-weight: bold;" text="📋&#10;XEM DANH SÁCH" textAlignment="CENTER">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Button>
+                                          <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;" text="Xem danh sách các hồ sơ đã cấp" textAlignment="CENTER" wrapText="true" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        
+                        <VBox alignment="CENTER" prefWidth="900.0" spacing="15.0" style="-fx-background-color: #fff3cd; -fx-background-radius: 10; -fx-border-color: #ffeaa7; -fx-border-radius: 10; -fx-border-width: 2;">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #856404;" text="Thông tin quan trọng:" />
+                              <Label style="-fx-text-fill: #856404; -fx-font-size: 14px;" text="• Tạm trú: Dành cho người từ ngoài muốn tạm trú tại chung cư" />
+                              <Label style="-fx-text-fill: #856404; -fx-font-size: 14px;" text="• Tạm vắng: Dành cho cư dân hiện tại muốn đi vắng tạm thời" />
+                              <Label style="-fx-text-fill: #856404; -fx-font-size: 14px;" text="• Tất cả hồ sơ sẽ được lưu trữ và có thể tra cứu sau này" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+    </AnchorPane>
+  </content>
+</ScrollPane>

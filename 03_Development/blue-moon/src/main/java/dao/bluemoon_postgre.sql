@@ -75,12 +75,30 @@ FOREIGN KEY (house_number) REFERENCES rooms(room_number) ON DELETE SET NULL;
 --- Bảng stay_absence_records ---
 CREATE TABLE IF NOT EXISTS stay_absence_records (
     record_id SERIAL PRIMARY KEY,
-    record_type VARCHAR,
-    created_date DATE,
+    record_type VARCHAR CHECK (record_type IN ('TEMPORARY_STAY', 'TEMPORARY_ABSENCE')),
+    created_date DATE DEFAULT CURRENT_DATE,
     temp_address VARCHAR,
     period VARCHAR,
     request_desc TEXT,
-    resident_id INTEGER REFERENCES residents(resident_id)
+    
+    -- Link tới resident hiện có (cho tạm vắng)
+    resident_id INTEGER REFERENCES residents(resident_id),
+    
+    -- Link tới household (cho cả 2 loại)
+    household_id INTEGER REFERENCES households(household_id),
+    
+    -- Thông tin người tạm trú (chỉ cho TEMPORARY_STAY)
+    temp_resident_name VARCHAR,
+    temp_resident_cccd VARCHAR,
+    temp_resident_birth_date DATE,
+    temp_resident_gender VARCHAR,
+    temp_resident_phone VARCHAR,
+    temp_resident_hometown VARCHAR,
+    
+    -- Thời gian hiệu lực
+    start_date DATE,
+    end_date DATE,
+    status VARCHAR DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'EXPIRED', 'CANCELLED'))
 );
 
 --- Bảng change_history_records ---
