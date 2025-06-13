@@ -126,7 +126,7 @@ public class ChargeFeeDAOPostgreSQL implements ChargeFeeDAO {
 	public void updatePaidAmount(int campaignFeeId, int householdId, int feeId, int paidAmount) throws SQLException {
 	    String sql = """
 	        UPDATE fee_payment_records
-	        SET paid_amount = paid_amount + ?,
+	        SET paid_amount = COALESCE(paid_amount, 0) + ?,
 	            paid_date = CURRENT_DATE
 	        WHERE campaign_fee_id = ?
 	          AND household_id = ?

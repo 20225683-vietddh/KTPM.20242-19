@@ -32,6 +32,7 @@ public class Configs {
 	public static final String TEMPORARY_STAY_FORM = "/views/stayabsence/TemporaryStayForm.fxml";
 	public static final String TEMPORARY_ABSENCE_FORM = "/views/stayabsence/TemporaryAbsenceForm.fxml";
 	public static final String STAY_ABSENCE_LIST_SCREEN = "/views/stayabsence/StayAbsenceListScreen.fxml";
+	public static final String RESIDENT_STATISTICS_SCREEN_PATH = "/views/statistics/ResidentStatistics.fxml";
 	public static final String[] DAY = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", 
 			                            "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", 
 			                            "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};

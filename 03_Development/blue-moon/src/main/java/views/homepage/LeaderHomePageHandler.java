@@ -84,10 +84,12 @@ public class LeaderHomePageHandler extends HomePageHandler {
 	@FXML
 	private void handleTrackResident() {
 		try {
-			// TODO: Implement navigate to resident statistics screen
-			System.out.println("Navigating to resident statistics...");
+			views.statistics.ResidentStatisticsHandler statisticsHandler = 
+				new views.statistics.ResidentStatisticsHandler(this.stage, this.lblUserName.getText());
+			statisticsHandler.show();
 		} catch (Exception e) {
 			e.printStackTrace();
+			views.messages.ErrorDialog.showError("Lỗi", "Không thể mở màn hình thống kê nhân khẩu!");
 		}
 	}
 }
