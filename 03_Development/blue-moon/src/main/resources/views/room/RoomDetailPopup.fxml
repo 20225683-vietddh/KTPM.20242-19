@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: white; -fx-padding: 20;">
+   <children>
+      <!-- Header -->
+      <HBox alignment="CENTER_LEFT" spacing="20.0">
+         <children>
+            <Label text="CHI TIẾT PHÒNG" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+            <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+               <children>
+                  <Button fx:id="btnClose" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 5;" text="Đóng" />
+               </children>
+            </HBox>
+         </children>
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
+      </HBox>
+
+      <!-- Room Information Section -->
+      <VBox spacing="15.0">
+         <children>
+            <Label text="THÔNG TIN PHÒNG" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #34495e;" />
+            <Separator />
+            
+            <GridPane hgap="20.0" vgap="10.0">
+               <children>
+                  <Label text="Số phòng:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <Label fx:id="lblRoomNumber" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                  
+                  <Label text="Trạng thái:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <Label fx:id="lblStatus" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
+      </VBox>
+
+      <!-- Household Information Section -->
+      <VBox spacing="15.0">
+         <children>
+            <Label text="THÔNG TIN HỘ KHẨU" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #34495e;" />
+            <Separator />
+            
+            <GridPane hgap="20.0" vgap="10.0">
+               <children>
+                  <Label text="ID Hộ khẩu:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <Label fx:id="lblHouseholdId" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                  
+                  <Label text="Số nhà:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <Label fx:id="lblHouseNumber" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  
+                  <Label text="Địa chỉ:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <Label fx:id="lblAddress" text="N/A" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  
+                  <Label text="Ngày đăng ký:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                  <Label fx:id="lblRegistrationDate" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  
+                  <Label text="Chủ hộ:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                  <Label fx:id="lblHeadResident" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  
+                  <Label text="Số nhân khẩu:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                  <Label fx:id="lblResidentsCount" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  
+                  <Label text="Diện tích:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                  <Label fx:id="lblAreas" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+               </children>
+            </GridPane>
+         </children>
+      </VBox>
+   </children>
+</VBox> 

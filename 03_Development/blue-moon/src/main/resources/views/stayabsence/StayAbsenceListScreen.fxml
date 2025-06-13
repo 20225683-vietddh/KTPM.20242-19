@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1463.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1039.0" prefWidth="1446.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);" stylesheets="@../../assets/css/style.css">
+         <children>
+            <VBox prefHeight="987.0" prefWidth="264.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="26.0">
+               <children>
+                  <VBox prefHeight="743.0" prefWidth="264.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;">
+                     <VBox.margin>
+                        <Insets bottom="17.0" />
+                     </VBox.margin>
+                     <children>
+                        <ImageView fitHeight="128.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../assets/images/leader.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets left="68.0" top="16.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <Label fx:id="lblUserName" alignment="CENTER" prefWidth="292.0">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Button fx:id="btnGoBack" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Quay lại">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../assets/images/back.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="52.0" right="52.0" top="490.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="227.0" prefWidth="264.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 10;">
+                     <children>
+                        <ImageView fitHeight="124.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../assets/images/logo-2.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets bottom="16.0" left="70.0" right="70.0" top="30.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="48.0" prefWidth="160.0" style="-fx-text-fill: white; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;" text="Đăng xuất">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../assets/images/exit.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="52.0" right="52.0" top="15.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="987.0" prefWidth="1106.0" AnchorPane.leftAnchor="314.0" AnchorPane.topAnchor="26.0">
+               <children>
+                  <VBox prefWidth="100.0">
+                     <children>
+                        <HBox prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../assets/images/absence.png" />
+                                 </image>
+                              </ImageView>
+                              <Label prefHeight="40.0" text="Danh sách tạm trú &amp; tạm vắng">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Button fx:id="btnRefresh" mnemonicParsing="false" style="-fx-background-radius: 5px; -fx-cursor: hand; -fx-background-color: #27ae60; -fx-text-fill: white;" text="🔄 Làm mới">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="635.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Line endX="1006.0" startX="-100.0" />
+                        
+                        <!-- Filter và Search -->
+                        <HBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #dee2e6; -fx-border-width: 1; -fx-border-radius: 10;">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <children>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Loại hồ sơ:" />
+                                    <ComboBox fx:id="cbRecordType" prefWidth="180.0" style="-fx-font-size: 14px;" />
+                                 </children>
+                              </VBox>
+                              
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Trạng thái:" />
+                                    <ComboBox fx:id="cbStatus" prefWidth="150.0" style="-fx-font-size: 14px;" />
+                                 </children>
+                              </VBox>
+                              
+                              <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Tìm kiếm:" />
+                                    <TextField fx:id="tfSearch" promptText="Nhập tên, CCCD, phòng..." style="-fx-font-size: 14px;" />
+                                 </children>
+                              </VBox>
+                              
+                              <VBox alignment="BOTTOM_CENTER" spacing="5.0">
+                                 <children>
+                                    <Label text=" " />
+                                    <Button fx:id="btnSearch" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;" text="🔍 Tìm" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  
+                  <ScrollPane prefHeight="809.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: black; -fx-border-radius: 10;">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1080.0" style="-fx-background-color: white;">
+                           <children>
+                              <TableView fx:id="tvRecords" prefWidth="1060.0" style="-fx-font-size: 14px;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                 <columns>
+                                    <TableColumn fx:id="colRecordId" prefWidth="80.0" text="Mã hồ sơ" />
+                                    <TableColumn fx:id="colRecordType" prefWidth="120.0" text="Loại" />
+                                    <TableColumn fx:id="colPersonName" prefWidth="200.0" text="Họ tên" />
+                                    <TableColumn fx:id="colHousehold" prefWidth="120.0" text="Hộ khẩu" />
+                                    <TableColumn fx:id="colPeriod" prefWidth="100.0" text="Thời gian" />
+                                    <TableColumn fx:id="colStartDate" prefWidth="100.0" text="Từ ngày" />
+                                    <TableColumn fx:id="colEndDate" prefWidth="100.0" text="Đến ngày" />
+                                    <TableColumn fx:id="colStatus" prefWidth="100.0" text="Trạng thái" />
+                                    <TableColumn fx:id="colActions" prefWidth="140.0" text="Hành động" />
+                                 </columns>
+                              </TableView>
+                           </children>
+                      </AnchorPane>
+                    </content>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </ScrollPane>
+               </children>
+            </VBox>
+         </children>
+    </AnchorPane>
+  </content>
+</ScrollPane>

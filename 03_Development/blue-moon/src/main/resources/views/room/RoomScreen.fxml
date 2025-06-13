@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <!-- Header Section -->
+      <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+         <children>
+            <Label text="QUẢN LÝ PHÒNG" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+               <children>
+                  <Button fx:id="btnLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 5;" text="Đăng xuất" />
+                  <Button fx:id="btnGoBack" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-background-radius: 5;" text="Quay lại">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+
+      <!-- Statistics Section -->
+      <HBox alignment="CENTER_LEFT" spacing="30.0" style="-fx-background-color: #ecf0f1; -fx-padding: 15;">
+         <children>
+            <Label fx:id="lblTotalRooms" text="Tổng số phòng: 0" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+            <Label fx:id="lblEmptyRooms" text="Phòng trống: 0" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #27ae60;" />
+            <Label fx:id="lblOccupiedRooms" text="Có người ở: 0" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #e67e22;" />
+            <Label fx:id="lblOccupancyRate" text="Tỷ lệ lấp đầy: 0%" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #8e44ad;" />
+         </children>
+      </HBox>
+
+      <!-- Search and Filter Section -->
+      <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-padding: 20;">
+         <children>
+            <Label text="Tìm kiếm:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+            <TextField fx:id="txtSearch" promptText="Nhập số phòng, địa chỉ hoặc tên chủ hộ..." style="-fx-pref-width: 300;" />
+            <Button fx:id="btnSearch" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 5;" text="Tìm kiếm" />
+            
+            <Label text="Lọc theo:" style="-fx-font-size: 14px; -fx-font-weight: bold;">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Label>
+            <ComboBox fx:id="cmbFilter" style="-fx-pref-width: 150;" />
+            
+            <Button fx:id="btnRefresh" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 5;" text="Làm mới">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+
+      <!-- Room List Section -->
+      <ScrollPane fx:id="scrollPane" fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+         <content>
+            <VBox fx:id="roomContainer" spacing="10.0" style="-fx-padding: 20;" />
+         </content>
+      </ScrollPane>
+   </children>
+</VBox> 

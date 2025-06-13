@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #e0e0e0; -fx-border-width: 2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label alignment="CENTER" prefWidth="800.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC);" text="Chi tiết hộ khẩu" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="15.0" top="15.0" />
+         </padding>
+      </Label>
+      
+      <VBox prefWidth="800.0" spacing="15.0">
+         <VBox.margin>
+            <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+         </VBox.margin>
+         <children>
+            <Label style="-fx-font-weight: bold;" text="Thông tin hộ khẩu" textFill="#2c3e50">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            
+            <VBox spacing="10.0" style="-fx-background-color: #f8f9fa; -fx-background-radius: 8; -fx-padding: 15;">
+               <children>
+                  <HBox spacing="15.0">
+                     <children>
+                        <VBox prefWidth="300.0" spacing="5.0">
+                           <children>
+                              <Label text="Mã hộ khẩu:" textFill="#6c757d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblHouseholdId" style="-fx-font-weight: bold;" text="ID: 1" textFill="#2c3e50">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        
+                        <VBox prefWidth="180.0" spacing="5.0">
+                           <children>
+                              <Label text="Số nhà:" textFill="#6c757d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblHouseNumber" style="-fx-font-weight: bold;" text="Nhà 6/Tầng 3/BlueMoon" textFill="#2c3e50">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Diện tích:" textFill="#6c757d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblAreas" style="-fx-font-weight: bold;" text="75 m²" textFill="#2c3e50">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  
+                  <HBox spacing="15.0">
+                     <children>
+                        <VBox prefWidth="300.0" spacing="5.0">
+                           <children>
+                              <Label text="Địa chỉ đầy đủ:" textFill="#6c757d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblAddress" style="-fx-font-weight: bold;" text="Hà Nội, Phú La, Hà Đông" textFill="#2c3e50">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        
+                        <VBox prefWidth="180.0" spacing="5.0">
+                           <children>
+                              <Label text="Ngày đăng ký:" textFill="#6c757d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblRegistrationDate" style="-fx-font-weight: bold;" text="01/01/2022" textFill="#2c3e50">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        
+                        <VBox prefWidth="180.0" spacing="5.0">
+                           <children>
+                              <Label text="Số nhân khẩu:" textFill="#6c757d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblNumberOfResidents" style="-fx-font-weight: bold;" text="3" textFill="#2c3e50">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  
+                  <HBox>
+                     <children>
+                        <VBox prefWidth="300.0" spacing="5.0">
+                           <children>
+                              <Label text="Chủ hộ:" textFill="#6c757d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblHeadResident" style="-fx-font-weight: bold;" text="Nguyễn Văn A" textFill="#2c3e50">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            
+            <Label style="-fx-font-weight: bold;" text="Danh sách nhân khẩu" textFill="#2c3e50">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Label>
+            
+            <TableView fx:id="tblResidents" prefHeight="250.0" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 8;">
+            </TableView>
+         </children>
+      </VBox>
+      
+      <HBox alignment="CENTER" spacing="20.0">
+         <VBox.margin>
+            <Insets bottom="20.0" top="10.0" />
+         </VBox.margin>
+         <children>
+            <Button fx:id="btnHistory" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #9b59b6; -fx-cursor: hand;" text="📋 Xem lịch sử" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnClose" mnemonicParsing="false" prefWidth="120.0" style="-fx-background-color: linear-gradient(to right, #43A5DC, #FF7BAC); -fx-cursor: hand;" text="Đóng" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</VBox>
+ 
